@@ -1696,6 +1696,28 @@ namespace OpenRCT2::TrackMetadata
         TrackElemType::none, // TrackElemType::leftEighthDiveLoopDownToDiag
         TrackElemType::none, // TrackElemType::rightEighthDiveLoopDownToDiag
         TrackElemType::none, // TrackElemType::diagDown25Brakes
+        TrackElemType::none, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        TrackElemType::none, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
+        TrackElemType::none, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
+        TrackElemType::none, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
+        TrackElemType::none, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
+        TrackElemType::none, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
+        TrackElemType::none, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
+        TrackElemType::none, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
+        TrackElemType::none, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
+        TrackElemType::none, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
+        TrackElemType::none, // TrackElemType::leftFlyerZeroGRollInvertedDown,
+        TrackElemType::none, // TrackElemType::rightFlyerZeroGRollInvertedDown,
+        TrackElemType::none, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
+        TrackElemType::none, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
+        TrackElemType::none, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
+        TrackElemType::none, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
+        TrackElemType::none, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
+        TrackElemType::none, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
+        TrackElemType::none, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
+        TrackElemType::none, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
+
+        
     };
     static_assert(std::size(kAlternativeTrackTypes) == EnumValue(TrackElemType::count));
 
