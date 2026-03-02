@@ -381,7 +381,28 @@ namespace OpenRCT2
 
         diagDown25Brakes = 349,
 
-        count = 350,
+        leftFlyerLargeCorkscrewUninvertedUp = 350,
+        rightFlyerLargeCorkscrewUninvertedUp = 351,
+        leftFlyerLargeCorkscrewInvertedDown = 352,
+        rightFlyerLargeCorkscrewInvertedDown = 353,
+        leftFlyerMediumHalfLoopUninvertedUp = 354,
+        rightFlyerMediumHalfLoopUninvertedUp = 355,
+        leftFlyerMediumHalfLoopInvertedDown = 356,
+        rightFlyerMediumHalfLoopInvertedDown = 357,
+        leftFlyerZeroGRollUninvertedUp = 358,
+        rightFlyerZeroGRollUninvertedUp = 359,
+        leftFlyerZeroGRollInvertedDown = 360,
+        rightFlyerZeroGRollInvertedDown = 361,
+        leftFlyerLargeZeroGRollUninvertedUp = 362,
+        rightFlyerLargeZeroGRollUninvertedUp = 363,
+        leftFlyerLargeZeroGRollInvertedDown = 364,
+        rightFlyerLargeZeroGRollInvertedDown = 365,
+        leftFlyerEighthDiveLoopUninvertedUpToOrthogonal = 366,
+        rightFlyerEighthDiveLoopUninvertedUpToOrthogonal = 367,
+        leftFlyerEighthDiveLoopInvertedDownToDiag = 368,
+        rightFlyerEighthDiveLoopInvertedDownToDiag = 369,
+
+        count = 370,
 
         none = 65535,
     };

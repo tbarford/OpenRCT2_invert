@@ -98,6 +98,21 @@ namespace OpenRCT2
         flyingLargeHalfLoopUninvertedDown,
         flyingLargeHalfLoopInvertedUp,
 
+        flyingLargeCorkscrewUninvertedUp,
+        flyingLargeCorkscrewInvertedDown,
+
+        flyingMediumHalfLoopUninvertedUp,
+        flyingMediumHalfLoopInvertedDown,
+
+        flyingZeroGRollUninvertedUp,
+        flyingZeroGRollInvertedDown,
+
+        flyingZeroGRollLargeUninvertedUp,
+        flyingZeroGRollLargeInvertedDown,
+
+        flyingDiveLoopUninvertedUp,
+        flyingDiveLoopInvertedDown,
+
         flyingHalfLoopUninvertedDown,
         flyingHalfLoopInvertedUp,
 
