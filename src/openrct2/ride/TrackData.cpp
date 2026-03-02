@@ -2073,26 +2073,26 @@ namespace OpenRCT2::TrackMetadata
         458752, // TrackElemType::leftEighthDiveLoopDownToDiag
         458752, // TrackElemType::rightEighthDiveLoopDownToDiag
         109824, // TrackElemType::diagDown25Brakes
-        TrackElemType::leftFlyerLargeCorkscrewUninvertedUp, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::rightFlyerLargeCorkscrewUninvertedUp, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::leftFlyerLargeCorkscrewInvertedDown, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::rightFlyerLargeCorkscrewInvertedDown, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::leftFlyerMediumHalfLoopUninvertedUp, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::rightFlyerMediumHalfLoopUninvertedUp, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::leftFlyerMediumHalfLoopInvertedDown, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::rightFlyerMediumHalfLoopInvertedDown, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::leftFlyerZeroGRollUninvertedUp, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerZeroGRollUninvertedUp, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerZeroGRollInvertedDown, // TrackElemType::leftFlyerZeroGRollInvertedDown,
-        TrackElemType::rightFlyerZeroGRollInvertedDown, // TrackElemType::rightFlyerZeroGRollInvertedDown,
-        TrackElemType::leftFlyerLargeZeroGRollUninvertedUp, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerLargeZeroGRollUninvertedUp, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerLargeZeroGRollInvertedDown, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::rightFlyerLargeZeroGRollInvertedDown, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
-        TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
+        360448, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
+        360448, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        360448, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown
+        360448, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown
+        589824, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp
+        589824, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp
+        589824, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown
+        589824, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown
+        229376, // TrackElemType::leftFlyerZeroGRollUninvertedUp
+        229376, // TrackElemType::rightFlyerZeroGRollUninvertedUp
+        229376, // TrackElemType::leftFlyerZeroGRollInvertedDown
+        229376, // TrackElemType::rightFlyerZeroGRollInvertedDown
+        425984, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp
+        425984, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp
+        425984, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown
+        425984, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown
+        458752, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        458752, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        458752, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag
+        458752, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag
 
         
     };
@@ -2450,26 +2450,26 @@ namespace OpenRCT2::TrackMetadata
         TrackElemType::rightEighthDiveLoopDownToDiag,   // TrackElemType::leftEighthDiveLoopDownToDiag
         TrackElemType::leftEighthDiveLoopDownToDiag,    // TrackElemType::rightEighthDiveLoopDownToDiag
         TrackElemType::diagDown25Brakes,
-        TrackElemType::leftFlyerLargeCorkscrewUninvertedUp, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
         TrackElemType::rightFlyerLargeCorkscrewUninvertedUp, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::leftFlyerLargeCorkscrewInvertedDown, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::rightFlyerLargeCorkscrewInvertedDown, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::leftFlyerMediumHalfLoopUninvertedUp, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::rightFlyerMediumHalfLoopUninvertedUp, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::leftFlyerMediumHalfLoopInvertedDown, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::rightFlyerMediumHalfLoopInvertedDown, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::leftFlyerZeroGRollUninvertedUp, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerZeroGRollUninvertedUp, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerZeroGRollInvertedDown, // TrackElemType::leftFlyerZeroGRollInvertedDown,
-        TrackElemType::rightFlyerZeroGRollInvertedDown, // TrackElemType::rightFlyerZeroGRollInvertedDown,
-        TrackElemType::leftFlyerLargeZeroGRollUninvertedUp, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerLargeZeroGRollUninvertedUp, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerLargeZeroGRollInvertedDown, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::rightFlyerLargeZeroGRollInvertedDown, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
-        TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
+        TrackElemType::leftFlyerLargeCorkscrewUninvertedUp, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        TrackElemType::rightFlyerLargeCorkscrewInvertedDown, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown
+        TrackElemType::leftFlyerLargeCorkscrewInvertedDown, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown
+        TrackElemType::rightFlyerMediumHalfLoopUninvertedUp, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp
+        TrackElemType::leftFlyerMediumHalfLoopUninvertedUp, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp
+        TrackElemType::rightFlyerMediumHalfLoopInvertedDown, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown
+        TrackElemType::leftFlyerMediumHalfLoopInvertedDown, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown
+        TrackElemType::rightFlyerZeroGRollUninvertedUp, // TrackElemType::leftFlyerZeroGRollUninvertedUp
+        TrackElemType::leftFlyerZeroGRollUninvertedUp, // TrackElemType::rightFlyerZeroGRollUninvertedUp
+        TrackElemType::rightFlyerZeroGRollInvertedDown, // TrackElemType::leftFlyerZeroGRollInvertedDown
+        TrackElemType::leftFlyerZeroGRollInvertedDown, // TrackElemType::rightFlyerZeroGRollInvertedDown
+        TrackElemType::rightFlyerLargeZeroGRollUninvertedUp, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp
+        TrackElemType::leftFlyerLargeZeroGRollUninvertedUp, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp
+        TrackElemType::rightFlyerLargeZeroGRollInvertedDown, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown
+        TrackElemType::leftFlyerLargeZeroGRollInvertedDown, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown
+        TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag
+        TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag
 
     };
     static_assert(std::size(kTrackElementMirrorMap) == EnumValue(TrackElemType::count));
@@ -2826,26 +2826,26 @@ namespace OpenRCT2::TrackMetadata
         /* TrackElemType::leftEighthDiveLoopDownToDiag                  */ { TrackElementFlag::down, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::inversionToNormal },
         /* TrackElemType::rightEighthDiveLoopDownToDiag                 */ { TrackElementFlag::down, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::inversionToNormal },
         /* TrackElemType::diagDown25Brakes                              */ { TrackElementFlag::down, TrackElementFlag::startsAtHalfHeight },
-        TrackElemType::leftFlyerLargeCorkscrewUninvertedUp, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::rightFlyerLargeCorkscrewUninvertedUp, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::leftFlyerLargeCorkscrewInvertedDown, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::rightFlyerLargeCorkscrewInvertedDown, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::leftFlyerMediumHalfLoopUninvertedUp, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::rightFlyerMediumHalfLoopUninvertedUp, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::leftFlyerMediumHalfLoopInvertedDown, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::rightFlyerMediumHalfLoopInvertedDown, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::leftFlyerZeroGRollUninvertedUp, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerZeroGRollUninvertedUp, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerZeroGRollInvertedDown, // TrackElemType::leftFlyerZeroGRollInvertedDown,
-        TrackElemType::rightFlyerZeroGRollInvertedDown, // TrackElemType::rightFlyerZeroGRollInvertedDown,
-        TrackElemType::leftFlyerLargeZeroGRollUninvertedUp, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerLargeZeroGRollUninvertedUp, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerLargeZeroGRollInvertedDown, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::rightFlyerLargeZeroGRollInvertedDown, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
-        TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
+        /* TrackElemType::leftFlyerLargeCorkscrewUninvertedUp           */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::rightFlyerLargeCorkscrewUninvertedUp          */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::leftFlyerLargeCorkscrewInvertedDown           */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::rightFlyerLargeCorkscrewInvertedDown          */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::leftFlyerMediumHalfLoopUninvertedUp           */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::rightFlyerMediumHalfLoopUninvertedUp          */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::leftFlyerMediumHalfLoopInvertedDown           */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::rightFlyerMediumHalfLoopInvertedDown          */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::leftFlyerZeroGRollUninvertedUp                */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::rightFlyerZeroGRollUninvertedUp               */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::leftFlyerZeroGRollInvertedDown                */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::rightFlyerZeroGRollInvertedDown               */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::leftFlyerLargeZeroGRollUninvertedUp           */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::rightFlyerLargeZeroGRollUninvertedUp          */ { TrackElementFlag::up, TrackElementFlag::normalToInversion, TrackElementFlag::startsAtHalfHeight },
+        /* TrackElemType::leftFlyerLargeZeroGRollInvertedDown           */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::rightFlyerLargeZeroGRollInvertedDown          */ { TrackElementFlag::down, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal */ { TrackElementFlag::up, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::normalToInversion },
+        /* TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal */ { TrackElementFlag::up, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::normalToInversion },
+        /* TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag     */ { TrackElementFlag::down, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::inversionToNormal },
+        /* TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag    */ { TrackElementFlag::down, TrackElementFlag::startsAtHalfHeight, TrackElementFlag::inversionToNormal },
 
     };
     static_assert(std::size(kTrackFlags) == EnumValue(TrackElemType::count));
@@ -3206,26 +3206,26 @@ namespace OpenRCT2::TrackMetadata
         { TrackGroup::diveLoop,                          TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -56 }, // TrackElemType::leftEighthDiveLoopDownToDiag
         { TrackGroup::diveLoop,                          TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -56 }, // TrackElemType::rightEighthDiveLoopDownToDiag
         { TrackGroup::inclinedBrakes,                    TrackPitch::down25,           TrackPitch::down25,         TrackRoll::none,        TrackRoll::none,       0    }, // TrackElemType::diagDown25
-        TrackElemType::leftFlyerLargeCorkscrewUninvertedUp, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::rightFlyerLargeCorkscrewUninvertedUp, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
-        TrackElemType::leftFlyerLargeCorkscrewInvertedDown, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::rightFlyerLargeCorkscrewInvertedDown, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
-        TrackElemType::leftFlyerMediumHalfLoopUninvertedUp, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::rightFlyerMediumHalfLoopUninvertedUp, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
-        TrackElemType::leftFlyerMediumHalfLoopInvertedDown, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::rightFlyerMediumHalfLoopInvertedDown, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
-        TrackElemType::leftFlyerZeroGRollUninvertedUp, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerZeroGRollUninvertedUp, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerZeroGRollInvertedDown, // TrackElemType::leftFlyerZeroGRollInvertedDown,
-        TrackElemType::rightFlyerZeroGRollInvertedDown, // TrackElemType::rightFlyerZeroGRollInvertedDown,
-        TrackElemType::leftFlyerLargeZeroGRollUninvertedUp, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::rightFlyerLargeZeroGRollUninvertedUp, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
-        TrackElemType::leftFlyerLargeZeroGRollInvertedDown, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::rightFlyerLargeZeroGRollInvertedDown, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
-        TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
-        TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
-        TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
+        { TrackGroup::flyingLargeCorkscrewUninvertedUp,   TrackPitch::none,             TrackPitch::none,           TrackRoll::upsideDown,  TrackRoll::none,        32  }, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
+        { TrackGroup::flyingLargeCorkscrewUninvertedUp,   TrackPitch::none,             TrackPitch::none,           TrackRoll::upsideDown,  TrackRoll::none,        32  }, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        { TrackGroup::flyingLargeCorkscrewInvertedDown,   TrackPitch::none,             TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -32 }, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown
+        { TrackGroup::flyingLargeCorkscrewInvertedDown,   TrackPitch::none,             TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -32 }, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown
+        { TrackGroup::flyingMediumHalfLoopUninvertedUp,   TrackPitch::none,             TrackPitch::up25,           TrackRoll::upsideDown,  TrackRoll::none,        64  }, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp
+        { TrackGroup::flyingMediumHalfLoopUninvertedUp,   TrackPitch::none,             TrackPitch::up25,           TrackRoll::upsideDown,  TrackRoll::none,        64  }, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp
+        { TrackGroup::flyingMediumHalfLoopInvertedDown,   TrackPitch::down25,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -64 }, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown
+        { TrackGroup::flyingMediumHalfLoopInvertedDown,   TrackPitch::down25,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -64 }, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown
+        { TrackGroup::flyingZeroGRollUninvertedUp,        TrackPitch::none,             TrackPitch::up25,           TrackRoll::upsideDown,  TrackRoll::none,        0   }, // TrackElemType::leftFlyerZeroGRollUninvertedUp
+        { TrackGroup::flyingZeroGRollUninvertedUp,        TrackPitch::none,             TrackPitch::up25,           TrackRoll::upsideDown,  TrackRoll::none,        0   }, // TrackElemType::rightFlyerZeroGRollUninvertedUp
+        { TrackGroup::flyingZeroGRollInvertedDown,        TrackPitch::down25,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  0   }, // TrackElemType::leftFlyerZeroGRollInvertedDown
+        { TrackGroup::flyingZeroGRollInvertedDown,        TrackPitch::down25,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  0   }, // TrackElemType::rightFlyerZeroGRollInvertedDown
+        { TrackGroup::flyingZeroGRollLargeUninvertedUp,   TrackPitch::none,             TrackPitch::up60,           TrackRoll::upsideDown,  TrackRoll::none,        64  }, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp
+        { TrackGroup::flyingZeroGRollLargeUninvertedUp,   TrackPitch::none,             TrackPitch::up60,           TrackRoll::upsideDown,  TrackRoll::none,        64  }, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp
+        { TrackGroup::flyingZeroGRollLargeInvertedDown,   TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -64 }, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown
+        { TrackGroup::flyingZeroGRollLargeInvertedDown,   TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -64 }, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown
+        { TrackGroup::flyingDiveLoopUninvertedUp,         TrackPitch::none,             TrackPitch::up60,           TrackRoll::upsideDown,  TrackRoll::none,        56  }, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        { TrackGroup::flyingDiveLoopUninvertedUp,         TrackPitch::none,             TrackPitch::up60,           TrackRoll::upsideDown,  TrackRoll::none,        56  }, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        { TrackGroup::flyingDiveLoopInvertedDown,         TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -56 }, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag
+        { TrackGroup::flyingDiveLoopInvertedDown,         TrackPitch::down60,           TrackPitch::none,           TrackRoll::none,        TrackRoll::upsideDown,  -56 }, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag
 
     };
     static_assert(std::size(kTrackDefinitions) == EnumValue(TrackElemType::count));
@@ -3294,7 +3294,10 @@ namespace OpenRCT2::TrackMetadata
         SpinFunction::r9,   SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
         SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
         SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
-        SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none
+        SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
+        SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
+        SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none,
+        SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none, SpinFunction::none
     };
     static_assert(std::size(kTrackTypeToSpinFunction) == EnumValue(TrackElemType::count));
 
@@ -4657,6 +4660,26 @@ namespace OpenRCT2::TrackMetadata
         STR_DIVE_LOOP_LEFT,                // TrackElemType::leftEighthDiveLoopDownToDiag
         STR_DIVE_LOOP_RIGHT,               // TrackElemType::rightEighthDiveLoopDownToDiag
         STR_BRAKES,                        // TrackElemType::diagDown25Brakes
+        STR_LARGE_HALF_CORKSCREW_LEFT,     // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
+        STR_LARGE_HALF_CORKSCREW_RIGHT,    // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        STR_LARGE_HALF_CORKSCREW_LEFT,     // TrackElemType::leftFlyerLargeCorkscrewInvertedDown
+        STR_LARGE_HALF_CORKSCREW_RIGHT,    // TrackElemType::rightFlyerLargeCorkscrewInvertedDown
+        STR_MEDIUM_HALF_LOOP_LEFT,         // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp
+        STR_MEDIUM_HALF_LOOP_RIGHT,        // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp
+        STR_MEDIUM_HALF_LOOP_LEFT,         // TrackElemType::leftFlyerMediumHalfLoopInvertedDown
+        STR_MEDIUM_HALF_LOOP_RIGHT,        // TrackElemType::rightFlyerMediumHalfLoopInvertedDown
+        STR_ZERO_G_ROLL_LEFT,              // TrackElemType::leftFlyerZeroGRollUninvertedUp
+        STR_ZERO_G_ROLL_RIGHT,             // TrackElemType::rightFlyerZeroGRollUninvertedUp
+        STR_ZERO_G_ROLL_LEFT,              // TrackElemType::leftFlyerZeroGRollInvertedDown
+        STR_ZERO_G_ROLL_RIGHT,             // TrackElemType::rightFlyerZeroGRollInvertedDown
+        STR_LARGE_ZERO_G_ROLL_LEFT,        // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp
+        STR_LARGE_ZERO_G_ROLL_RIGHT,       // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp
+        STR_LARGE_ZERO_G_ROLL_LEFT,        // TrackElemType::leftFlyerLargeZeroGRollInvertedDown
+        STR_LARGE_ZERO_G_ROLL_RIGHT,       // TrackElemType::rightFlyerLargeZeroGRollInvertedDown
+        STR_DIVE_LOOP_LEFT,                // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        STR_DIVE_LOOP_RIGHT,               // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal
+        STR_DIVE_LOOP_LEFT,                // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag
+        STR_DIVE_LOOP_RIGHT,               // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag
     };
     static_assert(std::size(kRideConfigurationStringIds) == EnumValue(TrackElemType::count));
 
@@ -15283,6 +15306,664 @@ namespace OpenRCT2::TrackMetadata
         .blockedSegments = blockedSegmentsRotate(kLeftEighthDiveLoopUpToOrthogonalSeq0.blockedSegments, 2),
     };
 
+    // Flyer Large Corkscrew - copied from non-Flyer large corkscrew
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq1 = {
+        .clearance = { -32, 0, 8, 32, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0010,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 32, 24, { 0b0111, 0 }, 0 },
+        .allowedWallEdges = 0b0011,
+        .blockedSegments = { {
+            EnumsToFlags(PS::left, PS::centre, PS::topLeft, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq3 = {
+        .clearance = { -32, -32, 32, 24, { 0b1000, 0 }, 0 },
+        .allowedWallEdges = 0b1100,
+        .blockedSegments = { {
+            kSegmentsNone,
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq4 = {
+        .clearance = { -64, -32, 48, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = { {
+            EnumsToFlags(PS::left, PS::bottom, PS::centre, PS::topLeft, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewUninvertedUpSeq5 = {
+        .clearance = { -64, -64, 72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = { {
+            EnumsToFlags(PS::left, PS::bottom, PS::centre, PS::topLeft, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq1 = {
+        .clearance = { -32, 0, 8, 32, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1000,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 32, 24, { 0b1011, 0 }, 0 },
+        .allowedWallEdges = 0b1001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq3 = {
+        .clearance = { -32, 32, 32, 24, { 0b0100, 0 }, 0 },
+        .allowedWallEdges = 0b0110,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq4 = {
+        .clearance = { -64, 32, 48, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq4.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewUninvertedUpSeq5 = {
+        .clearance = { -64, 64, 72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewUninvertedUpSeq5.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq0 = {
+        .clearance = { 0, 0, -40, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq5.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq1 = {
+        .clearance = { -32, 0, -64, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0010,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq4.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq2 = {
+        .clearance = { -64, 0, -88, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq3.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq3 = {
+        .clearance = { -32, 32, -56, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq2.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq4 = {
+        .clearance = { -64, 32, -24, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq1.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeCorkscrewInvertedDownSeq5 = {
+        .clearance = { -64, 64, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerLargeCorkscrewUninvertedUpSeq0.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq0 = {
+        .clearance = { 0, 0, -40, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq1 = {
+        .clearance = { -32, 0, -64, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1000,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq2 = {
+        .clearance = { -64, 0, -88, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq3 = {
+        .clearance = { -32, -32, -56, 40, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq4 = {
+        .clearance = { -64, -32, -24, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq4.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeCorkscrewInvertedDownSeq5 = {
+        .clearance = { -64, -64, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeCorkscrewInvertedDownSeq5.blockedSegments),
+    };
+
+    // Flyer Medium Half Loop - copied from non-Flyer medium half loop
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::centre, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopUninvertedUpSeq1 = {
+        .clearance = { -32, 0, 16, 48, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0010,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0011,
+        .blockedSegments = { {
+            EnumsToFlags(PS::left, PS::centre, PS::topLeft, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopUninvertedUpSeq3 = {
+        .clearance = { -64, -32, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::bottom, PS::centre, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopUninvertedUpSeq4 = {
+        .clearance = { -32, -32, 168, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1111,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::bottom, PS::centre, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopUninvertedUpSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopUninvertedUpSeq1 = {
+        .clearance = { -32, 0, 16, 48, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1000,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopUninvertedUpSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1100,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopUninvertedUpSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopUninvertedUpSeq3 = {
+        .clearance = { -64, 32, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0110,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopUninvertedUpSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopUninvertedUpSeq4 = {
+        .clearance = { -32, 32, 168, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1111,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopUninvertedUpSeq4.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopInvertedDownSeq0 = {
+        .clearance = { 0, 0, -92, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerMediumHalfLoopUninvertedUpSeq4.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopInvertedDownSeq1 = {
+        .clearance = { -32, -32, -136, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerMediumHalfLoopUninvertedUpSeq3.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopInvertedDownSeq2 = {
+        .clearance = { -64, -32, -136, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerMediumHalfLoopUninvertedUpSeq2.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopInvertedDownSeq3 = {
+        .clearance = { -64, 0, -56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerMediumHalfLoopUninvertedUpSeq1.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerMediumHalfLoopInvertedDownSeq4 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerMediumHalfLoopUninvertedUpSeq0.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopInvertedDownSeq0 = {
+        .clearance = { 0, 0, -92, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopInvertedDownSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopInvertedDownSeq1 = {
+        .clearance = { -32, 32, -136, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopInvertedDownSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopInvertedDownSeq2 = {
+        .clearance = { -64, 32, -136, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopInvertedDownSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopInvertedDownSeq3 = {
+        .clearance = { -64, 0, -56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopInvertedDownSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerMediumHalfLoopInvertedDownSeq4 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerMediumHalfLoopInvertedDownSeq4.blockedSegments),
+    };
+
+    // Flyer Zero-G Roll - copied from non-Flyer zero-G roll
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::centre),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollUninvertedUpSeq1 = {
+        .clearance = { -64, 0, 24, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollUninvertedUpSeq2 = {
+        .clearance = { -32, 0, 56, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .blockedSegments = { {
+            EnumsToFlags(PS::bottom, PS::centre),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollUninvertedUpSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollUninvertedUpSeq1 = {
+        .clearance = { -64, 0, 24, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollUninvertedUpSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollUninvertedUpSeq2 = {
+        .clearance = { -32, 0, 56, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollUninvertedUpSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollInvertedDownSeq0 = {
+        .clearance = { 0, 0, -48, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerZeroGRollUninvertedUpSeq2.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollInvertedDownSeq1 = {
+        .clearance = { -64, 0, -120, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerZeroGRollUninvertedUpSeq1.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerZeroGRollInvertedDownSeq2 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerZeroGRollUninvertedUpSeq0.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollInvertedDownSeq0 = {
+        .clearance = { 0, 0, -48, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollInvertedDownSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollInvertedDownSeq1 = {
+        .clearance = { -64, 0, -120, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollInvertedDownSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerZeroGRollInvertedDownSeq2 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerZeroGRollInvertedDownSeq2.blockedSegments),
+    };
+
+    // Flyer Large Zero-G Roll - copied from non-Flyer large zero-G roll
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::centre),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollUninvertedUpSeq1 = {
+        .clearance = { -64, 0, 24, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollUninvertedUpSeq3 = {
+        .clearance = { -32, 0, 80, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .blockedSegments = { {
+            EnumsToFlags(PS::bottom, PS::centre),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollUninvertedUpSeq0 = {
+        .clearance = { 0, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollUninvertedUpSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollUninvertedUpSeq1 = {
+        .clearance = { -64, 0, 24, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollUninvertedUpSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollUninvertedUpSeq2 = {
+        .clearance = { -64, 0, 56, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollUninvertedUpSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollUninvertedUpSeq3 = {
+        .clearance = { -32, 0, 80, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollUninvertedUpSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollInvertedDownSeq0 = {
+        .clearance = { 0, 0, -72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerLargeZeroGRollUninvertedUpSeq3.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollInvertedDownSeq1 = {
+        .clearance = { -64, 0, -144, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerLargeZeroGRollUninvertedUpSeq2.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollInvertedDownSeq2 = {
+        .clearance = { -64, 0, -144, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerLargeZeroGRollUninvertedUpSeq1.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerLargeZeroGRollInvertedDownSeq3 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerLargeZeroGRollUninvertedUpSeq0.blockedSegments, 2),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollInvertedDownSeq0 = {
+        .clearance = { 0, 0, -72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollInvertedDownSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollInvertedDownSeq1 = {
+        .clearance = { -64, 0, -144, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollInvertedDownSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollInvertedDownSeq2 = {
+        .clearance = { -64, 0, -144, 120, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollInvertedDownSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerLargeZeroGRollInvertedDownSeq3 = {
+        .clearance = { -32, 0, 0, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0101,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerLargeZeroGRollInvertedDownSeq3.blockedSegments),
+    };
+
+    // Flyer Eighth Dive Loop - copied from non-Flyer eighth dive loop
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0 = {
+        .clearance = { 0, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1 = {
+        .clearance = { -32, 0, 0, 56, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0010,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2 = {
+        .clearance = { -64, 0, 56, 56, { 0b0111, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3 = {
+        .clearance = { -64, -32, 32, 56, { 0b0100, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4 = {
+        .clearance = { -64, -64, 0, 56, { 0b0110, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::top, PS::bottom, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5 = {
+        .clearance = { -32, -96, 0, 88, { 0b0001, 0 }, 0 },
+        .allowedWallEdges = 0b1001,
+        .blockedSegments = { {
+            EnumsToFlags(PS::bottom, PS::centre, PS::bottomLeft, PS::bottomRight),
+            kSegmentsUnimplemented,
+            kSegmentsUnimplemented,
+        } },
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0 = {
+        .clearance = { 0, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1 = {
+        .clearance = { -32, 0, 0, 56, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1000,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2 = {
+        .clearance = { -64, 0, 56, 56, { 0b1110, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3 = {
+        .clearance = { -64, 32, 32, 56, { 0b1000, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4 = {
+        .clearance = { -64, 64, 0, 56, { 0b1001, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5 = {
+        .clearance = { -32, 96, 0, 88, { 0b0010, 0 }, 0 },
+        .allowedWallEdges = 0b0110,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq0 = {
+        .clearance = { 0, 0, -72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq1 = {
+        .clearance = { -32, -96, -96, 56, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b0010,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq2 = {
+        .clearance = { -64, -96, -96, 56, { 0b1001, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq3 = {
+        .clearance = { -64, -32, -56, 56, { 0b0100, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq4 = {
+        .clearance = { -64, 0, 0, 56, { 0b0110, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq5 = {
+        .clearance = { -32, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsRotate(kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0.blockedSegments, 1),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq0 = {
+        .clearance = { 0, 0, -72, 24, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq0.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq1 = {
+        .clearance = { -32, 96, -96, 56, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1000,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq1.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq2 = {
+        .clearance = { -64, 96, -96, 56, { 0b0110, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq2.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq3 = {
+        .clearance = { -64, 32, -56, 56, { 0b1000, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq3.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq4 = {
+        .clearance = { -64, 0, 0, 56, { 0b1001, 0 }, 0 },
+        .allowedWallEdges = 0b0001,
+        .invertSegmentBlocking = true,
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq4.blockedSegments),
+    };
+    static constexpr SequenceDescriptor kRightFlyerEighthDiveLoopInvertedDownToDiagSeq5 = {
+        .clearance = { -32, 0, 0, 16, { 0b1111, 0 }, 0 },
+        .allowedWallEdges = 0b1010,
+        .flags = { SequenceFlag::hasHeightMarker },
+        .blockedSegments = blockedSegmentsFlipXAxis(kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq5.blockedSegments),
+    };
+
     static constexpr SequenceData kSequenceDescriptorsByElement[] = {
         /* TrackElemType::flat */ { 1, { kFlatSeq0 } },
         /* TrackElemType::endStation */ { 1, { kEndStationSeq0 } },
@@ -16219,7 +16900,97 @@ namespace OpenRCT2::TrackMetadata
         { 6,
           { kRightEighthDiveLoopDownToDiagSeq0, kRightEighthDiveLoopDownToDiagSeq1, kRightEighthDiveLoopDownToDiagSeq2,
             kRightEighthDiveLoopDownToDiagSeq3, kRightEighthDiveLoopDownToDiagSeq4, kRightEighthDiveLoopDownToDiagSeq5 } },
-        /* TrackElemType::diagDown25Brakes */ { 4, { kDiagDown25Seq0, kDiagDown25Seq1, kDiagDown25Seq2, kDiagDown25Seq3 } }
+        /* TrackElemType::diagDown25Brakes */ { 4, { kDiagDown25Seq0, kDiagDown25Seq1, kDiagDown25Seq2, kDiagDown25Seq3 } },
+        /* TrackElemType::leftFlyerLargeCorkscrewUninvertedUp */
+        { 6,
+          { kLeftFlyerLargeCorkscrewUninvertedUpSeq0, kLeftFlyerLargeCorkscrewUninvertedUpSeq1,
+            kLeftFlyerLargeCorkscrewUninvertedUpSeq2, kLeftFlyerLargeCorkscrewUninvertedUpSeq3,
+            kLeftFlyerLargeCorkscrewUninvertedUpSeq4, kLeftFlyerLargeCorkscrewUninvertedUpSeq5 } },
+        /* TrackElemType::rightFlyerLargeCorkscrewUninvertedUp */
+        { 6,
+          { kRightFlyerLargeCorkscrewUninvertedUpSeq0, kRightFlyerLargeCorkscrewUninvertedUpSeq1,
+            kRightFlyerLargeCorkscrewUninvertedUpSeq2, kRightFlyerLargeCorkscrewUninvertedUpSeq3,
+            kRightFlyerLargeCorkscrewUninvertedUpSeq4, kRightFlyerLargeCorkscrewUninvertedUpSeq5 } },
+        /* TrackElemType::leftFlyerLargeCorkscrewInvertedDown */
+        { 6,
+          { kLeftFlyerLargeCorkscrewInvertedDownSeq0, kLeftFlyerLargeCorkscrewInvertedDownSeq1,
+            kLeftFlyerLargeCorkscrewInvertedDownSeq2, kLeftFlyerLargeCorkscrewInvertedDownSeq3,
+            kLeftFlyerLargeCorkscrewInvertedDownSeq4, kLeftFlyerLargeCorkscrewInvertedDownSeq5 } },
+        /* TrackElemType::rightFlyerLargeCorkscrewInvertedDown */
+        { 6,
+          { kRightFlyerLargeCorkscrewInvertedDownSeq0, kRightFlyerLargeCorkscrewInvertedDownSeq1,
+            kRightFlyerLargeCorkscrewInvertedDownSeq2, kRightFlyerLargeCorkscrewInvertedDownSeq3,
+            kRightFlyerLargeCorkscrewInvertedDownSeq4, kRightFlyerLargeCorkscrewInvertedDownSeq5 } },
+        /* TrackElemType::leftFlyerMediumHalfLoopUninvertedUp */
+        { 5,
+          { kLeftFlyerMediumHalfLoopUninvertedUpSeq0, kLeftFlyerMediumHalfLoopUninvertedUpSeq1,
+            kLeftFlyerMediumHalfLoopUninvertedUpSeq2, kLeftFlyerMediumHalfLoopUninvertedUpSeq3,
+            kLeftFlyerMediumHalfLoopUninvertedUpSeq4 } },
+        /* TrackElemType::rightFlyerMediumHalfLoopUninvertedUp */
+        { 5,
+          { kRightFlyerMediumHalfLoopUninvertedUpSeq0, kRightFlyerMediumHalfLoopUninvertedUpSeq1,
+            kRightFlyerMediumHalfLoopUninvertedUpSeq2, kRightFlyerMediumHalfLoopUninvertedUpSeq3,
+            kRightFlyerMediumHalfLoopUninvertedUpSeq4 } },
+        /* TrackElemType::leftFlyerMediumHalfLoopInvertedDown */
+        { 5,
+          { kLeftFlyerMediumHalfLoopInvertedDownSeq0, kLeftFlyerMediumHalfLoopInvertedDownSeq1,
+            kLeftFlyerMediumHalfLoopInvertedDownSeq2, kLeftFlyerMediumHalfLoopInvertedDownSeq3,
+            kLeftFlyerMediumHalfLoopInvertedDownSeq4 } },
+        /* TrackElemType::rightFlyerMediumHalfLoopInvertedDown */
+        { 5,
+          { kRightFlyerMediumHalfLoopInvertedDownSeq0, kRightFlyerMediumHalfLoopInvertedDownSeq1,
+            kRightFlyerMediumHalfLoopInvertedDownSeq2, kRightFlyerMediumHalfLoopInvertedDownSeq3,
+            kRightFlyerMediumHalfLoopInvertedDownSeq4 } },
+        /* TrackElemType::leftFlyerZeroGRollUninvertedUp */
+        { 3,
+          { kLeftFlyerZeroGRollUninvertedUpSeq0, kLeftFlyerZeroGRollUninvertedUpSeq1, kLeftFlyerZeroGRollUninvertedUpSeq2 } },
+        /* TrackElemType::rightFlyerZeroGRollUninvertedUp */
+        { 3,
+          { kRightFlyerZeroGRollUninvertedUpSeq0, kRightFlyerZeroGRollUninvertedUpSeq1,
+            kRightFlyerZeroGRollUninvertedUpSeq2 } },
+        /* TrackElemType::leftFlyerZeroGRollInvertedDown */
+        { 3,
+          { kLeftFlyerZeroGRollInvertedDownSeq0, kLeftFlyerZeroGRollInvertedDownSeq1, kLeftFlyerZeroGRollInvertedDownSeq2 } },
+        /* TrackElemType::rightFlyerZeroGRollInvertedDown */
+        { 3,
+          { kRightFlyerZeroGRollInvertedDownSeq0, kRightFlyerZeroGRollInvertedDownSeq1,
+            kRightFlyerZeroGRollInvertedDownSeq2 } },
+        /* TrackElemType::leftFlyerLargeZeroGRollUninvertedUp */
+        { 4,
+          { kLeftFlyerLargeZeroGRollUninvertedUpSeq0, kLeftFlyerLargeZeroGRollUninvertedUpSeq1,
+            kLeftFlyerLargeZeroGRollUninvertedUpSeq2, kLeftFlyerLargeZeroGRollUninvertedUpSeq3 } },
+        /* TrackElemType::rightFlyerLargeZeroGRollUninvertedUp */
+        { 4,
+          { kRightFlyerLargeZeroGRollUninvertedUpSeq0, kRightFlyerLargeZeroGRollUninvertedUpSeq1,
+            kRightFlyerLargeZeroGRollUninvertedUpSeq2, kRightFlyerLargeZeroGRollUninvertedUpSeq3 } },
+        /* TrackElemType::leftFlyerLargeZeroGRollInvertedDown */
+        { 4,
+          { kLeftFlyerLargeZeroGRollInvertedDownSeq0, kLeftFlyerLargeZeroGRollInvertedDownSeq1,
+            kLeftFlyerLargeZeroGRollInvertedDownSeq2, kLeftFlyerLargeZeroGRollInvertedDownSeq3 } },
+        /* TrackElemType::rightFlyerLargeZeroGRollInvertedDown */
+        { 4,
+          { kRightFlyerLargeZeroGRollInvertedDownSeq0, kRightFlyerLargeZeroGRollInvertedDownSeq1,
+            kRightFlyerLargeZeroGRollInvertedDownSeq2, kRightFlyerLargeZeroGRollInvertedDownSeq3 } },
+        /* TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal */
+        { 6,
+          { kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0, kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1,
+            kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2, kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3,
+            kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4, kLeftFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5 } },
+        /* TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal */
+        { 6,
+          { kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq0, kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq1,
+            kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq2, kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq3,
+            kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq4, kRightFlyerEighthDiveLoopUninvertedUpToOrthogonalSeq5 } },
+        /* TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag */
+        { 6,
+          { kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq0, kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq1,
+            kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq2, kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq3,
+            kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq4, kLeftFlyerEighthDiveLoopInvertedDownToDiagSeq5 } },
+        /* TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag */
+        { 6,
+          { kRightFlyerEighthDiveLoopInvertedDownToDiagSeq0, kRightFlyerEighthDiveLoopInvertedDownToDiagSeq1,
+            kRightFlyerEighthDiveLoopInvertedDownToDiagSeq2, kRightFlyerEighthDiveLoopInvertedDownToDiagSeq3,
+            kRightFlyerEighthDiveLoopInvertedDownToDiagSeq4, kRightFlyerEighthDiveLoopInvertedDownToDiagSeq5 } }
     };
 
 #pragma endregion
