@@ -672,10 +672,10 @@ namespace OpenRCT2::TrackMetadata
         0,      // TrackElemType::flatTrack1x1B
         0,      // TrackElemType::flatTrack1x4C
         0,      // TrackElemType::flatTrack3x3
-        96,     // TrackElemType::leftCorkscrewUp
-        96,     // TrackElemType::rightCorkscrewUp
-        96,     // TrackElemType::leftCorkscrewDown
-        96,     // TrackElemType::rightCorkscrewDown
+        96,     // TrackElemType::leftLargeCorkscrewUp
+        96,     // TrackElemType::rightLargeCorkscrewUp
+        96,     // TrackElemType::leftLargeCorkscrewDown
+        96,     // TrackElemType::rightLargeCorkscrewDown
         80,     // TrackElemType::leftMediumHalfLoopUp
         80,     // TrackElemType::rightMediumHalfLoopUp
         80,     // TrackElemType::leftMediumHalfLoopDown
@@ -755,6 +755,26 @@ namespace OpenRCT2::TrackMetadata
         165, // TrackElemType::leftEighthDiveLoopDownToDiag
         165, // TrackElemType::rightEighthDiveLoopDownToDiag
         45, // TrackElemType::diagDown25Brakes
+        96, // TrackElemType::rightFlyerLargeCorkscrewUninvertedUp
+        96, // TrackElemType::leftFlyerLargeCorkscrewUninvertedUp
+        96, // TrackElemType::leftFlyerLargeCorkscrewInvertedDown,
+        96, // TrackElemType::rightFlyerLargeCorkscrewInvertedDown,
+        80, // TrackElemType::leftFlyerMediumHalfLoopUninvertedUp,
+        80, // TrackElemType::rightFlyerMediumHalfLoopUninvertedUp,
+        80, // TrackElemType::leftFlyerMediumHalfLoopInvertedDown,
+        80, // TrackElemType::rightFlyerMediumHalfLoopInvertedDown,
+        96, // TrackElemType::leftFlyerZeroGRollUninvertedUp,
+        96, // TrackElemType::rightFlyerZeroGRollUninvertedUp,
+        96, // TrackElemType::leftFlyerZeroGRollInvertedDown,
+        96, // TrackElemType::rightFlyerZeroGRollInvertedDown,
+        165, // TrackElemType::leftFlyerLargeZeroGRollUninvertedUp,
+        165, // TrackElemType::rightFlyerLargeZeroGRollUninvertedUp,
+        165, // TrackElemType::leftFlyerLargeZeroGRollInvertedDown,
+        165, // TrackElemType::rightFlyerLargeZeroGRollInvertedDown,
+        165, // TrackElemType::leftFlyerEighthDiveLoopUninvertedUpToOrthogonal,
+        165, // TrackElemType::rightFlyerEighthDiveLoopUninvertedUpToOrthogonal,
+        165, // TrackElemType::leftFlyerEighthDiveLoopInvertedDownToDiag,
+        165, // TrackElemType::rightFlyerEighthDiveLoopInvertedDownToDiag,
     };
 
     static_assert(std::size(kTrackPieceLengths) == EnumValue(TrackElemType::count));
