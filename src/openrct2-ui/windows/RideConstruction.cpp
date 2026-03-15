@@ -9,6 +9,7 @@
 
 #include "openrct2-ui/ProvisionalElements.h"
 
+#include <array>
 #include <limits>
 #include <openrct2-ui/UiContext.h>
 #include <openrct2-ui/input/InputManager.h>
@@ -61,6 +62,7 @@
 #include <openrct2/world/tile_element/PathElement.h>
 #include <openrct2/world/tile_element/SurfaceElement.h>
 #include <openrct2/world/tile_element/TrackElement.h>
+#include <span>
 
 constexpr int8_t kDefaultSpeedIncrement = 2;
 constexpr int8_t kDefaultMinimumSpeed = 2;
@@ -243,7 +245,105 @@ namespace OpenRCT2::Ui::Windows
         SpecialElementsDropdownState _specialElementDropdownState;
         bool _autoOpeningShop{};
 
+        // Each variation entry pairs a track element type with the TrackGroup that must
+        // be enabled for it to be offered. Using an explicit group (rather than looking
+        // up ted.definition.group) lets diagonal long-base pieces gate on
+        // diagSlopeSteepLong even though TrackData groups them under slopeSteepLong.
+        struct TrackVariationEntry
+        {
+            TrackElemType type;
+            TrackGroup enableGroup;
+        };
+
+        // Advances index to the next supported variation, wrapping around.
+        // Works with any size array — extend kXxxVariations below to add more variants.
+        static void CycleSteepVariation(uint8_t& index, std::span<const TrackVariationEntry> variations)
+        {
+            const auto N = variations.size();
+            for (size_t i = 1; i <= N; ++i)
+            {
+                const auto next = static_cast<uint8_t>((index + i) % N);
+                if (IsTrackEnabled(variations[next].enableGroup))
+                {
+                    index = next;
+                    return;
+                }
+            }
+        }
+
     public:
+        // Resolves the variation index to the actual track type, advancing to the first
+        // enabled variation if the current index points to a disabled piece. This handles
+        // rides where the base piece belongs to an extraTrackGroup (cheat-only) while the
+        // long-base variant is always enabled — restoring the old auto-upgrade behaviour
+        // and allowing wrap-around cycling once both pieces become available.
+        static TrackElemType ResolveVariation(uint8_t& index, std::span<const TrackVariationEntry> variations)
+        {
+            const auto N = variations.size();
+            for (size_t i = 0; i < N; ++i)
+            {
+                const auto candidate = static_cast<uint8_t>((index + i) % N);
+                if (IsTrackEnabled(variations[candidate].enableGroup))
+                {
+                    index = candidate;
+                    return variations[candidate].type;
+                }
+            }
+            return variations[index].type; // Nothing enabled; return current as-is
+        }
+
+        // Ordered lists of track pieces to cycle through for each steep transition direction.
+        // Each entry specifies both the piece and the TrackGroup that gates its availability.
+        // Add new entries here when more variants become available.
+        // Orthogonal
+        static constexpr std::array<TrackVariationEntry, 2> kFlatToSteepUpVariations = { {
+            { TrackElemType::flatToUp60, TrackGroup::flatToSteepSlope },
+            { TrackElemType::flatToUp60LongBase, TrackGroup::slopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kFlatToSteepDownVariations = { {
+            { TrackElemType::flatToDown60, TrackGroup::flatToSteepSlope },
+            { TrackElemType::flatToDown60LongBase, TrackGroup::slopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kSteepToFlatUpVariations = { {
+            { TrackElemType::up60ToFlat, TrackGroup::flatToSteepSlope },
+            { TrackElemType::up60ToFlatLongBase, TrackGroup::slopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kSteepToFlatDownVariations = { {
+            { TrackElemType::down60ToFlat, TrackGroup::flatToSteepSlope },
+            { TrackElemType::down60ToFlatLongBase, TrackGroup::slopeSteepLong },
+        } };
+        // Diagonal — long-base pieces gate on diagSlopeSteepLong, not slopeSteepLong,
+        // because their sprites are only present on ride types that declare that group.
+        static constexpr std::array<TrackVariationEntry, 2> kDiagFlatToSteepUpVariations = { {
+            { TrackElemType::diagFlatToUp60, TrackGroup::diagSlopeSteepUp },
+            { TrackElemType::diagFlatToUp60LongBase, TrackGroup::diagSlopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kDiagFlatToSteepDownVariations = { {
+            { TrackElemType::diagFlatToDown60, TrackGroup::diagSlopeSteepDown },
+            { TrackElemType::diagFlatToDown60LongBase, TrackGroup::diagSlopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kDiagSteepToFlatUpVariations = { {
+            { TrackElemType::diagUp60ToFlat, TrackGroup::diagSlopeSteepUp },
+            { TrackElemType::diagUp60ToFlatLongBase, TrackGroup::diagSlopeSteepLong },
+        } };
+        static constexpr std::array<TrackVariationEntry, 2> kDiagSteepToFlatDownVariations = { {
+            { TrackElemType::diagDown60ToFlat, TrackGroup::diagSlopeSteepDown },
+            { TrackElemType::diagDown60ToFlatLongBase, TrackGroup::diagSlopeSteepLong },
+        } };
+
+        // Variation indices — track the user's current cycling position for each direction.
+        // Public so the static WindowRideConstructionUpdateState helper can read them.
+        // Orthogonal
+        uint8_t _variationFlatToSteepUp{};
+        uint8_t _variationFlatToSteepDown{};
+        uint8_t _variationSteepToFlatUp{};
+        uint8_t _variationSteepToFlatDown{};
+        // Diagonal
+        uint8_t _variationDiagFlatToSteepUp{};
+        uint8_t _variationDiagFlatToSteepDown{};
+        uint8_t _variationDiagSteepToFlatUp{};
+        uint8_t _variationDiagSteepToFlatDown{};
+
         void onOpen() override
         {
             auto currentRide = GetRide(_currentRideIndex);
@@ -1211,6 +1311,9 @@ namespace OpenRCT2::Ui::Windows
                     UpdateLiftHillSelected(TrackPitch::down90);
                     break;
                 case WIDX_SLOPE_DOWN_STEEP:
+                {
+                    // Snapshot pitch before invalidation to detect re-click.
+                    const bool steepDownAlreadySelected = (_currentTrackPitchEnd == TrackPitch::down60);
                     RideConstructionInvalidateCurrentTrack();
                     if (IsTrackEnabled(TrackGroup::helixDownBankedHalf) || IsTrackEnabled(TrackGroup::helixUpBankedHalf))
                     {
@@ -1282,8 +1385,37 @@ namespace OpenRCT2::Ui::Windows
                         }
                     }
 
+                    // All helix paths already broke out above.
+                    // Only reach here for straight / non-helix track — cycle variation on re-click.
+                    // Front: prev=none, current=down60 → flatToDown60 → _variationFlatToSteepDown.
+                    // Back:  startSlope=down60, endSlope=none  → down60ToFlat → _variationSteepToFlatDown.
+                    if (steepDownAlreadySelected)
+                    {
+                        if (TrackPieceDirectionIsDiagonal(_currentTrackPieceDirection))
+                        {
+                            if (_rideConstructionState == RideConstructionState::Back)
+                                CycleSteepVariation(_variationDiagSteepToFlatDown, kDiagSteepToFlatDownVariations);
+                            else
+                                CycleSteepVariation(_variationDiagFlatToSteepDown, kDiagFlatToSteepDownVariations);
+                        }
+                        else
+                        {
+                            if (_rideConstructionState == RideConstructionState::Back)
+                                CycleSteepVariation(_variationSteepToFlatDown, kSteepToFlatDownVariations);
+                            else
+                                CycleSteepVariation(_variationFlatToSteepDown, kFlatToSteepDownVariations);
+                        }
+                        _currentTrackPrice = kMoney64Undefined;
+                        WindowRideConstructionUpdateActiveElements();
+                        break;
+                    }
+                    _variationFlatToSteepDown = 0;
+                    _variationSteepToFlatDown = 0;
+                    _variationDiagFlatToSteepDown = 0;
+                    _variationDiagSteepToFlatDown = 0;
                     UpdateLiftHillSelected(TrackPitch::down60);
                     break;
+                }
                 case WIDX_SLOPE_DOWN:
                     RideConstructionInvalidateCurrentTrack();
                     if (_rideConstructionState == RideConstructionState::Back && _currentTrackRollEnd != TrackRoll::none)
@@ -1293,6 +1425,9 @@ namespace OpenRCT2::Ui::Windows
                     UpdateLiftHillSelected(TrackPitch::down25);
                     break;
                 case WIDX_LEVEL:
+                {
+                    // Snapshot pitch before invalidation to detect re-click from steep.
+                    const bool levelAlreadySelected = (_currentTrackPitchEnd == TrackPitch::none);
                     RideConstructionInvalidateCurrentTrack();
                     if (_rideConstructionState == RideConstructionState::Front && _previousTrackPitchEnd == TrackPitch::down25)
                     {
@@ -1317,8 +1452,98 @@ namespace OpenRCT2::Ui::Windows
                             _currentTrackRollEnd = TrackRoll::right;
                         }
                     }
+                    // If level was already active and we're connecting from a steep pitch, cycle the transition variant.
+                    // Front: prev=up60 → up60ToFlat; prev=down60 → down60ToFlat.
+                    // Back:  prev=up60 → flatToUp60; prev=down60 → flatToDown60.
+                    if (levelAlreadySelected)
+                    {
+                        if (TrackPieceDirectionIsDiagonal(_currentTrackPieceDirection))
+                        {
+                            if (_rideConstructionState == RideConstructionState::Front)
+                            {
+                                if (_previousTrackPitchEnd == TrackPitch::up60)
+                                {
+                                    CycleSteepVariation(_variationDiagSteepToFlatUp, kDiagSteepToFlatUpVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                                if (_previousTrackPitchEnd == TrackPitch::down60)
+                                {
+                                    CycleSteepVariation(_variationDiagSteepToFlatDown, kDiagSteepToFlatDownVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if (_previousTrackPitchEnd == TrackPitch::up60)
+                                {
+                                    CycleSteepVariation(_variationDiagFlatToSteepUp, kDiagFlatToSteepUpVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                                if (_previousTrackPitchEnd == TrackPitch::down60)
+                                {
+                                    CycleSteepVariation(_variationDiagFlatToSteepDown, kDiagFlatToSteepDownVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (_rideConstructionState == RideConstructionState::Front)
+                            {
+                                if (_previousTrackPitchEnd == TrackPitch::up60)
+                                {
+                                    CycleSteepVariation(_variationSteepToFlatUp, kSteepToFlatUpVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                                if (_previousTrackPitchEnd == TrackPitch::down60)
+                                {
+                                    CycleSteepVariation(_variationSteepToFlatDown, kSteepToFlatDownVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if (_previousTrackPitchEnd == TrackPitch::up60)
+                                {
+                                    CycleSteepVariation(_variationFlatToSteepUp, kFlatToSteepUpVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                                if (_previousTrackPitchEnd == TrackPitch::down60)
+                                {
+                                    CycleSteepVariation(_variationFlatToSteepDown, kFlatToSteepDownVariations);
+                                    _currentTrackPrice = kMoney64Undefined;
+                                    WindowRideConstructionUpdateActiveElements();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // Fresh selection — reset all steep-transition indices.
+                    _variationSteepToFlatUp = 0;
+                    _variationSteepToFlatDown = 0;
+                    _variationFlatToSteepUp = 0;
+                    _variationFlatToSteepDown = 0;
+                    _variationDiagSteepToFlatUp = 0;
+                    _variationDiagSteepToFlatDown = 0;
+                    _variationDiagFlatToSteepUp = 0;
+                    _variationDiagFlatToSteepDown = 0;
                     UpdateLiftHillSelected(TrackPitch::none);
                     break;
+                }
                 case WIDX_SLOPE_UP:
                     RideConstructionInvalidateCurrentTrack();
                     if (_rideConstructionState == RideConstructionState::Front && _currentTrackRollEnd != TrackRoll::none)
@@ -1340,6 +1565,9 @@ namespace OpenRCT2::Ui::Windows
                     }
                     break;
                 case WIDX_SLOPE_UP_STEEP:
+                {
+                    // Snapshot pitch before invalidation to detect re-click.
+                    const bool steepUpAlreadySelected = (_currentTrackPitchEnd == TrackPitch::up60);
                     RideConstructionInvalidateCurrentTrack();
                     if (IsTrackEnabled(TrackGroup::helixDownBankedHalf) || IsTrackEnabled(TrackGroup::helixUpBankedHalf))
                     {
@@ -1411,8 +1639,35 @@ namespace OpenRCT2::Ui::Windows
                         }
                     }
 
+                    // All helix paths already broke out above.
+                    // Only reach here for straight / non-helix track — cycle variation on re-click.
+                    if (steepUpAlreadySelected)
+                    {
+                        if (TrackPieceDirectionIsDiagonal(_currentTrackPieceDirection))
+                        {
+                            if (_rideConstructionState == RideConstructionState::Back)
+                                CycleSteepVariation(_variationDiagSteepToFlatUp, kDiagSteepToFlatUpVariations);
+                            else
+                                CycleSteepVariation(_variationDiagFlatToSteepUp, kDiagFlatToSteepUpVariations);
+                        }
+                        else
+                        {
+                            if (_rideConstructionState == RideConstructionState::Back)
+                                CycleSteepVariation(_variationSteepToFlatUp, kSteepToFlatUpVariations);
+                            else
+                                CycleSteepVariation(_variationFlatToSteepUp, kFlatToSteepUpVariations);
+                        }
+                        _currentTrackPrice = kMoney64Undefined;
+                        WindowRideConstructionUpdateActiveElements();
+                        break;
+                    }
+                    _variationFlatToSteepUp = 0;
+                    _variationSteepToFlatUp = 0;
+                    _variationDiagFlatToSteepUp = 0;
+                    _variationDiagSteepToFlatUp = 0;
                     UpdateLiftHillSelected(TrackPitch::up60);
                     break;
+                }
                 case WIDX_SLOPE_UP_VERTICAL:
                     RideConstructionInvalidateCurrentTrack();
                     UpdateLiftHillSelected(TrackPitch::up90);
@@ -4951,53 +5206,52 @@ namespace OpenRCT2::Ui::Windows
         if (ride == nullptr)
             return true;
 
-        if (IsTrackEnabled(TrackGroup::slopeSteepLong))
+        // Resolve the user-selected variation for each steep-slope transition.
+        // Variation indices are owned by the window instance and cycle on repeated button clicks.
         {
-            switch (trackType)
+            auto* windowMgr = GetWindowManager();
+            auto* w = static_cast<RideConstructionWindow*>(windowMgr->FindByClass(WindowClass::rideConstruction));
+            if (w != nullptr)
             {
-                case TrackElemType::flatToUp60:
-                    trackType = TrackElemType::flatToUp60LongBase;
-                    break;
-
-                case TrackElemType::up60ToFlat:
-                    trackType = TrackElemType::up60ToFlatLongBase;
-                    break;
-
-                case TrackElemType::flatToDown60:
-                    trackType = TrackElemType::flatToDown60LongBase;
-                    break;
-
-                case TrackElemType::down60ToFlat:
-                    trackType = TrackElemType::down60ToFlatLongBase;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        if (IsTrackEnabled(TrackGroup::diagSlopeSteepLong))
-        {
-            switch (trackType)
-            {
-                case TrackElemType::diagFlatToUp60:
-                    trackType = TrackElemType::diagFlatToUp60LongBase;
-                    break;
-
-                case TrackElemType::diagUp60ToFlat:
-                    trackType = TrackElemType::diagUp60ToFlatLongBase;
-                    break;
-
-                case TrackElemType::diagFlatToDown60:
-                    trackType = TrackElemType::diagFlatToDown60LongBase;
-                    break;
-
-                case TrackElemType::diagDown60ToFlat:
-                    trackType = TrackElemType::diagDown60ToFlatLongBase;
-                    break;
-
-                default:
-                    break;
+                switch (trackType)
+                {
+                    // Orthogonal
+                    case TrackElemType::flatToUp60:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationFlatToSteepUp, RideConstructionWindow::kFlatToSteepUpVariations);
+                        break;
+                    case TrackElemType::up60ToFlat:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationSteepToFlatUp, RideConstructionWindow::kSteepToFlatUpVariations);
+                        break;
+                    case TrackElemType::flatToDown60:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationFlatToSteepDown, RideConstructionWindow::kFlatToSteepDownVariations);
+                        break;
+                    case TrackElemType::down60ToFlat:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationSteepToFlatDown, RideConstructionWindow::kSteepToFlatDownVariations);
+                        break;
+                    // Diagonal
+                    case TrackElemType::diagFlatToUp60:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationDiagFlatToSteepUp, RideConstructionWindow::kDiagFlatToSteepUpVariations);
+                        break;
+                    case TrackElemType::diagUp60ToFlat:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationDiagSteepToFlatUp, RideConstructionWindow::kDiagSteepToFlatUpVariations);
+                        break;
+                    case TrackElemType::diagFlatToDown60:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationDiagFlatToSteepDown, RideConstructionWindow::kDiagFlatToSteepDownVariations);
+                        break;
+                    case TrackElemType::diagDown60ToFlat:
+                        trackType = RideConstructionWindow::ResolveVariation(
+                            w->_variationDiagSteepToFlatDown, RideConstructionWindow::kDiagSteepToFlatDownVariations);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
