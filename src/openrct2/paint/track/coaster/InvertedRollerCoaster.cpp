@@ -19891,6 +19891,98 @@ TrackPaintFunction GetTrackPaintFunctionInvertedRC(TrackElemType trackType)
         case TrackElemType::up90ToInvertedFlatQuarterLoop:
             return InvertedRCTrack90DegToInvertedFlatQuarterLoopUp;
 
+        // wide sloped turns
+        case TrackElemType::rightEighthToDiagUp25:
+            return InvertedRCTrackRightEighthToDiagUp25;
+        case TrackElemType::leftEighthToDiagDown25:
+            return InvertedRCTrackLeftEighthToDiagDown25;
+        case TrackElemType::rightEighthToDiagDown25:
+            return InvertedRCTrackRightEighthToDiagDown25;
+        case TrackElemType::leftEighthToOrthogonalUp25:
+            return InvertedRCTrackLeftEighthToOrthogonalUp25;
+        case TrackElemType::rightEighthToOrthogonalUp25:
+            return InvertedRCTrackRightEighthToOrthogonalUp25;
+        case TrackElemType::leftEighthToOrthogonalDown25:
+            return InvertedRCTrackLeftEighthToOrthogonalDown25;
+        case TrackElemType::rightEighthToOrthogonalDown25:
+            return InvertedRCTrackRightEighthToOrthogonalDown25;
+
+        // wide sloped banked turns
+        case TrackElemType::leftEighthBankToDiagUp25:
+            return InvertedRCTrackLeftEighthBankToDiagUp25;
+        case TrackElemType::rightEighthBankToDiagUp25:
+            return InvertedRCTrackRightEighthBankToDiagUp25;
+        case TrackElemType::leftEighthBankToDiagDown25:
+            return InvertedRCTrackLeftEighthBankToDiagDown25;
+        case TrackElemType::rightEighthBankToDiagDown25:
+            return InvertedRCTrackRightEighthBankToDiagDown25;
+        case TrackElemType::leftEighthBankToOrthogonalUp25:
+            return InvertedRCTrackLeftEighthBankToOrthogonalUp25;
+        case TrackElemType::rightEighthBankToOrthogonalUp25:
+            return InvertedRCTrackRightEighthBankToOrthogonalUp25;
+        case TrackElemType::leftEighthBankToOrthogonalDown25:
+            return InvertedRCTrackLeftEighthBankToOrthogonalDown25;
+        case TrackElemType::rightEighthBankToOrthogonalDown25:
+            return InvertedRCTrackRightEighthBankToOrthogonalDown25;
+
+        // diag bank and slopes
+        case TrackElemType::diagUp25ToLeftBankedUp25:
+            return InvertedRCTrackDiagUp25ToLeftBankedUp25;
+        case TrackElemType::diagUp25ToRightBankedUp25:
+            return InvertedRCTrackDiagUp25ToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToUp25:
+            return InvertedRCTrackDiagLeftBankedUp25ToUp25;
+        case TrackElemType::diagRightBankedUp25ToUp25:
+            return InvertedRCTrackDiagRightBankedUp25ToUp25;
+        case TrackElemType::diagDown25ToLeftBankedDown25:
+            return InvertedRCTrackDiagDown25ToLeftBankedDown25;
+        case TrackElemType::diagDown25ToRightBankedDown25:
+            return InvertedRCTrackDiagDown25ToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToDown25:
+            return InvertedRCTrackDiagLeftBankedDown25ToDown25;
+        case TrackElemType::diagRightBankedDown25ToDown25:
+            return InvertedRCTrackDiagRightBankedDown25ToDown25;
+        case TrackElemType::diagLeftBankedFlatToLeftBankedUp25:
+            return InvertedRCTrackDiagLeftBankedFlatToLeftBankedUp25;
+        case TrackElemType::diagRightBankedFlatToRightBankedUp25:
+            return InvertedRCTrackDiagRightBankedFlatToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToLeftBankedFlat:
+            return InvertedRCTrackDiagLeftBankedUp25ToLeftBankedFlat;
+        case TrackElemType::diagRightBankedUp25ToRightBankedFlat:
+            return InvertedRCTrackDiagRightBankedUp25ToRightBankedFlat;
+        case TrackElemType::diagLeftBankedFlatToLeftBankedDown25:
+            return InvertedRCTrackDiagLeftBankedFlatToLeftBankedDown25;
+        case TrackElemType::diagRightBankedFlatToRightBankedDown25:
+            return InvertedRCTrackDiagRightBankedFlatToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToLeftBankedFlat:
+            return InvertedRCTrackDiagLeftBankedDown25ToLeftBankedFlat;
+        case TrackElemType::diagRightBankedDown25ToRightBankedFlat:
+            return InvertedRCTrackDiagRightBankedDown25ToRightBankedFlat;
+        case TrackElemType::diagUp25LeftBanked:
+            return InvertedRCTrackDiagUp25LeftBanked;
+        case TrackElemType::diagUp25RightBanked:
+            return InvertedRCTrackDiagUp25RightBanked;
+        case TrackElemType::diagDown25LeftBanked:
+            return InvertedRCTrackDiagDown25LeftBanked;
+        case TrackElemType::diagDown25RightBanked:
+            return InvertedRCTrackDiagDown25RightBanked;
+        case TrackElemType::diagFlatToLeftBankedUp25:
+            return InvertedRCTrackDiagFlatToLeftBankedUp25;
+        case TrackElemType::diagFlatToRightBankedUp25:
+            return InvertedRCTrackDiagFlatToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToFlat:
+            return InvertedRCTrackDiagLeftBankedUp25ToFlat;
+        case TrackElemType::diagRightBankedUp25ToFlat:
+            return InvertedRCTrackDiagRightBankedUp25ToFlat;
+        case TrackElemType::diagFlatToLeftBankedDown25:
+            return InvertedRCTrackDiagFlatToLeftBankedDown25;
+        case TrackElemType::diagFlatToRightBankedDown25:
+            return InvertedRCTrackDiagFlatToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToFlat:
+            return InvertedRCTrackDiagLeftBankedDown25ToFlat;
+        case TrackElemType::diagRightBankedDown25ToFlat:
+            return InvertedRCTrackDiagRightBankedDown25ToFlat;
+
         // diag breaks
         case TrackElemType::diagBrakes:
         case TrackElemType::diagBlockBrakes:
