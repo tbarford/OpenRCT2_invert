@@ -18233,12 +18233,12 @@ static void InvertedRCTrackDiagLeftBankedUp25ToUp25(
             {
                 case 0:
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + 48, session.SupportColours);
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + 52, session.SupportColours);
                     break;
                 case 1:
 
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + 48, session.SupportColours);
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + 52, session.SupportColours);
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
@@ -18250,7 +18250,7 @@ static void InvertedRCTrackDiagLeftBankedUp25ToUp25(
                     break;
                 case 3:
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + 48, session.SupportColours);
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + 52, session.SupportColours);
                     break;
             }
 
