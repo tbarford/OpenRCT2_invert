@@ -16835,7 +16835,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     break;
             }
 
-            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            PaintUtilSetGeneralSupportHeight(session, height + 72 + 8);
             break;
         case 1:
             PaintUtilSetSegmentSupportHeight(
@@ -17763,7 +17763,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 32 + 29 }, { 32, 32, 1 } });
 
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 17,
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 19,
                         session.SupportColours);
                     break;
                 case 1:
@@ -17773,7 +17773,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 32 + 29 }, { 32, 32, 1 } });
 
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 17,
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 19,
                         session.SupportColours);
                     break;
                 case 2:
@@ -17793,7 +17793,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 1 } });
 
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 15,
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 17,
                         session.SupportColours);
                     break;
             }
@@ -17826,19 +17826,19 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 114)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 30, 16, height + kInvertedSpriteOffset }, { 1, 16, 16 } });
+                        { { 30, 16, height + kInvertedSpriteOffset }, { 16, 1, 16 } });
                     break;
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 118)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 0, height + kInvertedSpriteOffset }, { 1, 32, 32 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 0, height + kInvertedSpriteOffset }, { 32, 1, 32 } });
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 122)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 1 } });
                     break;
                 case 3:
                     PaintAddImageAsParentRotated(
@@ -17866,7 +17866,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 115)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 20, 32, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -17876,8 +17876,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 119)),
-                        { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 12 }, { 30, 16, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, -6, height + kInvertedSpriteOffset }, { 16, 30, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -17899,7 +17898,7 @@ static void InvertedRCTrackRightEighthBankToOrthogonalUp25(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE_BANKED + 127)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 20, 32, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -19459,7 +19458,7 @@ static void InvertedRCTrackDiagRightBankedUp25ToFlat(
                     break;
                 case 3:
                     MetalASupportsPaintSetup(
-                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + 52, session.SupportColours);
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + 50, session.SupportColours);
                     break;
             }
 
