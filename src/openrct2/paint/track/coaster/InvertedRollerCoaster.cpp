@@ -16195,7 +16195,7 @@ static void InvertedRCTrackLeftEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 0)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 20, 20, 1 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16205,7 +16205,7 @@ static void InvertedRCTrackLeftEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 4)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 1, height + kInvertedSpriteOffset + 15 }, { 32, 1, 32 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16301,7 +16301,7 @@ static void InvertedRCTrackLeftEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 6)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 10, 10, 1 } });
+                        { { 20, 20, height + kInvertedSpriteOffset + 15 }, { 10, 10, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 10,
                         session.SupportColours);
@@ -16498,7 +16498,7 @@ static void InvertedRCTrackLeftEighthToOrthogonalUp25(
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 38)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 0, height + kInvertedSpriteOffset }, { 1, 32, 32 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 0, height + kInvertedSpriteOffset }, { 32, 32, 1 } });
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
@@ -16604,7 +16604,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 16)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 3 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16614,7 +16614,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 20)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 1, height + kInvertedSpriteOffset + 15 }, { 32, 1, 32 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
                         session.SupportColours);
@@ -16623,7 +16623,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 24)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 3 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
                         session.SupportColours);
@@ -16632,7 +16632,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 28)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 3 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
                         session.SupportColours);
@@ -16652,24 +16652,25 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 17)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 16, 3 } });
+                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 32, 16, 1 } });
                     break;
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 21)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 1, height + kInvertedSpriteOffset }, { 32, 1, 32 } });
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 32, 16, 1 } });
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 25)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 32, 16, 3 } });
+                        { { -16, 6, height + kInvertedSpriteOffset }, { 32, 1, 32 } });
                     break;
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 29)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 32, 16, 3 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 16, 1 } });
                     break;
             }
             PaintUtilSetSegmentSupportHeight(
@@ -16697,7 +16698,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 18)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 30, 30, 1 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 16, 16, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 13,
                         session.SupportColours);
@@ -16706,7 +16707,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 22)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 40, 1 } });
+                        { { 16, 0, height + kInvertedSpriteOffset + 15 }, { 16, 16, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 13,
                         session.SupportColours);
@@ -16715,7 +16716,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 26)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 24, 24, 3 } });
+                        { { 20, 20, height + kInvertedSpriteOffset + 15 }, { 10, 10, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
                         session.SupportColours);
@@ -16724,7 +16725,7 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 30)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 16, 16, 3 } });
+                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 16, 16, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 13,
                         session.SupportColours);
@@ -16756,28 +16757,28 @@ static void InvertedRCTrackRightEighthToDiagUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 19)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 16, 16, height + kInvertedSpriteOffset + 15 }, { 16, 16, 3 } });
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 1 } });
 
                     break;
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 23)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 1 } });
 
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 27)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 16, 16, 3 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
 
                     break;
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 31)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 16, 16, height + kInvertedSpriteOffset + 15 }, { 16, 16, 1 } });
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 1 } });
 
                     break;
             }
@@ -16808,7 +16809,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 48)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 1 } });
 
                     break;
                 case 1:
@@ -16822,14 +16823,14 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 56)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 1 } });
 
                     break;
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 60)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
 
                     break;
             }
@@ -16850,7 +16851,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                 case 0:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 49)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 32 + 29 }, { 32, 32, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 17,
                         session.SupportColours);
@@ -16858,8 +16859,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 53)),
-                        { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 32 + 29 }, { 32, 32, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 17,
                         session.SupportColours);
@@ -16868,7 +16868,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 57)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 16, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
+                        { { 16, 0, height + kInvertedSpriteOffset + 15 }, { 32, 32, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 19,
                         session.SupportColours);
@@ -16876,7 +16876,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 61)),
-                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 1 } });
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 15,
                         session.SupportColours);
@@ -16908,25 +16908,22 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 50)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 16, 32, 10 } });
+                        { { 16, 30, height + kInvertedSpriteOffset }, { 16, 1, 16 } });
                     break;
                 case 1:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 54)),
-                        { 0, 0, height + kInvertedSpriteOffset },
-                        { { 1, 0, height + kInvertedSpriteOffset + 15 }, { 30, 30, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 0, height + kInvertedSpriteOffset }, { 32, 32, 1 } });
                     break;
                 case 2:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 58)),
-                        { 0, 0, height + kInvertedSpriteOffset },
-                        { { 1, 0, height + kInvertedSpriteOffset + 15 }, { 30, 30, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 1 } });
                     break;
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 62)),
-                        { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 0, height + kInvertedSpriteOffset + 15 }, { 30, 30, 1 } });
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 1 } });
                     break;
             }
 
@@ -16947,7 +16944,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 51)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
+                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 20, 20, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16957,7 +16954,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 55)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
+                        { { 6, 0, height + kInvertedSpriteOffset + 12 }, { 16, 30, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16967,7 +16964,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 59)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 6, height + kInvertedSpriteOffset + 15 }, { 32, 20, 1 } });
+                        { { 6, 0, height + kInvertedSpriteOffset + 15 }, { 20, 32, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
@@ -16977,7 +16974,7 @@ static void InvertedRCTrackRightEighthToOrthogonalUp25(
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_INVERT_GENTLE_LARGE_CURVE + 63)),
                         { 0, 0, height + kInvertedSpriteOffset },
-                        { { 0, 8, height + kInvertedSpriteOffset + 15 }, { 16, 30, 1 } });
+                        { { 6, 0, height + kInvertedSpriteOffset + 15 }, { 20, 32, 1 } });
 
                     MetalASupportsPaintSetup(
                         session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
