@@ -17646,7 +17646,6 @@ static void InvertedRCTrackRightEighthBankToDiagUp25(
                 PaintUtilRotateSegments(
                     EnumsToFlags(PaintSegment::bottom, PaintSegment::bottomRight, PaintSegment::bottomLeft), direction),
                 0xFFFF, 0);
-            switch (direction) {}
 
             PaintUtilSetGeneralSupportHeight(session, height + 72 + 8);
             break;
