@@ -296,6 +296,7 @@ struct TrackDrawerEntry
 {
     TrackStyle trackStyle = TrackStyle::null;
     SupportType supportType{};
+    int32_t heightOffset = 0;
     /** rct2: 0x0097C468 (0 - 31) and 0x0097C5D4 (32 - 63) */
     RideTrackGroups enabledTrackGroups{};
     // Pieces that this ride type _can_ draw, but are disabled because their vehicles lack the relevant sprites,
@@ -557,8 +558,8 @@ struct RideTypeDescriptor
 
     MusicTrackOffsetLengthFunc MusicTrackOffsetLength = OpenRCT2::RideAudio::RideMusicGetTrackOffsetLength_Default;
 
-    UpdateRideApproachVehicleWaypointsFunction UpdateRideApproachVehicleWaypoints = OpenRCT2::
-        UpdateRideApproachVehicleWaypointsDefault;
+    UpdateRideApproachVehicleWaypointsFunction
+        UpdateRideApproachVehicleWaypoints = OpenRCT2::UpdateRideApproachVehicleWaypointsDefault;
     RtdSpecialType specialType = RtdSpecialType::none;
 
     /** @deprecated */

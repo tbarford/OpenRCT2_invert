@@ -2033,7 +2033,9 @@ void PaintTrack(PaintSession& session, Direction direction, int32_t height, cons
 
         trackType = uncoverTrackType(trackType);
         TrackPaintFunction paintFunction = GetTrackPaintFunction(trackDrawerEntry.trackStyle, trackType);
-        paintFunction(session, *ride, trackSequence, direction, height, trackElement, trackDrawerEntry.supportType);
+        paintFunction(
+            session, *ride, trackSequence, direction, height + trackDrawerEntry.heightOffset, trackElement,
+            trackDrawerEntry.supportType);
     }
 }
 
