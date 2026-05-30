@@ -308,6 +308,12 @@ static void OverrideElementOffsets(size_t index, G1Element& element)
         case 28736:
             element.xOffset -= 1; // Steeplechase leftEighthToDiag angle 2
             break;
+        case 27579:
+            element.yOffset += 1; // InvertedRCTrackDiag60DegUp angle 0
+            break;
+        case 27581:
+            element.yOffset += 1; // InvertedRCTrackDiag60DegUp angle 2
+            break;
     }
 }
 
