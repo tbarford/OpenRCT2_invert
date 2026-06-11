@@ -24,7 +24,7 @@ constexpr RideTypeDescriptor InvertedImpulseCoasterRTD =
         .trackStyle = TrackStyle::invertedImpulseCoaster,
         .supportType = MetalSupportType::tubesInverted,
         .enabledTrackGroups = {TrackGroup::straight, TrackGroup::stationEnd, TrackGroup::slope, TrackGroup::slopeSteepUp, TrackGroup::slopeSteepDown, TrackGroup::slopeVertical, TrackGroup::curveVertical},
-        .extraTrackGroups = {},
+        .extraTrackGroups = {TrackGroup::liftHill, TrackGroup::flatRollBanking, TrackGroup::verticalLoop, TrackGroup::slopeCurve, TrackGroup::slopeCurveSteep, TrackGroup::sBend, TrackGroup::curveSmall, TrackGroup::curve, TrackGroup::curveLarge, TrackGroup::twist, TrackGroup::halfLoop, TrackGroup::corkscrew, TrackGroup::helixDownBankedQuarter, TrackGroup::helixUpBankedQuarter, TrackGroup::brakes, TrackGroup::onridePhoto, TrackGroup::halfLoopLarge, TrackGroup::blockBrakes, TrackGroup::slopeRollBanking, TrackGroup::diagBrakes, TrackGroup::diagBlockBrakes, TrackGroup::diagSlope, TrackGroup::diagSlopeSteepUp, TrackGroup::diagSlopeSteepDown,  TrackGroup::halfLoopMedium, TrackGroup::corkscrewLarge, TrackGroup::diveLoop, TrackGroup::slopeSteepLong,  TrackGroup::quarterLoop, TrackGroup::diagSlopeSteepLong, TrackGroup::slopeCurveBanked, TrackGroup::slopeRollBanking,TrackGroup::slopeCurveLarge, TrackGroup::slopeCurveLargeBanked, TrackGroup::helixUpUnbankedQuarter, TrackGroup::helixDownUnbankedQuarter, TrackGroup::barrelRoll, TrackGroup::zeroGRoll, TrackGroup::zeroGRollLarge },
     }),
     .InvertedTrackPaintFunctions = {},
     .flags = kRtdFlagsHasThreeColours | kRtdFlagsCommonCoaster | kRtdFlagsCommonCoasterNonAlt |
