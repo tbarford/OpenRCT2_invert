@@ -15,6 +15,7 @@
 #include "../entity/EntityBase.h"
 #include "../world/Location.hpp"
 #include "Angles.h"
+#include "RideTypes.h"
 #include "VehicleColour.h"
 #include "VehicleFlags.h"
 #include "VehicleSubpositionData.h"
@@ -272,6 +273,7 @@ namespace OpenRCT2
          */
         void MoveRelativeDistance(int32_t distance);
         void UpdateTrackChange();
+        bool UpdateInversionFromTrack(const TrackElement& trackElement, ride_type_t rideType);
         TrackElemType GetTrackType() const
         {
             return static_cast<TrackElemType>(TrackTypeAndDirection >> 2);

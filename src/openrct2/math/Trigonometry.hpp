@@ -97,9 +97,6 @@ namespace OpenRCT2::Math::Trigonometry
         { 252, -42 },   // diagonal slopes down
         { 241, -83 },   // diagonal slopes down
         { 168, -193 },  // diagonal slopes down
-        { 236, -97 },   // inverting transition slopes down
-        { 195, -165 },  // inverting transition slopes down
-        { 134, -217 },  // inverting transition slopes down
         { 252, 44 },    // spiral lift hill up
         { 252, -44 },   // spiral lift hill down
     };

@@ -562,6 +562,22 @@ namespace OpenRCT2
         BlockBrakeSpeed = trackSpeed;
     }
 
+    bool Vehicle::UpdateInversionFromTrack(const TrackElement& trackElement, ride_type_t rideType)
+    {
+        const auto& rtd = GetRideTypeDescriptor(rideType);
+        const bool shouldBeInverted = rtd.flags.has(RtdFlag::hasInvertedVariant) && trackElement.isInverted();
+        const bool previousIsInverted = flags.has(VehicleFlag::carIsInverted);
+
+        if (previousIsInverted != shouldBeInverted)
+        {
+            flags.set(VehicleFlag::carIsInverted, shouldBeInverted);
+            EntityTweener::get().removeEntity(this);
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      *
      *  rct2: 0x006DB08C
@@ -667,23 +683,8 @@ namespace OpenRCT2
                 return false;
             }
 
-            // Update VehicleFlags::CarIsInverted flag
-            const auto previousCarIsInverted = flags.has(VehicleFlag::carIsInverted);
-            flags.unset(VehicleFlag::carIsInverted);
-            {
-                auto rideType = OpenRCT2::GetRide(tileElement->asTrack()->getRideIndex())->type;
-                if (GetRideTypeDescriptor(rideType).flags.has(RtdFlag::hasInvertedVariant))
-                {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        flags.set(VehicleFlag::carIsInverted);
-                    }
-                }
-                if (previousCarIsInverted != flags.has(VehicleFlag::carIsInverted))
-                {
-                    EntityTweener::get().removeEntity(this);
-                }
-            }
+            const auto trackRideType = OpenRCT2::GetRide(tileElement->asTrack()->getRideIndex())->type;
+            UpdateInversionFromTrack(*tileElement->asTrack(), trackRideType);
         }
 
         const int32_t previousTrackHeight = TrackLocation.z;
@@ -1047,21 +1048,8 @@ namespace OpenRCT2
             {
                 return false;
             }
-
-            // Update VehicleFlags::CarIsInverted
-            const auto previousCarIsInverted = flags.has(VehicleFlag::carIsInverted);
-            flags.unset(VehicleFlag::carIsInverted);
-            if (GetRideTypeDescriptor(curRide.type).flags.has(RtdFlag::hasInvertedVariant))
-            {
-                if (tileElement->asTrack()->isInverted())
-                {
-                    flags.set(VehicleFlag::carIsInverted);
-                }
-                if (previousCarIsInverted != flags.has(VehicleFlag::carIsInverted))
-                {
-                    EntityTweener::get().removeEntity(this);
-                }
-            }
+            // Update VehicleFlags::CarIsInverted flag with helper
+            UpdateInversionFromTrack(*tileElement->asTrack(), curRide.type);
 
             trackPos = { trackBeginEnd.begin_x, trackBeginEnd.begin_y, trackBeginEnd.begin_z };
             direction = trackBeginEnd.begin_direction;

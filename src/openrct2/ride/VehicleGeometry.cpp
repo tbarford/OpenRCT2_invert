@@ -113,9 +113,6 @@ namespace OpenRCT2::RideVehicle::Geometry
         90522,   // 53 Slope Down 8
         179760,  // 54 Slope Down 16
         484068,  // 55 Slope Down 50
-        243318,  // 56 Inverting Loop Down 25
-        416016,  // 57 Inverting Loop Down 42.5
-        546342,  // 58 Inverting Loop Down 60
         -110424, // 59 Slope Up Spiral Lift Hill
         110424,  // 60 Slope Down Spiral Lift Hill
     });
@@ -181,9 +178,6 @@ namespace OpenRCT2::RideVehicle::Geometry
         { 2125953864, -303325208 },   // down8
         { 2061796213, -600568389 },   // down16
         { 1411702590, -1618265062 },  // down50
-        { 1985590284, -817995863 },   // uninvertingDown25
-        { 1636362342, -1390684831 },  // uninvertingDown42
-        { 1127484953, -1827693544 },  // uninvertingDown60
         { 2115506168, 369214930 },    // curvedLifthillUp
         { 2115506168, -369214930 },   // curvedLiftHillDown
     });
@@ -191,9 +185,21 @@ namespace OpenRCT2::RideVehicle::Geometry
 
     /** rct2: 0x009A39C4 */
     const auto kRollHorizontalComponent = std::to_array<int32_t>({
-        2147483647,  2096579710,  1946281152,  2096579710, 1946281152, 1380375879, 555809667,
-        -372906620,  -1231746017, -1859775391, 1380375879, 555809667,  -372906620, -1231746017,
-        -1859775391, 0,           2096579710,  1946281152, 2096579710, 1946281152,
+        2147483647,
+        2096579710,
+        1946281152,
+        2096579710,
+        1946281152,
+        1380375879,
+        555809667,
+        -372906620,
+        -1231746017,
+        -1859775391,
+        1380375879,
+        555809667,
+        -372906620,
+        -1231746017,
+        -1859775391,
     });
     static_assert(std::size(kRollHorizontalComponent) == EnumValue(VehicleRoll::rollCount));
 

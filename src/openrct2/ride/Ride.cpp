@@ -3147,13 +3147,8 @@ namespace OpenRCT2
                 vehicle->track_progress = 15;
             }
             vehicle->flags = { VehicleFlag::collisionDisabled };
-            if (carEntry.flags.has(CarEntryFlag::hasInvertedSpriteSet))
-            {
-                if (trackElement->isInverted())
-                {
-                    vehicle->flags.set(VehicleFlag::carIsInverted);
-                }
-            }
+            // Update VehicleFlags::CarIsInverted flag with helper
+            vehicle->UpdateInversionFromTrack(*trackElement, ride.type);
             vehicle->SetState(Vehicle::Status::movingToEndOfStation);
 
             if (ride.flags.has(RideFlag::reversedTrains))
