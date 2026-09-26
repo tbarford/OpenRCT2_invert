@@ -12,6 +12,7 @@
 #include "../../SpriteIds.h"
 #include "../../paint/vehicle/VehiclePaint.h"
 #include "../../ride/RideData.h"
+#include "../../ride/Vehicle.h"
 #include "../Paint.h"
 
 using namespace OpenRCT2;
@@ -42,7 +43,7 @@ void PaintVehicle(PaintSession& session, const Vehicle& vehicle, int32_t imageDi
         }
 
         auto carEntryIndex = vehicle.vehicle_type;
-        if (vehicle.flags.has(VehicleFlag::carIsInverted))
+        if (vehicle.ShouldUseInvertedCarEntry())
         {
             carEntryIndex++;
             zOffset += 16;

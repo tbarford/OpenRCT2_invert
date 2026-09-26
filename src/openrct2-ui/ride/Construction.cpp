@@ -271,17 +271,39 @@ namespace OpenRCT2
                 continue;
 
             // If the current build orientation (slope, bank, diagonal) matches the track element's, show the piece as enabled
-            bool entryIsDisabled;
-            if (state == RideConstructionState::back)
+            const auto elemPitch = (state == RideConstructionState::back) ? ted.definition.pitchEnd : ted.definition.pitchStart;
+            const auto elemRoll = (state == RideConstructionState::back) ? ted.definition.rollEnd : ted.definition.rollStart;
+            const auto elemDiagonal = (state == RideConstructionState::back)
+                ? TrackPieceDirectionIsDiagonal(ted.coordinates.rotationEnd)
+                : TrackPieceDirectionIsDiagonal(ted.coordinates.rotationBegin);
+
+            bool rollMatches = (elemRoll == buildBank);
+            if (currentRide.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant) && buildBank == TrackRoll::none)
             {
-                entryIsDisabled = ted.definition.pitchEnd != buildSlope || ted.definition.rollEnd != buildBank
-                    || TrackPieceDirectionIsDiagonal(ted.coordinates.rotationEnd) != buildDirectionIsDiagonal;
+                const bool isInvertingPiece = (ted.definition.rollStart != ted.definition.rollEnd)
+                    && (ted.definition.rollStart == TrackRoll::upsideDown || ted.definition.rollEnd == TrackRoll::upsideDown);
+                if (isInvertingPiece)
+                {
+                    const bool isCurrentlyInverted = _currentTrackAlternative.has(AlternativeTrackFlag::inverted);
+                    if (ted.flags.has(TrackElementFlag::down))
+                    {
+                        rollMatches = (state == RideConstructionState::back) ? isCurrentlyInverted : !isCurrentlyInverted;
+                    }
+                    else if (ted.flags.has(TrackElementFlag::up))
+                    {
+                        rollMatches = (state == RideConstructionState::back) ? !isCurrentlyInverted : true;
+                    }
+                    else
+                    {
+                        const TrackRoll expectedRoll = (state == RideConstructionState::back)
+                            ? (isCurrentlyInverted ? TrackRoll::upsideDown : TrackRoll::none)
+                            : (isCurrentlyInverted ? TrackRoll::none : TrackRoll::upsideDown);
+                        rollMatches = (elemRoll == expectedRoll);
+                    }
+                }
             }
-            else
-            {
-                entryIsDisabled = ted.definition.pitchStart != buildSlope || ted.definition.rollStart != buildBank
-                    || TrackPieceDirectionIsDiagonal(ted.coordinates.rotationBegin) != buildDirectionIsDiagonal;
-            }
+
+            bool entryIsDisabled = (elemPitch != buildSlope) || !rollMatches || (elemDiagonal != buildDirectionIsDiagonal);
 
             // Additional tower bases can only be built if the ride allows for it (elevator)
             if (trackType == TrackElemType::towerBase

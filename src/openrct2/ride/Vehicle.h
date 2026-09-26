@@ -243,6 +243,7 @@ namespace OpenRCT2
         uint8_t target_seat_rotation;
         CoordsXY BoatLocation;
         uint8_t BlockBrakeSpeed;
+        mutable VehicleInfo _transformedMoveInfo;
 
         constexpr bool IsHead() const
         {
@@ -273,12 +274,13 @@ namespace OpenRCT2
          */
         void MoveRelativeDistance(int32_t distance);
         void UpdateTrackChange();
-        bool UpdateInversionFromTrack(const TrackElement& trackElement, ride_type_t rideType, bool isBackwards = false);
+        bool UpdateInversionFromTrack(const TrackElement& trackElement, ride_type_t rideType);
         TrackElemType GetTrackType() const
         {
             return static_cast<TrackElemType>(TrackTypeAndDirection >> 2);
         }
         bool IsOnCoveredTrack() const;
+        bool ShouldUseInvertedCarEntry() const;
         uint8_t GetTrackDirection() const
         {
             return TrackTypeAndDirection & kVehicleTrackDirectionMask;

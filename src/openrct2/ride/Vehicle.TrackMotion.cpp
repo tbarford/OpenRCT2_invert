@@ -678,7 +678,8 @@ namespace OpenRCT2
                 }
             }
 
-            if (PitchAndRollStart(flags.has(VehicleFlag::carIsInverted), tileElement) != pitchAndRollEnd)
+            if (!TrackPitchAndRollMatches(
+                    curRide.type, PitchAndRollStart(flags.has(VehicleFlag::carIsInverted), tileElement), pitchAndRollEnd))
             {
                 return false;
             }
@@ -1044,7 +1045,9 @@ namespace OpenRCT2
                 return false;
             }
 
-            if (getPitchAndRollEnd(curRide, flags.has(VehicleFlag::carIsInverted), trackType, tileElement) != pitchAndRollStart)
+            if (!TrackPitchAndRollMatches(
+                    curRide.type, getPitchAndRollEnd(curRide, flags.has(VehicleFlag::carIsInverted), trackType, tileElement),
+                    pitchAndRollStart))
             {
                 return false;
             }

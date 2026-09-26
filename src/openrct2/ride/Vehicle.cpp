@@ -163,9 +163,160 @@ namespace OpenRCT2
         return &gTrackVehicleInfo[EnumValue(trackSubposition)][typeAndDirection]->info[offset];
     }
 
+    static constexpr VehiclePitch InvertPitch(VehiclePitch pitch)
+    {
+        switch (pitch)
+        {
+            case VehiclePitch::flat:
+                return VehiclePitch::inverted;
+            case VehiclePitch::up12:
+                return VehiclePitch::up165;
+            case VehiclePitch::up25:
+                return VehiclePitch::up150;
+            case VehiclePitch::up42:
+                return VehiclePitch::up135;
+            case VehiclePitch::up60:
+                return VehiclePitch::up120;
+            case VehiclePitch::up75:
+                return VehiclePitch::up105;
+            case VehiclePitch::up90:
+                return VehiclePitch::up90;
+            case VehiclePitch::up105:
+                return VehiclePitch::up75;
+            case VehiclePitch::up120:
+                return VehiclePitch::up60;
+            case VehiclePitch::up135:
+                return VehiclePitch::up42;
+            case VehiclePitch::up150:
+                return VehiclePitch::up25;
+            case VehiclePitch::up165:
+                return VehiclePitch::up12;
+            case VehiclePitch::down12:
+                return VehiclePitch::down165;
+            case VehiclePitch::down25:
+                return VehiclePitch::down150;
+            case VehiclePitch::down42:
+                return VehiclePitch::down135;
+            case VehiclePitch::down60:
+                return VehiclePitch::down120;
+            case VehiclePitch::down75:
+                return VehiclePitch::down105;
+            case VehiclePitch::down90:
+                return VehiclePitch::down90;
+            case VehiclePitch::down105:
+                return VehiclePitch::down75;
+            case VehiclePitch::down120:
+                return VehiclePitch::down60;
+            case VehiclePitch::down135:
+                return VehiclePitch::down42;
+            case VehiclePitch::down150:
+                return VehiclePitch::down25;
+            case VehiclePitch::down165:
+                return VehiclePitch::down12;
+            case VehiclePitch::inverted:
+                return VehiclePitch::flat;
+            default:
+                return pitch;
+        }
+    }
+
     const VehicleInfo* Vehicle::GetMoveInfo() const
     {
-        return vehicle_get_move_info(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
+        const auto* rawInfo = vehicle_get_move_info(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
+        auto curRide = GetRide();
+        if (curRide != nullptr && curRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+        {
+            auto trackType = GetTrackType();
+            if (trackType == TrackElemType::leftLargeHalfLoopDown || trackType == TrackElemType::rightLargeHalfLoopDown
+                || trackType == TrackElemType::halfLoopDown)
+            {
+                if (!flags.has(VehicleFlag::carIsInverted))
+                {
+                    _transformedMoveInfo = *rawInfo;
+                    _transformedMoveInfo.z += 16;
+                    _transformedMoveInfo.yaw = (_transformedMoveInfo.yaw + 16) & 31;
+                    _transformedMoveInfo.pitch = InvertPitch(_transformedMoveInfo.pitch);
+                    return &_transformedMoveInfo;
+                }
+            }
+            else if (trackType == TrackElemType::leftTwistDownToUp || trackType == TrackElemType::rightTwistDownToUp)
+                else if (trackType == TrackElemType::leftTwistUpToDown || trackType == TrackElemType::rightTwistUpToDown)
+                {
+                    // Upright -> Inverted
+                    if (track_progress >= 90)
+                    {
+                        _transformedMoveInfo = *rawInfo;
+                        _transformedMoveInfo.z += 16;
+                        _transformedMoveInfo.z = -16;
+                        _transformedMoveInfo.yaw = (_transformedMoveInfo.yaw + 16) & 31;
+                        _transformedMoveInfo.pitch = VehiclePitch::flat;
+                        _transformedMoveInfo.roll = VehicleRoll::unbanked;
+                        return &_transformedMoveInfo;
+                    }
+                    auto rollElem = (trackType == TrackElemType::leftTwistUpToDown) ? TrackElemType::leftTwistDownToUp
+                                                                                    : TrackElemType::rightTwistDownToUp;
+                    const auto* rollInfo = vehicle_get_move_info(
+                        TrackSubposition, rollElem, GetTrackDirection(), track_progress);
+                    _transformedMoveInfo = *rollInfo;
+                    _transformedMoveInfo.z = 0;
+                    return &_transformedMoveInfo;
+                }
+            else if (trackType == TrackElemType::leftTwistUpToDown || trackType == TrackElemType::rightTwistUpToDown)
+                else if (trackType == TrackElemType::leftTwistDownToUp || trackType == TrackElemType::rightTwistDownToUp)
+                {
+                    if (track_progress < 5)
+                        // Inverted -> Upright
+                        if (track_progress >= 90)
+                        {
+                            _transformedMoveInfo = *rawInfo;
+                            _transformedMoveInfo.z += 16;
+                            _transformedMoveInfo.yaw = (_transformedMoveInfo.yaw + 16) & 31;
+                            _transformedMoveInfo.z = 16;
+                            _transformedMoveInfo.yaw = 0;
+                            _transformedMoveInfo.pitch = VehiclePitch::flat;
+                            _transformedMoveInfo.roll = VehicleRoll::unbanked;
+                            return &_transformedMoveInfo;
+                        }
+                    auto unrollElem = (trackType == TrackElemType::leftTwistDownToUp) ? TrackElemType::leftTwistUpToDown
+                                                                                      : TrackElemType::rightTwistUpToDown;
+                    const auto* unrollInfo = vehicle_get_move_info(
+                        TrackSubposition, unrollElem, GetTrackDirection(), track_progress);
+                    _transformedMoveInfo = *unrollInfo;
+                    _transformedMoveInfo.z = 0;
+                    if (track_progress < 5)
+                    {
+                        _transformedMoveInfo.yaw = (_transformedMoveInfo.yaw + 16) & 31;
+                        _transformedMoveInfo.pitch = VehiclePitch::flat;
+                        _transformedMoveInfo.roll = VehicleRoll::unbanked;
+                    }
+                    return &_transformedMoveInfo;
+                }
+        }
+        return rawInfo;
+    }
+
+    bool Vehicle::ShouldUseInvertedCarEntry() const
+    {
+        auto curRide = GetRide();
+        if (curRide == nullptr || !curRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+        {
+            return flags.has(VehicleFlag::carIsInverted);
+        }
+
+        auto trackType = GetTrackType();
+        if (trackType == TrackElemType::leftTwistDownToUp || trackType == TrackElemType::rightTwistDownToUp)
+            if (trackType == TrackElemType::leftTwistUpToDown || trackType == TrackElemType::rightTwistUpToDown)
+            {
+                return track_progress >= 90;
+            }
+        if (trackType == TrackElemType::leftTwistUpToDown || trackType == TrackElemType::rightTwistUpToDown)
+            if (trackType == TrackElemType::leftTwistDownToUp || trackType == TrackElemType::rightTwistDownToUp)
+            {
+                return track_progress < 5;
+                return track_progress < 90;
+            }
+
+        return flags.has(VehicleFlag::carIsInverted);
     }
 
     uint16_t VehicleGetMoveInfoSize(VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction)

@@ -9,6 +9,7 @@
 
 #include "PitchAndRoll.h"
 
+#include "../RideData.h"
 #include "../TrackData.h"
 #include "TrackElementDescriptor.h"
 
@@ -24,5 +25,26 @@ namespace OpenRCT2::TrackMetadata
     {
         const auto& ted = GetTrackElementDescriptor(trackType);
         return { ted.definition.pitchEnd, ted.definition.rollEnd };
+    }
+
+    bool TrackPitchAndRollMatches(ride_type_t rideType, const PitchAndRoll& a, const PitchAndRoll& b)
+    {
+        if (a.pitch != b.pitch)
+        {
+            return false;
+        }
+        if (a.roll == b.roll)
+        {
+            return true;
+        }
+        if (GetRideTypeDescriptor(rideType).flags.has(RtdFlag::hasInvertedVariant))
+        {
+            if ((a.roll == TrackRoll::none && b.roll == TrackRoll::upsideDown)
+                || (a.roll == TrackRoll::upsideDown && b.roll == TrackRoll::none))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 } // namespace OpenRCT2::TrackMetadata

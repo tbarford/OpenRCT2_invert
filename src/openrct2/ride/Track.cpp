@@ -45,6 +45,12 @@ int32_t TrackIsConnectedByShape(TileElement* a, TileElement* b)
     auto bAngle = ted->definition.pitchStart;
     bBank = TrackGetActualBank(b, bBank);
 
+    auto ride = GetRide(a->asTrack()->getRideIndex());
+    if (ride != nullptr)
+    {
+        return TrackPitchAndRollMatches(ride->type, { aAngle, aBank }, { bAngle, bBank });
+    }
+
     return aBank == bBank && aAngle == bAngle;
 }
 

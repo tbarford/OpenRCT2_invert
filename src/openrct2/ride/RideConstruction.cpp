@@ -837,10 +837,14 @@ namespace OpenRCT2
                 // Set track banking
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant))
                 {
-                    if (bank == TrackRoll::upsideDown)
+                    const bool isInvertingPiece = (ted->definition.rollStart != ted->definition.rollEnd)
+                        && (ted->definition.rollStart == TrackRoll::upsideDown
+                            || ted->definition.rollEnd == TrackRoll::upsideDown);
+                    if (isInvertingPiece)
                     {
                         bank = TrackRoll::none;
                         _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
+                        _currentlySelectedTrack = TrackCurve::none;
                     }
                 }
                 _currentTrackRollEnd = bank;
@@ -896,10 +900,14 @@ namespace OpenRCT2
                 // Set track banking
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant))
                 {
-                    if (bank == TrackRoll::upsideDown)
+                    const bool isInvertingPiece = (ted->definition.rollStart != ted->definition.rollEnd)
+                        && (ted->definition.rollStart == TrackRoll::upsideDown
+                            || ted->definition.rollEnd == TrackRoll::upsideDown);
+                    if (isInvertingPiece)
                     {
                         bank = TrackRoll::none;
                         _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
+                        _currentlySelectedTrack = TrackCurve::none;
                     }
                 }
                 _currentTrackRollEnd = bank;

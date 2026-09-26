@@ -11,6 +11,8 @@
 
 #include <cstdint>
 
+using ride_type_t = uint16_t;
+
 namespace OpenRCT2
 {
     enum class TrackElemType : uint16_t;
@@ -56,4 +58,5 @@ namespace OpenRCT2::TrackMetadata
 
     PitchAndRoll TrackPitchAndRollStart(TrackElemType trackType);
     PitchAndRoll TrackPitchAndRollEnd(TrackElemType trackType);
+    bool TrackPitchAndRollMatches(ride_type_t rideType, const PitchAndRoll& a, const PitchAndRoll& b);
 } // namespace OpenRCT2::TrackMetadata
