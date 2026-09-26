@@ -38,6 +38,7 @@
 #include "../world/tile_element/PathElement.h"
 #include "../world/tile_element/TileElement.h"
 #include "../world/tile_element/TrackElement.h"
+#include "FlyerInversion.h"
 #include "Ride.h"
 #include "RideData.h"
 #include "TrackData.h"
@@ -835,17 +836,11 @@ namespace OpenRCT2
                 _currentlySelectedTrack = ted->curveChain.next;
 
                 // Set track banking
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+                if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertingPiece(ted->definition))
                 {
-                    const bool isInvertingPiece = (ted->definition.rollStart != ted->definition.rollEnd)
-                        && (ted->definition.rollStart == TrackRoll::upsideDown
-                            || ted->definition.rollEnd == TrackRoll::upsideDown);
-                    if (isInvertingPiece)
-                    {
-                        bank = TrackRoll::none;
-                        _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
-                        _currentlySelectedTrack = TrackCurve::none;
-                    }
+                    bank = TrackRoll::none;
+                    _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
+                    _currentlySelectedTrack = TrackCurve::none;
                 }
                 _currentTrackRollEnd = bank;
                 _previousTrackRollEnd = bank;
@@ -898,17 +893,11 @@ namespace OpenRCT2
                 _currentlySelectedTrack = ted->curveChain.previous;
 
                 // Set track banking
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+                if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertingPiece(ted->definition))
                 {
-                    const bool isInvertingPiece = (ted->definition.rollStart != ted->definition.rollEnd)
-                        && (ted->definition.rollStart == TrackRoll::upsideDown
-                            || ted->definition.rollEnd == TrackRoll::upsideDown);
-                    if (isInvertingPiece)
-                    {
-                        bank = TrackRoll::none;
-                        _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
-                        _currentlySelectedTrack = TrackCurve::none;
-                    }
+                    bank = TrackRoll::none;
+                    _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
+                    _currentlySelectedTrack = TrackCurve::none;
                 }
                 _currentTrackRollEnd = bank;
                 _previousTrackRollEnd = bank;

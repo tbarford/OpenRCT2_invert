@@ -14,6 +14,7 @@
 #include <openrct2/actions/ride/RideCreateAction.h>
 #include <openrct2/config/Config.h>
 #include <openrct2/interface/Viewport.h>
+#include <openrct2/ride/FlyerInversion.h>
 #include <openrct2/ride/Ride.h>
 #include <openrct2/ride/RideConstruction.h>
 #include <openrct2/ride/RideData.h>
@@ -280,9 +281,7 @@ namespace OpenRCT2
             bool rollMatches = (elemRoll == buildBank);
             if (currentRide.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant) && buildBank == TrackRoll::none)
             {
-                const bool isInvertingPiece = (ted.definition.rollStart != ted.definition.rollEnd)
-                    && (ted.definition.rollStart == TrackRoll::upsideDown || ted.definition.rollEnd == TrackRoll::upsideDown);
-                if (isInvertingPiece)
+                if (FlyerInversion::IsInvertingPiece(ted.definition))
                 {
                     const bool isCurrentlyInverted = _currentTrackAlternative.has(AlternativeTrackFlag::inverted);
                     if (ted.flags.has(TrackElementFlag::down))

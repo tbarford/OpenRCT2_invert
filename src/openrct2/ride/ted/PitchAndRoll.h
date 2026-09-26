@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <cstdint>
+#include "../RideTypes.h"
 
-using ride_type_t = uint16_t;
+#include <cstdint>
 
 namespace OpenRCT2
 {
