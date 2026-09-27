@@ -151,7 +151,7 @@ namespace OpenRCT2
         return true;
     }
 
-    static const VehicleInfo* vehicle_get_move_info(
+    const VehicleInfo* vehicle_get_move_info(
         VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction, int32_t offset)
     {
         uint16_t typeAndDirection = (EnumValue(type) << 2) | (direction & 3);
@@ -176,7 +176,8 @@ namespace OpenRCT2
         if (transform == FlyerInversion::FlyerTransform::None)
             return rawInfo;
 
-        _transformedMoveInfo = FlyerInversion::TransformMoveInfo(*rawInfo, transform);
+        _transformedMoveInfo = FlyerInversion::TransformMoveInfo(
+            *rawInfo, transform, GetTrackType(), TrackSubposition, GetTrackDirection(), track_progress);
         return &_transformedMoveInfo;
     }
 

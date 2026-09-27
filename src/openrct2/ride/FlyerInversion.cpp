@@ -10,6 +10,7 @@
 #include "FlyerInversion.h"
 
 #include "Track.h"
+#include "Vehicle.h"
 #include "ted/TrackElementDescriptor.h"
 
 namespace OpenRCT2::FlyerInversion
@@ -34,6 +35,14 @@ namespace OpenRCT2::FlyerInversion
                 // If the car is already flagged as inverted, no transform needed.
                 return carIsInverted ? FlyerTransform::None : FlyerTransform::HalfLoopDown;
 
+            case TrackElemType::leftTwistUpToDown:
+            case TrackElemType::rightTwistUpToDown:
+                return FlyerTransform::TwistUpToDown;
+
+            case TrackElemType::leftTwistDownToUp:
+            case TrackElemType::rightTwistDownToUp:
+                return FlyerTransform::TwistDownToUp;
+
             default:
                 return FlyerTransform::None;
         }
@@ -49,7 +58,9 @@ namespace OpenRCT2::FlyerInversion
         return carIsInverted;
     }
 
-    VehicleInfo TransformMoveInfo(const VehicleInfo& raw, FlyerTransform transform)
+    VehicleInfo TransformMoveInfo(
+        const VehicleInfo& raw, FlyerTransform transform, TrackElemType type, VehicleTrackSubposition subposition,
+        uint8_t direction, uint16_t trackProgress)
     {
         switch (transform)
         {
@@ -59,6 +70,41 @@ namespace OpenRCT2::FlyerInversion
                 out.z += 16;
                 out.yaw = (out.yaw + 16) & 31;
                 out.pitch = InvertPitch(out.pitch);
+                return out;
+            }
+            case FlyerTransform::TwistUpToDown:
+            {
+                // Upright -> Inverted
+                if (trackProgress >= 90)
+                {
+                    VehicleInfo out = raw;
+                    out.z = -16;
+                    out.yaw = (out.yaw + 16) & 31;
+                    out.pitch = VehiclePitch::flat;
+                    out.roll = VehicleRoll::unbanked;
+                    return out;
+                }
+                auto rollElem = (type == TrackElemType::leftTwistUpToDown) ? TrackElemType::leftTwistDownToUp
+                                                                           : TrackElemType::rightTwistDownToUp;
+                const auto* rollInfo = vehicle_get_move_info(subposition, rollElem, direction, trackProgress);
+                VehicleInfo out = *rollInfo;
+                out.z = 0;
+                return out;
+            }
+            case FlyerTransform::TwistDownToUp:
+            {
+                // Inverted -> Upright
+                auto unrollElem = (type == TrackElemType::leftTwistDownToUp) ? TrackElemType::leftTwistUpToDown
+                                                                             : TrackElemType::rightTwistUpToDown;
+                const auto* unrollInfo = vehicle_get_move_info(subposition, unrollElem, direction, trackProgress);
+                VehicleInfo out = *unrollInfo;
+                out.z = 0;
+                if (trackProgress < 5)
+                {
+                    out.yaw = (out.yaw + 16) & 31;
+                    out.pitch = VehiclePitch::flat;
+                    out.roll = VehicleRoll::unbanked;
+                }
                 return out;
             }
             default:
