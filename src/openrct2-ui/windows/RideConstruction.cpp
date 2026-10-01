@@ -45,6 +45,7 @@
 #include <openrct2/paint/VirtualFloor.h>
 #include <openrct2/paint/tile_element/Paint.TileElement.h>
 #include <openrct2/platform/Platform.h>
+#include <openrct2/ride/FlyerInversion.h>
 #include <openrct2/ride/Ride.h>
 #include <openrct2/ride/RideConstruction.h>
 #include <openrct2/ride/RideData.h>
@@ -2715,12 +2716,17 @@ namespace OpenRCT2::Ui::Windows
             tempTrackTileElement.asTrack()->setTrackType(trackType);
             tempTrackTileElement.asTrack()->setRideType(currentRide->type);
             tempTrackTileElement.asTrack()->setHasCableLift(false);
-            tempTrackTileElement.asTrack()->setInverted(liftHillAndInvertedState.has(LiftHillAndInverted::inverted));
+            const auto& ted = GetTrackElementDescriptor(trackType);
+            bool isInverted = liftHillAndInvertedState.has(LiftHillAndInverted::inverted);
+            if (currentRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
+                && FlyerInversion::UsesStandardInversion(ted.definition))
+            {
+                isInverted = FlyerInversion::EntersInverted(ted.definition);
+            }
+            tempTrackTileElement.asTrack()->setInverted(isInverted);
             tempTrackTileElement.asTrack()->setColourScheme(_currentColourScheme);
             // Skipping seat rotation, should not be necessary for a temporary piece.
             tempTrackTileElement.asTrack()->setRideIndex(rideIndex);
-
-            const auto& ted = GetTrackElementDescriptor(trackType);
             const auto* rideEntry = currentRide->getRideEntry();
             auto clearanceHeight = (rideEntry != nullptr) ? rideEntry->Clearance
                                                           : currentRide->getRideTypeDescriptor().Heights.ClearanceHeight;

@@ -168,26 +168,31 @@ namespace OpenRCT2
     {
         const auto* rawInfo = vehicle_get_move_info(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
 
-        auto curRide = GetRide();
+        const auto* curRide = GetRide();
         if (curRide == nullptr || !curRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
             return rawInfo;
 
-        auto transform = FlyerInversion::ClassifyTrack(GetTrackType(), flags.has(VehicleFlag::carIsInverted));
-        if (transform == FlyerInversion::FlyerTransform::None)
+        const auto& ted = GetTrackElementDescriptor(GetTrackType());
+        if (!FlyerInversion::UsesStandardInversion(ted.definition))
             return rawInfo;
 
-        _transformedMoveInfo = FlyerInversion::TransformMoveInfo(
-            *rawInfo, transform, GetTrackType(), TrackSubposition, GetTrackDirection(), track_progress);
+        _transformedMoveInfo = FlyerInversion::TransformMoveInfo(*rawInfo, flags.has(VehicleFlag::carIsInverted));
         return &_transformedMoveInfo;
     }
 
     bool Vehicle::ShouldUseInvertedCarEntry() const
     {
-        auto curRide = GetRide();
+        const bool carIsInverted = flags.has(VehicleFlag::carIsInverted);
+        const auto* curRide = GetRide();
         if (curRide == nullptr || !curRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
-            return flags.has(VehicleFlag::carIsInverted);
+            return carIsInverted;
 
-        return FlyerInversion::ShouldUseInvertedSprite(GetTrackType(), track_progress, flags.has(VehicleFlag::carIsInverted));
+        const auto& ted = GetTrackElementDescriptor(GetTrackType());
+        if (!FlyerInversion::UsesStandardInversion(ted.definition))
+            return carIsInverted;
+
+        const auto* rawInfo = vehicle_get_move_info(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
+        return FlyerInversion::UsesInvertedCarSet(*rawInfo, carIsInverted);
     }
 
     uint16_t VehicleGetMoveInfoSize(VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction)

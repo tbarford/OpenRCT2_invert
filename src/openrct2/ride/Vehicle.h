@@ -243,6 +243,7 @@ namespace OpenRCT2
         uint8_t target_seat_rotation;
         CoordsXY BoatLocation;
         uint8_t BlockBrakeSpeed;
+        // Scratch storage for GetMoveInfo() when a flyer car's sample has to be transformed.
         mutable VehicleInfo _transformedMoveInfo;
 
         constexpr bool IsHead() const

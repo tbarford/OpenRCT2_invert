@@ -818,17 +818,15 @@ namespace OpenRCT2
                     return;
                 }
 
-                // Set whether track is covered
+                ted = &GetTrackElementDescriptor(trackType);
+
+                // Set whether track is covered / inverted
                 _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+                if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertedAtEnd(*tileElement->asTrack()))
                 {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
-                    }
+                    _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
                 }
 
-                ted = &GetTrackElementDescriptor(trackType);
                 auto bank = ted->definition.rollEnd;
                 auto slope = ted->definition.pitchEnd;
 
@@ -839,7 +837,6 @@ namespace OpenRCT2
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertingPiece(ted->definition))
                 {
                     bank = TrackRoll::none;
-                    _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
                     _currentlySelectedTrack = TrackCurve::none;
                 }
                 _currentTrackRollEnd = bank;
@@ -875,17 +872,15 @@ namespace OpenRCT2
                 tileElement = xyElement.element;
                 trackType = tileElement->asTrack()->getTrackType();
 
-                // Set whether track is covered
+                ted = &GetTrackElementDescriptor(trackType);
+
+                // Set whether track is covered / inverted
                 _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+                if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertedAtStart(*tileElement->asTrack()))
                 {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
-                    }
+                    _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
                 }
 
-                ted = &GetTrackElementDescriptor(trackType);
                 auto bank = ted->definition.rollStart;
                 auto slope = ted->definition.pitchStart;
 
@@ -896,7 +891,6 @@ namespace OpenRCT2
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::IsInvertingPiece(ted->definition))
                 {
                     bank = TrackRoll::none;
-                    _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
                     _currentlySelectedTrack = TrackCurve::none;
                 }
                 _currentTrackRollEnd = bank;

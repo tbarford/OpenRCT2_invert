@@ -15,6 +15,7 @@
 #include "../../core/Money.hpp"
 #include "../../core/Numerics.hpp"
 #include "../../management/Finance.h"
+#include "../../ride/FlyerInversion.h"
 #include "../../ride/RideColour.h"
 #include "../../ride/RideData.h"
 #include "../../ride/Track.h"
@@ -614,10 +615,12 @@ namespace OpenRCT2::GameActions
                 trackElement->setSeatRotation(_seatRotation);
             }
 
-            if (_trackPlaceFlags.has(LiftHillAndInverted::inverted))
+            bool isInverted = _trackPlaceFlags.has(LiftHillAndInverted::inverted);
+            if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::UsesStandardInversion(ted.definition))
             {
-                trackElement->setInverted(true);
+                isInverted = FlyerInversion::EntersInverted(ted.definition);
             }
+            trackElement->setInverted(isInverted);
             trackElement->setColourScheme(static_cast<RideColourScheme>(_colour));
 
             if (ted.sequenceData.sequences[0].flags.has(SequenceFlag::connectsToPath))

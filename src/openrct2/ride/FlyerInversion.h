@@ -9,34 +9,38 @@
 
 #pragma once
 
-#include "Angles.h"
-#include "VehicleSubpositionData.h"
-
 #include <cstdint>
-#include <iterator>
 
 namespace OpenRCT2
 {
-    enum class TrackElemType : uint16_t;
-}
+    struct TrackElement;
+    struct VehicleInfo;
+} // namespace OpenRCT2
 
 namespace OpenRCT2::TrackMetadata
 {
     struct TrackDefinition;
 }
 
+/**
+ * Inversion rules for rides with an inverted track variant (the Flying Roller Coaster).
+ *
+ * Model: every inverting piece toggles the car between upright and inverted. A track element's
+ * inverted bit records the state the car is in when it ENTERS the element; the exit state is the
+ * opposite for inverting pieces and the same for everything else.
+ *
+ * Standard inversion elements are reused in the direction the flyer paint draws them, which is the
+ * reverse of the descriptor's roll labels: the flyer is inverted where the descriptor says the roll
+ * is none. In this direction the standard descriptor geometry (block offsets and zEnd) already
+ * matches the flyer exactly, so no Z adjustment exists.
+ */
 namespace OpenRCT2::FlyerInversion
 {
     /**
-     * Classifies what kind of flyer move-info transform a track element needs.
+     * Height difference between a car riding on top of the rails and one hanging below them.
+     * Shared by the vehicle painter and the move-info transform.
      */
-    enum class FlyerTransform : uint8_t
-    {
-        None,          // Standard handling — no transform needed
-        HalfLoopDown,  // halfLoopDown, left/rightLargeHalfLoopDown — upright vehicle on inverted-geometry track
-        TwistUpToDown, // leftTwistUpToDown / rightTwistUpToDown (Upright -> Inverted)
-        TwistDownToUp, // leftTwistDownToUp / rightTwistDownToUp (Inverted -> Upright)
-    };
+    inline constexpr int16_t kInvertedCarZOffset = 16;
 
     /**
      * Does this track definition transition between upright and inverted?
@@ -45,73 +49,40 @@ namespace OpenRCT2::FlyerInversion
     bool IsInvertingPiece(const TrackMetadata::TrackDefinition& def);
 
     /**
-     * What transform does this track element need for a flying coaster?
-     * Returns None for non-inverting elements or when the vehicle is already in the correct state.
+     * Is this an inverting piece from the standard element set (not one of the legacy
+     * flyer-specific elements, which carry their own subposition data)?
      */
-    FlyerTransform ClassifyTrack(TrackElemType type, bool carIsInverted);
+    bool UsesStandardInversion(const TrackMetadata::TrackDefinition& def);
 
     /**
-     * Invert a pitch value (reflect around 90°).
-     * flat ↔ inverted, up25 ↔ up150, etc.
-     * Corkscrew/helix/other pitches pass through unchanged.
+     * The state a car is in when it enters a standard inverting piece. This is the value stored
+     * in the element's inverted bit when the piece is placed.
      */
-    constexpr VehiclePitch InvertPitch(VehiclePitch pitch);
+    bool EntersInverted(const TrackMetadata::TrackDefinition& def);
+
+    /** Car state at the start of an existing element (its inverted bit). */
+    bool IsInvertedAtStart(const TrackElement& trackElement);
+
+    /** Car state at the end of an existing element: the start state, toggled by inverting pieces. */
+    bool IsInvertedAtEnd(const TrackElement& trackElement);
 
     /**
-     * Should the inverted car entry (sprite set) be used for painting?
-     * For most elements, just returns carIsInverted.
-     * (Extensible for future mid-element sprite switching.)
+     * Which car set draws a flyer car at this standard subposition sample on a standard inverting
+     * piece. The flyer's pose is the standard pose rolled half a turn about the rail, so a level
+     * unbanked standard sample is a hanging flyer (inverted set), while rolled and over-the-top
+     * samples are drawn with the upright set. Corkscrew-type pitches keep the entry state.
      */
-    bool ShouldUseInvertedSprite(TrackElemType type, uint16_t trackProgress, bool carIsInverted);
+    bool UsesInvertedCarSet(const VehicleInfo& raw, bool enteredInverted);
 
     /**
-     * Transform raw VehicleInfo for a flying coaster on an inverting element.
-     * Returns the raw info unmodified if no transform is needed.
+     * Re-express a standard subposition sample for a flyer car on a standard inverting piece, in the
+     * frame of the car set chosen by UsesInvertedCarSet. The pose and total height match the legacy
+     * flyer subposition tables sample-for-sample; only the set that draws each pose differs:
+     *  - samples drawn with the upright set are rolled half a turn: rolled samples are mirrored to
+     *    the opposite side (rollX -> other side, 180 - X), unbanked ones get the inverted pitch and
+     *    a half-revolution yaw;
+     *  - a car that entered upright is lifted by kInvertedCarZOffset, since the painter only adds
+     *    that offset to cars flagged inverted.
      */
-    VehicleInfo TransformMoveInfo(
-        const VehicleInfo& raw, FlyerTransform transform, TrackElemType type, VehicleTrackSubposition subposition,
-        uint8_t direction, uint16_t trackProgress);
-
-    // ---- constexpr implementation ----
-
-    // Enum layout: flat(0), up12(1), up25(2), up42(3), up60(4),
-    //   down12(5), down25(6), down42(7), down60(8),
-    //   up75(9), up90(10), up105(11), up120(12), up135(13), up150(14), up165(15),
-    //   inverted(16),
-    //   down75(17), down90(18), down105(19), down120(20), down135(21), down150(22), down165(23)
-    inline constexpr VehiclePitch kInvertPitchMap[] = {
-        VehiclePitch::inverted, // flat(0) → inverted
-        VehiclePitch::up165,    // up12(1) → up165
-        VehiclePitch::up150,    // up25(2) → up150
-        VehiclePitch::up135,    // up42(3) → up135
-        VehiclePitch::up120,    // up60(4) → up120
-        VehiclePitch::down165,  // down12(5) → down165
-        VehiclePitch::down150,  // down25(6) → down150
-        VehiclePitch::down135,  // down42(7) → down135
-        VehiclePitch::down120,  // down60(8) → down120
-        VehiclePitch::up105,    // up75(9) → up105
-        VehiclePitch::up90,     // up90(10) → up90
-        VehiclePitch::up75,     // up105(11) → up75
-        VehiclePitch::up60,     // up120(12) → up60
-        VehiclePitch::up42,     // up135(13) → up42
-        VehiclePitch::up25,     // up150(14) → up25
-        VehiclePitch::up12,     // up165(15) → up12
-        VehiclePitch::flat,     // inverted(16) → flat
-        VehiclePitch::down105,  // down75(17) → down105
-        VehiclePitch::down90,   // down90(18) → down90
-        VehiclePitch::down75,   // down105(19) → down75
-        VehiclePitch::down60,   // down120(20) → down60
-        VehiclePitch::down42,   // down135(21) → down42
-        VehiclePitch::down25,   // down150(22) → down25
-        VehiclePitch::down12,   // down165(23) → down12
-    };
-
-    constexpr VehiclePitch InvertPitch(VehiclePitch pitch)
-    {
-        auto idx = static_cast<uint8_t>(pitch);
-        if (idx < std::size(kInvertPitchMap))
-            return kInvertPitchMap[idx];
-        return pitch; // corkscrew/helix/etc — pass through unchanged
-    }
-
+    VehicleInfo TransformMoveInfo(const VehicleInfo& raw, bool enteredInverted);
 } // namespace OpenRCT2::FlyerInversion

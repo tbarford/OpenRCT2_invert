@@ -842,17 +842,59 @@ TrackPaintFunction GetTrackPaintFunctionFlyingRC(TrackElemType trackType)
         case TrackElemType::rightFlyerLargeHalfLoopInvertedDown:
             return TwisterRCTrackRightLargeHalfLoopDown;
         case TrackElemType::flyerHalfLoopInvertedUp:
+        case TrackElemType::halfLoopUp:
             return FlyingRCTrackHalfLoopInvertedUp;
         case TrackElemType::flyerHalfLoopUninvertedDown:
+        case TrackElemType::halfLoopDown:
             return FlyingRCTrackHalfLoopUninvertedDown;
         case TrackElemType::leftFlyerLargeHalfLoopInvertedUp:
+        case TrackElemType::leftLargeHalfLoopUp:
             return FlyingRCTrackLeftFlyingLargeHalfLoopInvertedUp;
         case TrackElemType::rightFlyerLargeHalfLoopInvertedUp:
+        case TrackElemType::rightLargeHalfLoopUp:
             return FlyingRCTrackRightFlyingLargeHalfLoopInvertedUp;
         case TrackElemType::leftFlyerLargeHalfLoopUninvertedDown:
+        case TrackElemType::leftLargeHalfLoopDown:
             return FlyingRCTrackLeftFlyingLargeHalfLoopUninvertedDown;
         case TrackElemType::rightFlyerLargeHalfLoopUninvertedDown:
+        case TrackElemType::rightLargeHalfLoopDown:
             return FlyingRCTrackRightFlyingLargeHalfLoopUninvertedDown;
+
+        // Inversions defined in FlyingRollerCoasterInverted.cpp
+        case TrackElemType::leftTwistDownToUp:
+        case TrackElemType::rightTwistDownToUp:
+        case TrackElemType::leftTwistUpToDown:
+        case TrackElemType::rightTwistUpToDown:
+        case TrackElemType::leftCorkscrewUp:
+        case TrackElemType::rightCorkscrewUp:
+        case TrackElemType::leftCorkscrewDown:
+        case TrackElemType::rightCorkscrewDown:
+        case TrackElemType::leftMediumHalfLoopUp:
+        case TrackElemType::rightMediumHalfLoopUp:
+        case TrackElemType::leftMediumHalfLoopDown:
+        case TrackElemType::rightMediumHalfLoopDown:
+        case TrackElemType::leftBarrelRollUpToDown:
+        case TrackElemType::rightBarrelRollUpToDown:
+        case TrackElemType::leftBarrelRollDownToUp:
+        case TrackElemType::rightBarrelRollDownToUp:
+        case TrackElemType::leftLargeCorkscrewUp:
+        case TrackElemType::rightLargeCorkscrewUp:
+        case TrackElemType::leftLargeCorkscrewDown:
+        case TrackElemType::rightLargeCorkscrewDown:
+        case TrackElemType::leftZeroGRollUp:
+        case TrackElemType::rightZeroGRollUp:
+        case TrackElemType::leftZeroGRollDown:
+        case TrackElemType::rightZeroGRollDown:
+        case TrackElemType::leftLargeZeroGRollUp:
+        case TrackElemType::rightLargeZeroGRollUp:
+        case TrackElemType::leftLargeZeroGRollDown:
+        case TrackElemType::rightLargeZeroGRollDown:
+        case TrackElemType::leftEighthDiveLoopUpToOrthogonal:
+        case TrackElemType::rightEighthDiveLoopUpToOrthogonal:
+        case TrackElemType::leftEighthDiveLoopDownToDiag:
+        case TrackElemType::rightEighthDiveLoopDownToDiag:
+            return GetTrackPaintFunctionFlyingRCInverted(trackType);
+
         default:
             return GetTrackPaintFunctionTwisterRC(trackType);
     }

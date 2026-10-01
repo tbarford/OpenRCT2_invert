@@ -147,10 +147,6 @@ namespace OpenRCT2
         TrackElemType::leftCorkscrewDown,
         TrackElemType::rightCorkscrewUp,
         TrackElemType::rightCorkscrewDown,
-        TrackElemType::leftFlyerCorkscrewUp,
-        TrackElemType::leftFlyerCorkscrewDown,
-        TrackElemType::rightFlyerCorkscrewUp,
-        TrackElemType::rightFlyerCorkscrewDown,
         TrackElemType::leftLargeCorkscrewUp,
         TrackElemType::leftLargeCorkscrewDown,
         TrackElemType::rightLargeCorkscrewUp,
@@ -162,10 +158,6 @@ namespace OpenRCT2
         TrackElemType::rightVerticalLoop,
         TrackElemType::halfLoopUp,
         TrackElemType::halfLoopDown,
-        TrackElemType::flyerHalfLoopUninvertedUp,
-        TrackElemType::flyerHalfLoopInvertedDown,
-        TrackElemType::flyerHalfLoopInvertedUp,
-        TrackElemType::flyerHalfLoopUninvertedDown,
         TrackElemType::leftMediumHalfLoopUp,
         TrackElemType::leftMediumHalfLoopDown,
         TrackElemType::rightMediumHalfLoopUp,
@@ -174,14 +166,6 @@ namespace OpenRCT2
         TrackElemType::leftLargeHalfLoopDown,
         TrackElemType::rightLargeHalfLoopUp,
         TrackElemType::rightLargeHalfLoopDown,
-        TrackElemType::leftFlyerLargeHalfLoopUninvertedUp,
-        TrackElemType::leftFlyerLargeHalfLoopInvertedDown,
-        TrackElemType::leftFlyerLargeHalfLoopInvertedUp,
-        TrackElemType::leftFlyerLargeHalfLoopUninvertedDown,
-        TrackElemType::rightFlyerLargeHalfLoopUninvertedUp,
-        TrackElemType::rightFlyerLargeHalfLoopInvertedDown,
-        TrackElemType::rightFlyerLargeHalfLoopInvertedUp,
-        TrackElemType::rightFlyerLargeHalfLoopUninvertedDown,
         TrackElemType::multiDimInvertedFlatToDown90QuarterLoop,
         TrackElemType::up90ToInvertedFlatQuarterLoop,
         TrackElemType::invertedFlatToDown90QuarterLoop,
@@ -217,10 +201,6 @@ namespace OpenRCT2
         TrackElemType::leftTwistUpToDown,
         TrackElemType::rightTwistDownToUp,
         TrackElemType::rightTwistUpToDown,
-        TrackElemType::leftFlyerTwistUp,
-        TrackElemType::leftFlyerTwistDown,
-        TrackElemType::rightFlyerTwistUp,
-        TrackElemType::rightFlyerTwistDown,
     };
 
     // Update the magic number with the current number of track elements to silence
@@ -281,24 +261,14 @@ namespace OpenRCT2
             bool rollMatches = (elemRoll == buildBank);
             if (currentRide.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant) && buildBank == TrackRoll::none)
             {
-                if (FlyerInversion::IsInvertingPiece(ted.definition))
+                if (FlyerInversion::UsesStandardInversion(ted.definition))
                 {
+                    // An inverting piece toggles the car state, so it fits when its entry state matches
+                    // the current state (building forwards) or its exit state does (building backwards).
                     const bool isCurrentlyInverted = _currentTrackAlternative.has(AlternativeTrackFlag::inverted);
-                    if (ted.flags.has(TrackElementFlag::down))
-                    {
-                        rollMatches = (state == RideConstructionState::back) ? isCurrentlyInverted : !isCurrentlyInverted;
-                    }
-                    else if (ted.flags.has(TrackElementFlag::up))
-                    {
-                        rollMatches = (state == RideConstructionState::back) ? !isCurrentlyInverted : true;
-                    }
-                    else
-                    {
-                        const TrackRoll expectedRoll = (state == RideConstructionState::back)
-                            ? (isCurrentlyInverted ? TrackRoll::upsideDown : TrackRoll::none)
-                            : (isCurrentlyInverted ? TrackRoll::none : TrackRoll::upsideDown);
-                        rollMatches = (elemRoll == expectedRoll);
-                    }
+                    const bool entersInverted = FlyerInversion::EntersInverted(ted.definition);
+                    rollMatches = (state == RideConstructionState::back) ? (entersInverted != isCurrentlyInverted)
+                                                                         : (entersInverted == isCurrentlyInverted);
                 }
             }
 
