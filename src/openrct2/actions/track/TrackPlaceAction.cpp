@@ -616,9 +616,9 @@ namespace OpenRCT2::GameActions
             }
 
             bool isInverted = _trackPlaceFlags.has(LiftHillAndInverted::inverted);
-            if (rtd.flags.has(RtdFlag::hasInvertedVariant) && FlyerInversion::UsesStandardInversion(ted.definition))
+            if (rtd.flags.has(RtdFlag::hasInvertedVariant))
             {
-                isInverted = FlyerInversion::EntersInverted(ted.definition);
+                isInverted = FlyerInversion::ResolveEntryInverted(ted.definition, isInverted);
             }
             trackElement->setInverted(isInverted);
             trackElement->setColourScheme(static_cast<RideColourScheme>(_colour));

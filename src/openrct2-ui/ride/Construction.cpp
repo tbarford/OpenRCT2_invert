@@ -266,9 +266,9 @@ namespace OpenRCT2
                     // An inverting piece toggles the car state, so it fits when its entry state matches
                     // the current state (building forwards) or its exit state does (building backwards).
                     const bool isCurrentlyInverted = _currentTrackAlternative.has(AlternativeTrackFlag::inverted);
-                    const bool entersInverted = FlyerInversion::EntersInverted(ted.definition);
-                    rollMatches = (state == RideConstructionState::back) ? (entersInverted != isCurrentlyInverted)
-                                                                         : (entersInverted == isCurrentlyInverted);
+                    const bool entersInverted = (state == RideConstructionState::back) ? !isCurrentlyInverted
+                                                                                       : isCurrentlyInverted;
+                    rollMatches = FlyerInversion::SupportsEntry(ted.definition, entersInverted);
                 }
             }
 

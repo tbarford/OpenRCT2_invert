@@ -2718,10 +2718,9 @@ namespace OpenRCT2::Ui::Windows
             tempTrackTileElement.asTrack()->setHasCableLift(false);
             const auto& ted = GetTrackElementDescriptor(trackType);
             bool isInverted = liftHillAndInvertedState.has(LiftHillAndInverted::inverted);
-            if (currentRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
-                && FlyerInversion::UsesStandardInversion(ted.definition))
+            if (currentRide->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
             {
-                isInverted = FlyerInversion::EntersInverted(ted.definition);
+                isInverted = FlyerInversion::ResolveEntryInverted(ted.definition, isInverted);
             }
             tempTrackTileElement.asTrack()->setInverted(isInverted);
             tempTrackTileElement.asTrack()->setColourScheme(_currentColourScheme);
@@ -4680,6 +4679,13 @@ namespace OpenRCT2::Ui::Windows
         {
             zBegin = coords.zBegin;
             zEnd = coords.zEnd;
+            if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+            {
+                const bool entersInverted = FlyerInversion::ResolveEntryInverted(
+                    ted.definition, liftHillAndAlternativeState.has(LiftHillAndInverted::inverted));
+                zBegin += FlyerInversion::GetZBeginOffset(ted.definition, entersInverted);
+                zEnd += FlyerInversion::GetZEndOffset(ted.definition, entersInverted);
+            }
         }
         else
         {
@@ -4838,6 +4844,14 @@ namespace OpenRCT2::Ui::Windows
         if (ride == nullptr)
             return true;
 
+        // An inverting piece built backwards ends in the current state, so it is entered in the other one.
+        if (_rideConstructionState == RideConstructionState::back
+            && ride->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
+            && FlyerInversion::UsesStandardInversion(GetTrackElementDescriptor(trackType).definition))
+        {
+            liftHillAndInvertedState.flip(LiftHillAndInverted::inverted);
+        }
+
         if (IsTrackEnabled(TrackGroup::slopeSteepLong))
         {
             switch (trackType)
@@ -4911,9 +4925,18 @@ namespace OpenRCT2::Ui::Windows
         x = _currentTrackBegin.x;
         y = _currentTrackBegin.y;
         auto z = _currentTrackBegin.z;
+        int16_t flyerZBeginOffset = 0;
+        int16_t flyerZEndOffset = 0;
+        if (rtd.flags.has(RtdFlag::hasInvertedVariant))
+        {
+            const bool entersInverted = FlyerInversion::ResolveEntryInverted(
+                ted.definition, liftHillAndInvertedState.has(LiftHillAndInverted::inverted));
+            flyerZBeginOffset = FlyerInversion::GetZBeginOffset(ted.definition, entersInverted);
+            flyerZEndOffset = FlyerInversion::GetZEndOffset(ted.definition, entersInverted);
+        }
         if (_rideConstructionState == RideConstructionState::back)
         {
-            z -= trackCoordinates.zEnd;
+            z -= trackCoordinates.zEnd + flyerZEndOffset;
             trackDirection = _currentTrackPieceDirection ^ 0x02;
             trackDirection -= trackCoordinates.rotationEnd;
             trackDirection += trackCoordinates.rotationBegin;
@@ -4932,7 +4955,7 @@ namespace OpenRCT2::Ui::Windows
         }
         else
         {
-            z -= trackCoordinates.zBegin;
+            z -= trackCoordinates.zBegin + flyerZBeginOffset;
             trackDirection = _currentTrackPieceDirection;
         }
 

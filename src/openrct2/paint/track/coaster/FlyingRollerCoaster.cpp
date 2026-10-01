@@ -819,7 +819,7 @@ static void FlyingRCTrackRightFlyingLargeHalfLoopUninvertedDown(
         session, ride, 6 - trackSequence, direction, height, trackElement, supportType);
 }
 
-TrackPaintFunction GetTrackPaintFunctionFlyingRC(TrackElemType trackType)
+TrackPaintFunction GetTrackPaintFunctionFlyingRCPieces(TrackElemType trackType)
 {
     switch (trackType)
     {
@@ -893,9 +893,32 @@ TrackPaintFunction GetTrackPaintFunctionFlyingRC(TrackElemType trackType)
         case TrackElemType::rightEighthDiveLoopUpToOrthogonal:
         case TrackElemType::leftEighthDiveLoopDownToDiag:
         case TrackElemType::rightEighthDiveLoopDownToDiag:
-            return GetTrackPaintFunctionFlyingRCInverted(trackType);
+            return GetTrackPaintFunctionFlyingRCInvertedPieces(trackType);
 
         default:
             return GetTrackPaintFunctionTwisterRC(trackType);
+    }
+}
+
+// Paint for elements placed in the upright state. Up-going half loops, zero-G rolls and dive loops
+// entered upright run in the descriptor's own direction, which is the standard sit-down piece.
+TrackPaintFunction GetTrackPaintFunctionFlyingRC(TrackElemType trackType)
+{
+    switch (trackType)
+    {
+        case TrackElemType::halfLoopUp:
+        case TrackElemType::leftMediumHalfLoopUp:
+        case TrackElemType::rightMediumHalfLoopUp:
+        case TrackElemType::leftLargeHalfLoopUp:
+        case TrackElemType::rightLargeHalfLoopUp:
+        case TrackElemType::leftZeroGRollUp:
+        case TrackElemType::rightZeroGRollUp:
+        case TrackElemType::leftLargeZeroGRollUp:
+        case TrackElemType::rightLargeZeroGRollUp:
+        case TrackElemType::leftEighthDiveLoopUpToOrthogonal:
+        case TrackElemType::rightEighthDiveLoopUpToOrthogonal:
+            return GetTrackPaintFunctionTwisterRC(trackType);
+        default:
+            return GetTrackPaintFunctionFlyingRCPieces(trackType);
     }
 }

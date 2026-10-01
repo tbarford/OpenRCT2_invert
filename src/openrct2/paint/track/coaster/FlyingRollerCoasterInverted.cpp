@@ -11817,7 +11817,7 @@ static void InvertedFlyingRCTrackRightTwistUpToDown(
     }
 }
 
-TrackPaintFunction GetTrackPaintFunctionFlyingRCInverted(TrackElemType trackType)
+TrackPaintFunction GetTrackPaintFunctionFlyingRCInvertedPieces(TrackElemType trackType)
 {
     switch (trackType)
     {
@@ -12174,6 +12174,29 @@ TrackPaintFunction GetTrackPaintFunctionFlyingRCInverted(TrackElemType trackType
             return InvertedFlyingRCTrackRightCorkscrewDown;
 
         default:
-            return GetTrackPaintFunctionFlyingRC(trackType);
+            return GetTrackPaintFunctionFlyingRCPieces(trackType);
+    }
+}
+
+// Paint for elements placed in the inverted state. Down-going half loops, zero-G rolls and dive loops
+// entered inverted run in the descriptor's own direction, which is the standard sit-down piece.
+TrackPaintFunction GetTrackPaintFunctionFlyingRCInverted(TrackElemType trackType)
+{
+    switch (trackType)
+    {
+        case TrackElemType::halfLoopDown:
+        case TrackElemType::leftMediumHalfLoopDown:
+        case TrackElemType::rightMediumHalfLoopDown:
+        case TrackElemType::leftLargeHalfLoopDown:
+        case TrackElemType::rightLargeHalfLoopDown:
+        case TrackElemType::leftZeroGRollDown:
+        case TrackElemType::rightZeroGRollDown:
+        case TrackElemType::leftLargeZeroGRollDown:
+        case TrackElemType::rightLargeZeroGRollDown:
+        case TrackElemType::leftEighthDiveLoopDownToDiag:
+        case TrackElemType::rightEighthDiveLoopDownToDiag:
+            return GetTrackPaintFunctionTwisterRC(trackType);
+        default:
+            return GetTrackPaintFunctionFlyingRCInvertedPieces(trackType);
     }
 }

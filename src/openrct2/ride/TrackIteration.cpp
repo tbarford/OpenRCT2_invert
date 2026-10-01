@@ -5,6 +5,7 @@
 #include "../world/Map.h"
 #include "../world/tile_element/TileElement.h"
 #include "../world/tile_element/TrackElement.h"
+#include "FlyerInversion.h"
 #include "Ride.h"
 #include "RideData.h"
 #include "Track.h"
@@ -235,6 +236,8 @@ namespace OpenRCT2
                 continue;
 
             int16_t nextZ = nextTrackCoordinate.zBegin - ted.sequenceData.sequences[0].clearance.z + tileElement->getBaseZ();
+            if (ride.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+                nextZ += FlyerInversion::GetZBeginOffset(ted.definition, trackElement->isInverted());
             if (nextZ != trackPos.z)
                 continue;
 
@@ -294,6 +297,8 @@ namespace OpenRCT2
 
         OriginZ -= trackBlock.z;
         OriginZ += trackCoordinate.zEnd;
+        if (ride->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+            OriginZ += FlyerInversion::GetZEndOffset(ted.definition, inputElement->isInverted());
 
         uint8_t directionStart = ((trackCoordinate.rotationEnd + rotation) & kTileElementDirectionMask)
             | (trackCoordinate.rotationEnd & kTrackDirectionDiagonalMask);
@@ -358,6 +363,8 @@ namespace OpenRCT2
                 continue;
 
             int16_t nextZ = nextTrackCoordinate.zEnd - currentBlock.z + tileElement->getBaseZ();
+            if (ride.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+                nextZ += FlyerInversion::GetZEndOffset(ted.definition, trackElement->isInverted());
             if (nextZ != trackPos.z)
                 continue;
 
@@ -432,6 +439,8 @@ namespace OpenRCT2
 
         z -= trackBlock.z;
         z += trackCoordinate.zBegin;
+        if (ride->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant))
+            z += FlyerInversion::GetZBeginOffset(ted.definition, trackElement->isInverted());
 
         rotation = ((trackCoordinate.rotationBegin + rotation) & kTileElementDirectionMask)
             | (trackCoordinate.rotationBegin & kTrackDirectionDiagonalMask);
