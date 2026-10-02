@@ -44,8 +44,11 @@ void PaintVehicle(PaintSession& session, const Vehicle& vehicle, int32_t imageDi
         auto carEntryIndex = vehicle.vehicle_type;
         if (vehicle.flags.has(VehicleFlag::carIsInverted))
         {
-            carEntryIndex++;
             zOffset += 16;
+        }
+        if (VehicleUsesInvertedCarSet(vehicle))
+        {
+            carEntryIndex++;
         }
 
         if (carEntryIndex >= std::size(rideEntry->Cars))

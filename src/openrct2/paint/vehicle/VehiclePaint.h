@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include "../../ride/Angles.h"
+#include "../../ride/ted/TrackElemType.h"
+
 #include <cstdint>
 
 struct PaintSession;
@@ -30,6 +33,18 @@ struct VehicleBoundBox
 };
 
 extern const VehicleBoundBox VehicleBoundboxes[16][224];
+
+/**
+ * Inverted cars are drawn with their car entry's inverted sprite set, except at the poses below, which have always
+ * been drawn with the upright set. The pitch and roll are the drawn ones, after reversed cars have been mirrored.
+ * - Flat, banked 67 degrees or more, or at an uninverting roll.
+ * - Pitched down 75 or 90 degrees, other than on vertical drop track.
+ * - Pitched down past vertical, at an uninverting pitch, or at a corkscrew frame.
+ */
+bool InvertedCarDrawsWithUprightSet(OpenRCT2::TrackElemType trackType, VehiclePitch pitch, VehicleRoll roll);
+
+/** Whether a car is drawn with its car entry's inverted sprite set at its current pose. */
+bool VehicleUsesInvertedCarSet(const OpenRCT2::Vehicle& vehicle);
 
 void VehicleVisualDefault(
     PaintSession& session, int32_t imageDirection, int32_t z, const OpenRCT2::Vehicle* vehicle, const CarEntry* carEntry);

@@ -1161,6 +1161,62 @@ static VehicleRoll GetPaintBankRotation(const Vehicle* vehicle)
     return (vehicle->flags.has(VehicleFlag::carIsReversed)) ? RollInvertTable[EnumValue(vehicle->roll)] : vehicle->roll;
 }
 
+bool InvertedCarDrawsWithUprightSet(TrackElemType trackType, VehiclePitch pitch, VehicleRoll roll)
+{
+    switch (pitch)
+    {
+        case VehiclePitch::flat:
+            switch (roll)
+            {
+                case VehicleRoll::left67:
+                case VehicleRoll::left90:
+                case VehicleRoll::left112:
+                case VehicleRoll::left135:
+                case VehicleRoll::left157:
+                case VehicleRoll::right67:
+                case VehicleRoll::right90:
+                case VehicleRoll::right112:
+                case VehicleRoll::right135:
+                case VehicleRoll::right157:
+                case VehicleRoll::uninvertingLeft22:
+                case VehicleRoll::uninvertingLeft45:
+                case VehicleRoll::uninvertingRight22:
+                case VehicleRoll::uninvertingRight45:
+                    return true;
+                default:
+                    return false;
+            }
+        case VehiclePitch::down75:
+            return trackType != TrackElemType::down90ToDown60 && trackType != TrackElemType::down60ToDown90;
+        case VehiclePitch::down90:
+            return trackType != TrackElemType::down90 && trackType != TrackElemType::down90ToDown60
+                && trackType != TrackElemType::down60ToDown90;
+        case VehiclePitch::uninvertingDown25:
+        case VehiclePitch::uninvertingDown42:
+        case VehiclePitch::uninvertingDown60:
+        case VehiclePitch::down105:
+        case VehiclePitch::down120:
+        case VehiclePitch::down135:
+        case VehiclePitch::down150:
+        case VehiclePitch::down165:
+            return true;
+        default:
+            return pitch >= VehiclePitch::corkscrewUpRight0 && pitch <= VehiclePitch::corkscrewDownRight4;
+    }
+}
+
+bool VehicleUsesInvertedCarSet(const Vehicle& vehicle)
+{
+    if (!vehicle.flags.has(VehicleFlag::carIsInverted))
+        return false;
+    if (vehicle.pitch >= VehiclePitch::pitchCount)
+        return true;
+
+    const auto pitch = vehicle.flags.has(VehicleFlag::carIsReversed) ? PitchInvertTable[EnumValue(vehicle.pitch)]
+                                                                     : vehicle.pitch;
+    return !InvertedCarDrawsWithUprightSet(vehicle.GetTrackType(), pitch, GetPaintBankRotation(&vehicle));
+}
+
 #pragma endregion
 
 #pragma region FlatSlope
@@ -1260,10 +1316,6 @@ static void VehiclePitchFlatBankedLeft67(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : YawTo4(imageDirection) + kBoundBoxIndexFlatBanked67;
     if (carEntry->groupEnabled(SpriteGroupType::flatBanked67))
@@ -1282,10 +1334,6 @@ static void VehiclePitchFlatBankedLeft90(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : YawTo4(imageDirection) + kBoundBoxIndexFlatBanked90;
     if (carEntry->groupEnabled(SpriteGroupType::flatBanked90))
@@ -1304,10 +1352,6 @@ static void VehiclePitchFlatBankedLeft112(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : YawTo4(imageDirection) + kBoundBoxIndexFlatBanked112;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1326,10 +1370,6 @@ static void VehiclePitchFlatBankedLeft135(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : YawTo4(imageDirection) + kBoundBoxIndexFlatBanked135;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1348,10 +1388,6 @@ static void VehiclePitchFlatBankedLeft157(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : YawTo4(imageDirection) + kBoundBoxIndexFlatBanked157;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1370,10 +1406,6 @@ static void VehiclePitchFlatBankedRight67(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : (YawTo4(imageDirection) ^ 2) + kBoundBoxIndexFlatBanked67;
     if (carEntry->groupEnabled(SpriteGroupType::flatBanked67))
@@ -1392,10 +1424,6 @@ static void VehiclePitchFlatBankedRight90(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : (YawTo4(imageDirection) ^ 2) + kBoundBoxIndexFlatBanked90;
     if (carEntry->groupEnabled(SpriteGroupType::flatBanked90))
@@ -1414,10 +1442,6 @@ static void VehiclePitchFlatBankedRight112(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : (YawTo4(imageDirection) ^ 2) + kBoundBoxIndexFlatBanked112;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1436,10 +1460,6 @@ static void VehiclePitchFlatBankedRight135(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : (YawTo4(imageDirection) ^ 2) + kBoundBoxIndexFlatBanked135;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1458,10 +1478,6 @@ static void VehiclePitchFlatBankedRight157(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : (YawTo4(imageDirection) ^ 2) + kBoundBoxIndexFlatBanked157;
     if (carEntry->groupEnabled(SpriteGroupType::inlineTwists))
@@ -1473,42 +1489,6 @@ static void VehiclePitchFlatBankedRight157(
     {
         VehiclePitchFlatBankedLeft45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
     }
-}
-
-// 6D4EE4
-static void VehiclePitchUninvertedFlatBankedLeft22(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchFlatBankedLeft22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-// 6D4F31
-static void VehiclePitchUninvertedFlatBankedLeft45(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchFlatBankedLeft45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-// 6D4F09
-static void VehiclePitchUninvertedFlatBankedRight22(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchFlatBankedRight22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-// 6D4F59
-static void VehiclePitchUninvertedFlatBankedRight45(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchFlatBankedRight45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
 }
 
 // 6D51D7
@@ -1568,16 +1548,16 @@ static void VehiclePitchFlat(
             VehiclePitchFlatUnbanked(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
             break;
         case VehicleRoll::uninvertingLeft22:
-            VehiclePitchUninvertedFlatBankedLeft22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
+            VehiclePitchFlatBankedLeft22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
             break;
         case VehicleRoll::uninvertingLeft45:
-            VehiclePitchUninvertedFlatBankedLeft45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
+            VehiclePitchFlatBankedLeft45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
             break;
         case VehicleRoll::uninvertingRight22:
-            VehiclePitchUninvertedFlatBankedRight22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
+            VehiclePitchFlatBankedRight22(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
             break;
         case VehicleRoll::uninvertingRight45:
-            VehiclePitchUninvertedFlatBankedRight45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
+            VehiclePitchFlatBankedRight45(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
             break;
         default:
             VehiclePitchFlatUnbanked(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
@@ -3391,14 +3371,6 @@ static void VehiclePitchDown75(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        if (vehicle->GetTrackType() != TrackElemType::down90ToDown60
-            && (vehicle->GetTrackType()) != TrackElemType::down60ToDown90)
-        {
-            carEntry--;
-        }
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex75;
     if (carEntry->groupEnabled(SpriteGroupType::slopes75))
@@ -3417,14 +3389,6 @@ static void VehiclePitchDown90(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        if (vehicle->GetTrackType() != TrackElemType::down90 && (vehicle->GetTrackType()) != TrackElemType::down90ToDown60
-            && (vehicle->GetTrackType()) != TrackElemType::down60ToDown90)
-        {
-            carEntry--;
-        }
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo16(imageDirection)) ^ 8) + kBoundBoxIndex90;
     if (carEntry->groupEnabled(SpriteGroupType::slopes90))
@@ -3447,10 +3411,6 @@ static void VehiclePitchDown105(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex105;
     if (carEntry->groupEnabled(SpriteGroupType::slopes90))
@@ -3469,10 +3429,6 @@ static void VehiclePitchDown120(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex120;
     if (carEntry->groupEnabled(SpriteGroupType::slopes90))
@@ -3491,10 +3447,6 @@ static void VehiclePitchDown135(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex135;
     if (carEntry->groupEnabled(SpriteGroupType::slopesLoop))
@@ -3513,10 +3465,6 @@ static void VehiclePitchDown150(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex150;
     if (carEntry->groupEnabled(SpriteGroupType::slopesLoop))
@@ -3535,10 +3483,6 @@ static void VehiclePitchDown165(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined ? boundingBoxIndex
                                                                    : ((YawTo4(imageDirection)) ^ 2) + kBoundBoxIndex165;
     if (carEntry->groupEnabled(SpriteGroupType::slopesLoop))
@@ -3562,10 +3506,6 @@ void VehiclePitchCorkscrew(
     PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
     uint32_t boundingBoxIndex)
 {
-    if (vehicle->flags.has(VehicleFlag::carIsInverted))
-    {
-        carEntry--;
-    }
     boundingBoxIndex = boundingBoxIndex != kBoundBoxIndexUndefined
         ? boundingBoxIndex
         : (YawTo4(imageDirection)) + corkscrewFrame * kNumOrthogonalDirections + kBoundBoxIndexCorkscrew;
@@ -4382,37 +4322,6 @@ static void VehiclePitchDown50(
 
 #pragma endregion
 
-#pragma region InvertingSlopesDown
-
-// 6D47DA
-static void VehiclePitchInvertingDown25(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchDown25(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-// 6D4A02
-static void VehiclePitchInvertingDown42(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchDown42(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-// 6D4A56
-static void VehiclePitchInvertingDown60(
-    PaintSession& session, const Vehicle* vehicle, int32_t imageDirection, const int32_t z, const CarEntry* carEntry,
-    uint32_t boundingBoxIndex)
-{
-    carEntry--;
-    VehiclePitchDown60(session, vehicle, imageDirection, z, carEntry, boundingBoxIndex);
-}
-
-#pragma endregion
-
 #pragma region SpiralLiftSlopes
 
 // 6D4773
@@ -4515,9 +4424,9 @@ static constexpr vehicle_sprite_func PaintFunctionsByPitch[] = {
     VehiclePitchDown8,
     VehiclePitchDown16,
     VehiclePitchDown50,
-    VehiclePitchInvertingDown25,
-    VehiclePitchInvertingDown42,
-    VehiclePitchInvertingDown60,
+    VehiclePitchDown25,
+    VehiclePitchDown42,
+    VehiclePitchDown60,
     VehiclePitchSpiralLiftUp,
     VehiclePitchSpiralLiftDown,
 };
