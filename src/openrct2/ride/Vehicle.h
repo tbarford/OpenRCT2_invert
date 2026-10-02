@@ -540,6 +540,8 @@ namespace OpenRCT2
     void VehicleUpdateAll();
     void VehicleSoundsUpdate();
     std::optional<uint32_t> ride_get_train_index_from_vehicle(const Ride& ride, EntityId spriteIndex);
+    const VehicleInfo* VehicleGetMoveInfo(
+        VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction, int32_t offset);
     uint16_t VehicleGetMoveInfoSize(VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction);
 
     void RideUpdateMeasurementsSpecialElements_Default(Ride& ride, TrackElemType trackType);

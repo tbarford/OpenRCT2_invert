@@ -150,7 +150,7 @@ namespace OpenRCT2
         return true;
     }
 
-    static const VehicleInfo* vehicle_get_move_info(
+    const VehicleInfo* VehicleGetMoveInfo(
         VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction, int32_t offset)
     {
         uint16_t typeAndDirection = (EnumValue(type) << 2) | (direction & 3);
@@ -165,7 +165,7 @@ namespace OpenRCT2
 
     const VehicleInfo* Vehicle::GetMoveInfo() const
     {
-        return vehicle_get_move_info(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
+        return VehicleGetMoveInfo(TrackSubposition, GetTrackType(), GetTrackDirection(), track_progress);
     }
 
     uint16_t VehicleGetMoveInfoSize(VehicleTrackSubposition trackSubposition, TrackElemType type, uint8_t direction)
