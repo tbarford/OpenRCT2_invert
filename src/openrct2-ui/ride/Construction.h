@@ -46,7 +46,7 @@ namespace OpenRCT2
 
     SpecialElementsDropdownState BuildSpecialElementsList(
         const Ride& currentRide, uint8_t buildDirection, TrackMetadata::TrackPitch buildSlope,
-        TrackMetadata::TrackRoll buildBank, RideConstructionState state);
+        TrackMetadata::TrackRoll buildBank, bool buildInverted, RideConstructionState state);
 
     void RideConstructNew(RideSelection listItem);
     CoordsXYZD RideGetEntranceOrExitPositionFromScreenPosition(const ScreenCoordsXY& screenCoords);

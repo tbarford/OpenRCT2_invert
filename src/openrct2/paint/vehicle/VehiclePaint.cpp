@@ -15,7 +15,11 @@
 #include "../../entity/EntityRegistry.h"
 #include "../../entity/Yaw.hpp"
 #include "../../ride/CarEntry.h"
+#include "../../ride/FlyerInversion.h"
+#include "../../ride/Ride.h"
+#include "../../ride/RideData.h"
 #include "../../ride/Vehicle.h"
+#include "../../ride/VehicleGeometry.h"
 #include "../Paint.h"
 
 #include <iterator>
@@ -1215,6 +1219,119 @@ bool VehicleUsesInvertedCarSet(const Vehicle& vehicle)
     const auto pitch = vehicle.flags.has(VehicleFlag::carIsReversed) ? PitchInvertTable[EnumValue(vehicle.pitch)]
                                                                      : vehicle.pitch;
     return !InvertedCarDrawsWithUprightSet(vehicle.GetTrackType(), pitch, GetPaintBankRotation(&vehicle));
+}
+
+// Height an inverted car is drawn above its position.
+static constexpr int32_t kInvertedCarZOffset = 16;
+
+// Pitch of the same pose rolled half a turn about the rail, together with a half turn of yaw: flat <-> inverted,
+// up25 <-> up150, and so on. Later pitches have no counterpart and are kept.
+static constexpr VehiclePitch kHalfRollPitch[] = {
+    VehiclePitch::inverted, // flat
+    VehiclePitch::up165,    // up12
+    VehiclePitch::up150,    // up25
+    VehiclePitch::up135,    // up42
+    VehiclePitch::up120,    // up60
+    VehiclePitch::down165,  // down12
+    VehiclePitch::down150,  // down25
+    VehiclePitch::down135,  // down42
+    VehiclePitch::down120,  // down60
+    VehiclePitch::up105,    // up75
+    VehiclePitch::up90,     // up90
+    VehiclePitch::up75,     // up105
+    VehiclePitch::up60,     // up120
+    VehiclePitch::up42,     // up135
+    VehiclePitch::up25,     // up150
+    VehiclePitch::up12,     // up165
+    VehiclePitch::flat,     // inverted
+    VehiclePitch::down105,  // down75
+    VehiclePitch::down90,   // down90
+    VehiclePitch::down75,   // down105
+    VehiclePitch::down60,   // down120
+    VehiclePitch::down42,   // down135
+    VehiclePitch::down25,   // down150
+    VehiclePitch::down12,   // down165
+};
+static_assert(std::size(kHalfRollPitch) == EnumValue(VehiclePitch::down165) + 1);
+
+// Roll of the same pose rolled half a turn about the rail: leftX <-> right(180 - X).
+static constexpr VehicleRoll kHalfRollRoll[] = {
+    VehicleRoll::unbanked, // unbanked
+    VehicleRoll::right157, // left22
+    VehicleRoll::right135, // left45
+    VehicleRoll::left157,  // right22
+    VehicleRoll::left135,  // right45
+    VehicleRoll::right112, // left67
+    VehicleRoll::right90,  // left90
+    VehicleRoll::right67,  // left112
+    VehicleRoll::right45,  // left135
+    VehicleRoll::right22,  // left157
+    VehicleRoll::left112,  // right67
+    VehicleRoll::left90,   // right90
+    VehicleRoll::left67,   // right112
+    VehicleRoll::left45,   // right135
+    VehicleRoll::left22,   // right157
+};
+static_assert(std::size(kHalfRollRoll) == EnumValue(VehicleRoll::right157) + 1);
+
+static constexpr uint8_t kYawHalfTurn = kBaseRotation / 2;
+
+VehiclePaintPose HalfRoll(const VehiclePaintPose& pose)
+{
+    auto out = pose;
+    if (pose.roll != VehicleRoll::unbanked)
+    {
+        out.roll = kHalfRollRoll[EnumValue(pose.roll)];
+    }
+    else if (EnumValue(pose.pitch) < std::size(kHalfRollPitch))
+    {
+        out.pitch = kHalfRollPitch[EnumValue(pose.pitch)];
+        out.yaw = (pose.yaw + kYawHalfTurn) & (kBaseRotation - 1);
+    }
+    return out;
+}
+
+// Rolled past a quarter turn, or pitched past vertical: the sign of the horizontal roll or pitch component.
+static bool IsTurnedOver(VehiclePitch pitch, VehicleRoll roll)
+{
+    namespace Geometry = OpenRCT2::RideVehicle::Geometry;
+    return Geometry::getRollHorizontalComponent(roll) < 0 || Geometry::getPitchVector32(pitch).x < 0;
+}
+
+// Corkscrew frames encode their roll in the pitch, so they cannot be judged turned over.
+static bool IsCorkscrewFrame(VehiclePitch pitch)
+{
+    return pitch >= VehiclePitch::corkscrewUpRight0 && pitch <= VehiclePitch::corkscrewDownRight4;
+}
+
+VehiclePaintPose GetFlyerPoseOnStandardSample(const VehicleInfo& sample, const VehicleInfo& firstSample, bool enteredInverted)
+{
+    const bool turnedOver = IsTurnedOver(sample.pitch, sample.roll) != IsTurnedOver(firstSample.pitch, firstSample.roll);
+    const bool usesInvertedCarSet = IsCorkscrewFrame(sample.pitch) ? enteredInverted : enteredInverted != turnedOver;
+
+    const VehiclePaintPose pose = { sample.yaw, sample.pitch, sample.roll, usesInvertedCarSet, kInvertedCarZOffset };
+    return usesInvertedCarSet ? pose : HalfRoll(pose);
+}
+
+static VehiclePaintPose GetFlyerPoseOnStandardInversion(const Vehicle& vehicle)
+{
+    const VehicleInfo sample = { 0, 0, 0, vehicle.orientation, vehicle.pitch, vehicle.roll };
+    const auto& firstSample = *VehicleGetMoveInfo(
+        vehicle.TrackSubposition, vehicle.GetTrackType(), vehicle.GetTrackDirection(), 0);
+    return GetFlyerPoseOnStandardSample(sample, firstSample, vehicle.flags.has(VehicleFlag::carIsInverted));
+}
+
+VehiclePaintPose GetVehiclePaintPose(const Vehicle& vehicle)
+{
+    const auto* ride = vehicle.GetRide();
+    if (ride != nullptr && ride->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
+        && FlyerInversion::IsStandardInversion(vehicle.GetTrackType()))
+    {
+        return GetFlyerPoseOnStandardInversion(vehicle);
+    }
+
+    const int32_t zOffset = vehicle.flags.has(VehicleFlag::carIsInverted) ? kInvertedCarZOffset : 0;
+    return { vehicle.orientation, vehicle.pitch, vehicle.roll, VehicleUsesInvertedCarSet(vehicle), zOffset };
 }
 
 #pragma endregion

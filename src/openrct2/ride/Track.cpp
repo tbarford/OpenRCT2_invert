@@ -15,6 +15,7 @@
 #include "../world/tile_element/SmallSceneryElement.h"
 #include "../world/tile_element/TileElement.h"
 #include "../world/tile_element/TrackElement.h"
+#include "FlyerInversion.h"
 #include "Ride.h"
 #include "RideData.h"
 #include "Station.h"
@@ -28,24 +29,34 @@ using namespace OpenRCT2::TrackMetadata;
 using OpenRCT2::GameActions::CommandFlag;
 using OpenRCT2::GameActions::CommandFlags;
 
+static bool TrackHasInvertedVariant(const TrackElement& trackElement)
+{
+    const auto* ride = GetRide(trackElement.getRideIndex());
+    return ride != nullptr && ride->getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant);
+}
+
 /**
  * Helper method to determine if a connects to b by its bank and angle, not location.
  */
 int32_t TrackIsConnectedByShape(TileElement* a, TileElement* b)
 {
-    auto trackType = a->asTrack()->getTrackType();
-    const auto* ted = &GetTrackElementDescriptor(trackType);
-    auto aBank = ted->definition.rollEnd;
-    auto aAngle = ted->definition.pitchEnd;
-    aBank = TrackGetActualBank(a, aBank);
+    const auto& aTrack = *a->asTrack();
+    const auto& aDefinition = GetTrackElementDescriptor(aTrack.getTrackType()).definition;
+    auto aBank = aDefinition.rollEnd;
+    if (TrackHasInvertedVariant(aTrack))
+    {
+        aBank = FlyerInversion::GetRoll(aBank, FlyerInversion::IsInvertedAtOtherEnd(aDefinition, aTrack.isInverted()));
+    }
 
-    trackType = b->asTrack()->getTrackType();
-    ted = &GetTrackElementDescriptor(trackType);
-    auto bBank = ted->definition.rollStart;
-    auto bAngle = ted->definition.pitchStart;
-    bBank = TrackGetActualBank(b, bBank);
+    const auto& bTrack = *b->asTrack();
+    const auto& bDefinition = GetTrackElementDescriptor(bTrack.getTrackType()).definition;
+    auto bBank = bDefinition.rollStart;
+    if (TrackHasInvertedVariant(bTrack))
+    {
+        bBank = FlyerInversion::GetRoll(bBank, bTrack.isInverted());
+    }
 
-    return aBank == bBank && aAngle == bAngle;
+    return aBank == bBank && aDefinition.pitchEnd == bDefinition.pitchStart;
 }
 
 static TileElement* find_station_element(const CoordsXYZD& loc, RideId rideIndex)
@@ -379,17 +390,6 @@ ResultWithMessage TrackRemoveStationElement(const CoordsXYZD& loc, RideId rideIn
     } while (!finaliseStationDone);
 
     return { true };
-}
-
-TrackRoll TrackGetActualBank(TileElement* tileElement, TrackRoll bank)
-{
-    auto ride = GetRide(tileElement->asTrack()->getRideIndex());
-    if (ride != nullptr)
-    {
-        bool isInverted = tileElement->asTrack()->isInverted();
-        return TrackGetActualBank2(ride->type, isInverted, bank);
-    }
-    return bank;
 }
 
 TrackRoll TrackGetActualBank2(ride_type_t rideType, bool isInverted, TrackRoll bank)

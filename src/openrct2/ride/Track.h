@@ -44,8 +44,6 @@ struct ResultWithMessage;
 
 int32_t TrackIsConnectedByShape(OpenRCT2::TileElement* a, OpenRCT2::TileElement* b);
 
-OpenRCT2::TrackMetadata::TrackRoll TrackGetActualBank(
-    OpenRCT2::TileElement* tileElement, OpenRCT2::TrackMetadata::TrackRoll bank);
 OpenRCT2::TrackMetadata::TrackRoll TrackGetActualBank2(
     ride_type_t rideType, bool isInverted, OpenRCT2::TrackMetadata::TrackRoll bank);
 OpenRCT2::TrackMetadata::TrackRoll TrackGetActualBank3(bool useInvertedSprites, OpenRCT2::TileElement* tileElement);

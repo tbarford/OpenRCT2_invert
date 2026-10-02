@@ -385,6 +385,7 @@ namespace OpenRCT2
         int32_t UpdateTrackMotionMiniGolfCalculateAcceleration(const CarEntry& carEntry);
         int32_t UpdateTrackMotionMiniGolf(int32_t* outStation);
         void UpdateTrackMotionMiniGolfVehicle(const Ride& curRide, const RideObjectEntry& rideEntry, const CarEntry* carEntry);
+        void updateCarIsInverted(const TrackElement& trackElement, const Ride& curRide);
         bool trackMotionForwardsGetNewTrack(TrackElemType trackType, const Ride& curRide, const RideObjectEntry& rideEntry);
         bool trackMotionBackwardsGetNewTrack(TrackElemType trackType, const Ride& curRide, uint16_t* progress);
         bool UpdateMotionCollisionDetection(const CoordsXYZ& loc, EntityId* otherVehicleIndex);

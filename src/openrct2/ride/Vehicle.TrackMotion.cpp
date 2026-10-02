@@ -563,6 +563,20 @@ namespace OpenRCT2
     }
 
     /**
+     * On rides with an inverted variant, a car takes the inverted state of the element it moves onto.
+     */
+    void Vehicle::updateCarIsInverted(const TrackElement& trackElement, const Ride& curRide)
+    {
+        const bool isInverted = curRide.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
+            && trackElement.isInverted();
+        if (flags.has(VehicleFlag::carIsInverted) != isInverted)
+        {
+            flags.set(VehicleFlag::carIsInverted, isInverted);
+            EntityTweener::get().removeEntity(this);
+        }
+    }
+
+    /**
      *
      *  rct2: 0x006DB08C
      */
@@ -570,7 +584,6 @@ namespace OpenRCT2
     {
         CoordsXYZD location = {};
 
-        auto pitchAndRollEnd = TrackPitchAndRollEnd(trackType);
         TileElement* tileElement = MapGetTrackElementAtOfTypeSeq(TrackLocation, trackType, 0);
 
         if (tileElement == nullptr)
@@ -643,6 +656,7 @@ namespace OpenRCT2
         }
         else
         {
+            auto* currentElement = tileElement;
             {
                 int32_t curZ, direction;
                 CoordsXYE xyElement = { TrackLocation, tileElement };
@@ -662,28 +676,12 @@ namespace OpenRCT2
                 }
             }
 
-            if (PitchAndRollStart(flags.has(VehicleFlag::carIsInverted), tileElement) != pitchAndRollEnd)
+            if (!TrackIsConnectedByShape(currentElement, tileElement))
             {
                 return false;
             }
 
-            // Update VehicleFlags::CarIsInverted flag
-            const auto previousCarIsInverted = flags.has(VehicleFlag::carIsInverted);
-            flags.unset(VehicleFlag::carIsInverted);
-            {
-                auto rideType = OpenRCT2::GetRide(tileElement->asTrack()->getRideIndex())->type;
-                if (GetRideTypeDescriptor(rideType).flags.has(RtdFlag::hasInvertedVariant))
-                {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        flags.set(VehicleFlag::carIsInverted);
-                    }
-                }
-                if (previousCarIsInverted != flags.has(VehicleFlag::carIsInverted))
-                {
-                    EntityTweener::get().removeEntity(this);
-                }
-            }
+            updateCarIsInverted(*tileElement->asTrack(), curRide);
         }
 
         const int32_t previousTrackHeight = TrackLocation.z;
@@ -982,21 +980,12 @@ namespace OpenRCT2
         }
     }
 
-    static PitchAndRoll getPitchAndRollEnd(
-        const Ride& curRide, bool useInvertedSprites, TrackElemType trackType, TileElement* tileElement)
-    {
-        bool isInverted = useInvertedSprites ^ tileElement->asTrack()->isInverted();
-        const auto& ted = GetTrackElementDescriptor(trackType);
-        return { ted.definition.pitchEnd, TrackGetActualBank2(curRide.type, isInverted, ted.definition.rollEnd) };
-    }
-
     /**
      *
      *  rct2: 0x006DBAA6
      */
     bool Vehicle::trackMotionBackwardsGetNewTrack(TrackElemType trackType, const Ride& curRide, uint16_t* progress)
     {
-        auto pitchAndRollStart = TrackPitchAndRollStart(trackType);
         TileElement* tileElement = MapGetTrackElementAtOfTypeSeq(TrackLocation, trackType, 0);
 
         if (tileElement == nullptr)
@@ -1035,6 +1024,7 @@ namespace OpenRCT2
             {
                 return false;
             }
+            auto* currentElement = tileElement;
             tileElement = trackBeginEnd.begin_element;
 
             trackType = tileElement->asTrack()->getTrackType();
@@ -1043,25 +1033,12 @@ namespace OpenRCT2
                 return false;
             }
 
-            if (getPitchAndRollEnd(curRide, flags.has(VehicleFlag::carIsInverted), trackType, tileElement) != pitchAndRollStart)
+            if (!TrackIsConnectedByShape(tileElement, currentElement))
             {
                 return false;
             }
 
-            // Update VehicleFlags::CarIsInverted
-            const auto previousCarIsInverted = flags.has(VehicleFlag::carIsInverted);
-            flags.unset(VehicleFlag::carIsInverted);
-            if (GetRideTypeDescriptor(curRide.type).flags.has(RtdFlag::hasInvertedVariant))
-            {
-                if (tileElement->asTrack()->isInverted())
-                {
-                    flags.set(VehicleFlag::carIsInverted);
-                }
-                if (previousCarIsInverted != flags.has(VehicleFlag::carIsInverted))
-                {
-                    EntityTweener::get().removeEntity(this);
-                }
-            }
+            updateCarIsInverted(*tileElement->asTrack(), curRide);
 
             trackPos = { trackBeginEnd.begin_x, trackBeginEnd.begin_y, trackBeginEnd.begin_z };
             direction = trackBeginEnd.begin_direction;
