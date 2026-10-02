@@ -38,6 +38,7 @@
 #include "../world/tile_element/PathElement.h"
 #include "../world/tile_element/TileElement.h"
 #include "../world/tile_element/TrackElement.h"
+#include "FlyerInversion.h"
 #include "Ride.h"
 #include "RideData.h"
 #include "TrackData.h"
@@ -817,16 +818,6 @@ namespace OpenRCT2
                     return;
                 }
 
-                // Set whether track is covered
-                _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
-                {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
-                    }
-                }
-
                 ted = &GetTrackElementDescriptor(trackType);
                 auto bank = ted->definition.rollEnd;
                 auto slope = ted->definition.pitchEnd;
@@ -834,14 +825,14 @@ namespace OpenRCT2
                 // Set track curve
                 _currentlySelectedTrack = ted->curveChain.next;
 
-                // Set track banking
+                // Set whether the car is inverted at the end of the track; the state replaces an upsideDown bank
+                _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant))
                 {
-                    if (bank == TrackRoll::upsideDown)
-                    {
-                        bank = TrackRoll::none;
-                        _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
-                    }
+                    _currentTrackAlternative.set(
+                        AlternativeTrackFlag::inverted,
+                        FlyerInversion::IsInvertedAtOtherEnd(ted->definition, tileElement->asTrack()->isInverted()));
+                    bank = FlyerInversion::GetRollIgnoringInversion(bank);
                 }
                 _currentTrackRollEnd = bank;
                 _previousTrackRollEnd = bank;
@@ -876,16 +867,6 @@ namespace OpenRCT2
                 tileElement = xyElement.element;
                 trackType = tileElement->asTrack()->getTrackType();
 
-                // Set whether track is covered
-                _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
-                if (rtd.flags.has(RtdFlag::hasInvertedVariant))
-                {
-                    if (tileElement->asTrack()->isInverted())
-                    {
-                        _currentTrackAlternative.set(AlternativeTrackFlag::inverted);
-                    }
-                }
-
                 ted = &GetTrackElementDescriptor(trackType);
                 auto bank = ted->definition.rollStart;
                 auto slope = ted->definition.pitchStart;
@@ -893,14 +874,12 @@ namespace OpenRCT2
                 // Set track curve
                 _currentlySelectedTrack = ted->curveChain.previous;
 
-                // Set track banking
+                // Set whether the car is inverted at the start of the track; the state replaces an upsideDown bank
+                _currentTrackAlternative.unset(AlternativeTrackFlag::inverted);
                 if (rtd.flags.has(RtdFlag::hasInvertedVariant))
                 {
-                    if (bank == TrackRoll::upsideDown)
-                    {
-                        bank = TrackRoll::none;
-                        _currentTrackAlternative.flip(AlternativeTrackFlag::inverted);
-                    }
+                    _currentTrackAlternative.set(AlternativeTrackFlag::inverted, tileElement->asTrack()->isInverted());
+                    bank = FlyerInversion::GetRollIgnoringInversion(bank);
                 }
                 _currentTrackRollEnd = bank;
                 _previousTrackRollEnd = bank;

@@ -45,6 +45,7 @@
 #include <openrct2/paint/VirtualFloor.h>
 #include <openrct2/paint/tile_element/Paint.TileElement.h>
 #include <openrct2/platform/Platform.h>
+#include <openrct2/ride/FlyerInversion.h>
 #include <openrct2/ride/Ride.h>
 #include <openrct2/ride/RideConstruction.h>
 #include <openrct2/ride/RideData.h>
@@ -2196,7 +2197,7 @@ namespace OpenRCT2::Ui::Windows
             }
             _specialElementDropdownState = BuildSpecialElementsList(
                 *currentRide, _currentTrackPieceDirection, _previousTrackPitchEnd, _previousTrackRollEnd,
-                _rideConstructionState);
+                _currentTrackAlternative.has(AlternativeTrackFlag::inverted), _rideConstructionState);
             _currentlyShowingBrakeOrBoosterSpeed = false;
         }
 
@@ -4926,6 +4927,15 @@ namespace OpenRCT2::Ui::Windows
 
         const auto& ted = GetTrackElementDescriptor(trackType);
         const TrackCoordinates& trackCoordinates = ted.coordinates;
+
+        // A piece built backwards ends in the current state, so an inverting piece is entered in the other one
+        if (_rideConstructionState == RideConstructionState::back && rtd.flags.has(RtdFlag::hasInvertedVariant))
+        {
+            liftHillAndInvertedState.set(
+                LiftHillAndInverted::inverted,
+                FlyerInversion::IsInvertedAtOtherEnd(
+                    ted.definition, liftHillAndInvertedState.has(LiftHillAndInverted::inverted)));
+        }
 
         x = _currentTrackBegin.x;
         y = _currentTrackBegin.y;

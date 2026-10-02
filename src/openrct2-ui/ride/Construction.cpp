@@ -14,6 +14,7 @@
 #include <openrct2/actions/ride/RideCreateAction.h>
 #include <openrct2/config/Config.h>
 #include <openrct2/interface/Viewport.h>
+#include <openrct2/ride/FlyerInversion.h>
 #include <openrct2/ride/Ride.h>
 #include <openrct2/ride/RideConstruction.h>
 #include <openrct2/ride/RideData.h>
@@ -251,7 +252,7 @@ namespace OpenRCT2
     }
 
     SpecialElementsDropdownState BuildSpecialElementsList(
-        const Ride& currentRide, uint8_t buildDirection, TrackPitch buildSlope, TrackRoll buildBank,
+        const Ride& currentRide, uint8_t buildDirection, TrackPitch buildSlope, TrackRoll buildBank, bool buildInverted,
         RideConstructionState state)
     {
         auto buildDirectionIsDiagonal = TrackPieceDirectionIsDiagonal(buildDirection);
@@ -270,18 +271,35 @@ namespace OpenRCT2
             if (!IsTrackEnabled(ted.definition.group) && trackType != kSeparator)
                 continue;
 
+            // On rides with an inverted variant, the build state replaces a standard inversion's upsideDown end, and
+            // the piece must support being entered in the state it would be built in
+            auto rollStart = ted.definition.rollStart;
+            auto rollEnd = ted.definition.rollEnd;
+            bool supportsBuildState = true;
+            if (currentRide.getRideTypeDescriptor().flags.has(RtdFlag::hasInvertedVariant)
+                && FlyerInversion::IsStandardInversion(trackType))
+            {
+                rollStart = FlyerInversion::GetRollIgnoringInversion(rollStart);
+                rollEnd = FlyerInversion::GetRollIgnoringInversion(rollEnd);
+                const bool entersInverted = (state == RideConstructionState::back)
+                    ? FlyerInversion::IsInvertedAtOtherEnd(ted.definition, buildInverted)
+                    : buildInverted;
+                supportsBuildState = FlyerInversion::SupportsEntry(trackType, entersInverted);
+            }
+
             // If the current build orientation (slope, bank, diagonal) matches the track element's, show the piece as enabled
             bool entryIsDisabled;
             if (state == RideConstructionState::back)
             {
-                entryIsDisabled = ted.definition.pitchEnd != buildSlope || ted.definition.rollEnd != buildBank
+                entryIsDisabled = ted.definition.pitchEnd != buildSlope || rollEnd != buildBank
                     || TrackPieceDirectionIsDiagonal(ted.coordinates.rotationEnd) != buildDirectionIsDiagonal;
             }
             else
             {
-                entryIsDisabled = ted.definition.pitchStart != buildSlope || ted.definition.rollStart != buildBank
+                entryIsDisabled = ted.definition.pitchStart != buildSlope || rollStart != buildBank
                     || TrackPieceDirectionIsDiagonal(ted.coordinates.rotationBegin) != buildDirectionIsDiagonal;
             }
+            entryIsDisabled |= !supportsBuildState;
 
             // Additional tower bases can only be built if the ride allows for it (elevator)
             if (trackType == TrackElemType::towerBase

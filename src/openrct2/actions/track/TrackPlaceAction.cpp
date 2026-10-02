@@ -15,6 +15,7 @@
 #include "../../core/Money.hpp"
 #include "../../core/Numerics.hpp"
 #include "../../management/Finance.h"
+#include "../../ride/FlyerInversion.h"
 #include "../../ride/RideColour.h"
 #include "../../ride/RideData.h"
 #include "../../ride/Track.h"
@@ -131,6 +132,12 @@ namespace OpenRCT2::GameActions
         auto resultData = TrackPlaceActionResult{};
 
         const auto& rtd = ride->getRideTypeDescriptor();
+
+        if (rtd.flags.has(RtdFlag::hasInvertedVariant)
+            && !FlyerInversion::SupportsEntry(_trackType, _trackPlaceFlags.has(LiftHillAndInverted::inverted)))
+        {
+            return Result(Status::invalidParameters, STR_RIDE_CONSTRUCTION_CANT_CONSTRUCT_THIS_HERE, kStringIdNone);
+        }
 
         if (ride->flags.has(RideFlag::indestructibleTrack) && _trackType == TrackElemType::endStation)
         {
