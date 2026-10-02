@@ -20,7 +20,8 @@ struct CarEntry;
 namespace OpenRCT2
 {
     struct Vehicle;
-}
+    struct VehicleInfo;
+} // namespace OpenRCT2
 
 struct VehicleBoundBox
 {
@@ -45,6 +46,41 @@ bool InvertedCarDrawsWithUprightSet(OpenRCT2::TrackElemType trackType, VehiclePi
 
 /** Whether a car is drawn with its car entry's inverted sprite set at its current pose. */
 bool VehicleUsesInvertedCarSet(const OpenRCT2::Vehicle& vehicle);
+
+/** The pose, car set and height offset a car is drawn with. */
+struct VehiclePaintPose
+{
+    uint8_t yaw;
+    VehiclePitch pitch;
+    VehicleRoll roll;
+    bool usesInvertedCarSet;
+    int32_t zOffset;
+};
+
+/**
+ * The same pose rolled half a turn about the rail; the inverted car set draws each pose this way. A banked pose keeps
+ * its yaw and pitch and banks to the other side. An unbanked pose turns round and pitches over the top.
+ */
+VehiclePaintPose HalfRoll(const VehiclePaintPose& pose);
+
+/**
+ * A flyer car on a standard inversion moves along the sit-down coaster's subposition samples, so physics matches the
+ * sit-down coaster on the same track. It is drawn from the same samples:
+ * - With the set it entered with until the sample has turned over (rolled past a quarter turn, or pitched past
+ *   vertical) relative to the element's first sample, then with the other set. Corkscrew frames keep the entry set.
+ * - In the sample's pose with the inverted set, and that pose rolled half a turn with the upright set: in the
+ *   default direction the car is inverted where the sit-down car is upright.
+ * - 16 units up in either state, as on the legacy flyer-only elements.
+ * Matches the legacy elements that copy a standard inversion in its default direction, sample for sample.
+ */
+VehiclePaintPose GetFlyerPoseOnStandardSample(
+    const OpenRCT2::VehicleInfo& sample, const OpenRCT2::VehicleInfo& firstSample, bool enteredInverted);
+
+/**
+ * The pose a car is drawn with: its own pose and car set, raised for inverted cars, except for flyer cars on standard
+ * inversions (see GetFlyerPoseOnStandardSample). Paint only: the vehicle's own pose is game state.
+ */
+VehiclePaintPose GetVehiclePaintPose(const OpenRCT2::Vehicle& vehicle);
 
 void VehicleVisualDefault(
     PaintSession& session, int32_t imageDirection, int32_t z, const OpenRCT2::Vehicle* vehicle, const CarEntry* carEntry);
