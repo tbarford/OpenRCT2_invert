@@ -477,6 +477,7 @@
     <ClInclude Include="ride\Angles.h" />
     <ClInclude Include="ride\CableLift.h" />
     <ClInclude Include="ride\CarEntry.h" />
+    <ClInclude Include="ride\FlyerInversion.h" />
     <ClInclude Include="ride\MazeCost.h" />
     <ClInclude Include="ride\Ride.h" />
     <ClInclude Include="ride\RideAudio.h" />
@@ -1183,6 +1184,7 @@
     <ClCompile Include="ride\ted\TrackElemType.cpp" />
     <ClCompile Include="ride\CableLift.cpp" />
     <ClCompile Include="ride\CarEntry.cpp" />
+    <ClCompile Include="ride\FlyerInversion.cpp" />
     <ClCompile Include="ride\MazeCost.cpp" />
     <ClCompile Include="ride\Ride.cpp" />
     <ClCompile Include="ride\RideAudio.cpp" />
