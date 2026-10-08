@@ -648,6 +648,7 @@ TrackPaintFunction GetTrackPaintFunctionMineRide(OpenRCT2::TrackElemType trackTy
 TrackPaintFunction GetTrackPaintFunctionLimLaunchedRC(OpenRCT2::TrackElemType trackType);
 TrackPaintFunction GetTrackPaintFunctionTwisterRC(OpenRCT2::TrackElemType trackType);
 TrackPaintFunction GetTrackPaintFunctionCorkscrewRC(OpenRCT2::TrackElemType trackType);
+TrackPaintFunction GetTrackPaintFunctionModernLoopingRC(OpenRCT2::TrackElemType trackType);
 namespace OpenRCT2::HybridRC
 {
     TrackPaintFunction GetTrackPaintFunction(TrackElemType trackType);

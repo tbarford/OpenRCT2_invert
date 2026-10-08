@@ -96,6 +96,7 @@ enum class TrackStyle : uint8_t
     waterCoaster,
     woodenRollerCoaster,
     woodenWildMouse,
+    modernLoopingCoaster,
 
     null = 255,
 };

@@ -50405,5 +50405,17 @@
         "path": "track/raptor/brake_gentle_diag_4.png",
         "x": -3,
         "y": -22
+    },
+    {
+        "path": "track/vekoma_modern/flat_0.png",
+        "x": -22,
+        "y": -3,
+        "palette": "keep"
+    },
+    {
+        "path": "track/vekoma_modern/flat_1.png",
+        "x": -22,
+        "y": -3,
+        "palette": "keep"
     }
 ]
