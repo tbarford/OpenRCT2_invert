@@ -23275,7 +23275,7 @@ static void LatticeTriangleTrackDiagLeftVerticalLoop(
                     PaintAddImageAsParentRotated(
                         session, direction,
                         session.TrackColours.WithIndex((SPR_TRACKS_LATTICE_TRIANGLE_TRACK_VERTICAL_LOOP_DIAGONAL + 13)),
-                        { -16, -16, height }, { { -4, -4, height + 0 }, { 20, 20, 3 } });
+                        { -16, -16, height }, { { 0, 0, height + 0 }, { 20, 20, 3 } });
                     break;
             }
             MetalASupportsPaintSetupRotated(

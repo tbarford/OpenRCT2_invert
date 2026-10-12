@@ -22101,6 +22101,8 @@ static void TwisterRCTrackLeftEighthToDiagUp60(
             PaintAddImageAsParentRotated(
                 session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 2)),
                 { 0, 0, height }, boundingBoxes[direction + 8]);
+            MetalASupportsPaintSetupRotated(
+                session, supportType.metal, MetalSupportPlace::rightCorner, direction, 65, height + 0, session.SupportColours);
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22124,8 +22126,7 @@ static void TwisterRCTrackLeftEighthToDiagUp60(
             PaintAddImageAsParentRotated(
                 session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 3)),
                 { 0, 0, height }, boundingBoxes[direction + 12]);
-            MetalASupportsPaintSetupRotated(
-                session, supportType.metal, MetalSupportPlace::bottomCorner, direction, 30, height + 0, session.SupportColours);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22191,6 +22192,8 @@ static void TwisterRCTrackRightEighthToDiagUp60(
                 session, direction,
                 session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 18)), { 0, 0, height },
                 boundingBoxes[direction + 8]);
+            MetalASupportsPaintSetupRotated(
+                session, supportType.metal, MetalSupportPlace::leftCorner, direction, 10, height + 0, session.SupportColours);
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22216,8 +22219,7 @@ static void TwisterRCTrackRightEighthToDiagUp60(
                 session, direction,
                 session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 19)), { 0, 0, height },
                 boundingBoxes[direction + 12]);
-            MetalASupportsPaintSetupRotated(
-                session, supportType.metal, MetalSupportPlace::leftCorner, direction, 30, height + 0, session.SupportColours);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22251,8 +22253,7 @@ static void TwisterRCTrackLeftEighthToOrthogonalUp60(
                 session, direction,
                 session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 32)), { 0, 0, height },
                 boundingBoxes[direction + 0]);
-            MetalASupportsPaintSetupRotated(
-                session, supportType.metal, MetalSupportPlace::rightCorner, direction, 17, height + 0, session.SupportColours);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22268,6 +22269,8 @@ static void TwisterRCTrackLeftEighthToOrthogonalUp60(
                 session, direction,
                 session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 33)), { 0, 0, height },
                 boundingBoxes[direction + 4]);
+            MetalASupportsPaintSetupRotated(
+                session, supportType.metal, MetalSupportPlace::bottomCorner, direction, 26, height + 0, session.SupportColours);
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -22292,6 +22295,7 @@ static void TwisterRCTrackLeftEighthToOrthogonalUp60(
                 session, direction,
                 session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_STEEP_LARGE_CURVE + 4 * direction + 34)), { 0, 0, height },
                 boundingBoxes[direction + 8]);
+
             PaintUtilSetSegmentSupportHeight(
                 session,
                 PaintUtilRotateSegments(
@@ -23486,7 +23490,7 @@ static void TwisterRCTrackDiagLeftVerticalLoop(
                 case 3:
                     PaintAddImageAsParentRotated(
                         session, direction, session.TrackColours.WithIndex((SPR_TRACKS_BM_TRACK_VERTICAL_LOOP_DIAGONAL + 13)),
-                        { -16, -16, height }, { { -4, -4, height + 0 }, { 20, 20, 3 } });
+                        { -16, -16, height }, { { 0, 0, height + 0 }, { 20, 20, 3 } });
                     break;
             }
             MetalASupportsPaintSetupRotated(
