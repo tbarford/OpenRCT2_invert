@@ -550,7 +550,7 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .blockedSegments = { {
             { PS::right, PS::bottom, PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                               // inverted
+            { PS::right, PS::bottom, PS::topRight, PS::bottomLeft, PS::bottomRight },             // inverted
             kSegmentsUnimplemented,                                                               // wide
         } },
     };

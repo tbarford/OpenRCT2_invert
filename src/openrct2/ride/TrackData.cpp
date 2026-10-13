@@ -3867,7 +3867,7 @@ namespace OpenRCT2::TrackMetadata
         .woodenSupports = { WoodenSupportSubType::neSw },
         .blockedSegments = { {
             { PS::right, PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                   // inverted
+            { PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight },            // inverted
             kSegmentsAll,                                                             // wide
         } },
     };
@@ -3891,7 +3891,7 @@ namespace OpenRCT2::TrackMetadata
         .invertSegmentBlocking = true,
         .blockedSegments = { {
             { PS::bottom, PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                    // inverted
+            { PS::centre, PS::topRight, PS::bottomLeft },                              // inverted
             kSegmentsAll,                                                              // wide
         } },
     };
@@ -3974,9 +3974,9 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .woodenSupports = { WoodenSupportSubType::corner3 },
         .blockedSegments = { {
-            { PS::top, PS::centre, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                // inverted
-            kSegmentsAll,                                          // wide
+            { PS::top, PS::centre, PS::topRight, PS::bottomLeft },                  // narrow
+            { PS::top, PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                           // wide
         } },
     };
 
@@ -4006,9 +4006,9 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .woodenSupports = { WoodenSupportSubType::corner3 },
         .blockedSegments = { {
-            { PS::bottom, PS::centre, PS::topLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                   // inverted
-            kSegmentsAll,                                             // wide
+            { PS::bottom, PS::centre, PS::topLeft, PS::bottomRight },            // narrow
+            { PS::top, PS::centre, PS::topLeft, PS::topRight, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                        // wide
         } },
     };
 
@@ -5381,7 +5381,7 @@ namespace OpenRCT2::TrackMetadata
         .woodenSupports = { WoodenSupportSubType::corner3 },
         .blockedSegments = { {
             { PS::left, PS::centre, PS::topLeft, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                // inverted
+            { PS::left, PS::topLeft, PS::bottomLeft },             // inverted
             kSegmentsAll,                                          // wide
         } },
     };
@@ -5389,9 +5389,9 @@ namespace OpenRCT2::TrackMetadata
     static constexpr SequenceDescriptor kLeftEighthToDiagUp25Seq4 = {
         .clearance = { -64, -32, 32, 24, { 0b0001, 0 }, {} },
         .blockedSegments = { {
-            { PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                                 // inverted
-            kSegmentsAll,                                                                           // wide
+            { PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight },          // narrow
+            { PS::top, PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                                                    // wide
         } },
     };
 
@@ -5471,7 +5471,11 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .woodenSupports = { WoodenSupportSubType::neSw, WoodenSupportTransitionType::up25Deg },
         .extraSupportRotation = 2,
-        .blockedSegments = blockedSegmentsFlipXAxis(kLeftEighthToDiagDown25Seq0.blockedSegments),
+        .blockedSegments = { {
+            { PS::centre, PS::topRight, PS::bottomLeft },              // narrow
+            { PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // inverted
+            kSegmentsAll,                                              // wide
+        } },
     };
 
     static constexpr SequenceDescriptor kRightEighthToDiagDown25Seq1 = {
@@ -5532,7 +5536,7 @@ namespace OpenRCT2::TrackMetadata
         .clearance = { -64, 32, 32, 16, { 0b1111, 0 }, {} },
         .allowedWallEdges = 0b0010,
         .woodenSupports = { WoodenSupportSubType::neSw },
-        .blockedSegments = blockedSegmentsRotate(kRightEighthToDiagUp25Seq0.blockedSegments, 2),
+        .blockedSegments = blockedSegmentsRotate(kRightEighthToDiagDown25Seq0.blockedSegments, 2),
     };
 
     static constexpr SequenceDescriptor kRightEighthToOrthogonalUp25Seq0 = {
@@ -5602,7 +5606,7 @@ namespace OpenRCT2::TrackMetadata
         .clearance = { -64, 32, -48, 16, { 0b1111, 0 }, {} },
         .allowedWallEdges = 0b0010,
         .flags = { SequenceFlag::hasHeightMarker },
-        .blockedSegments = kLeftEighthToOrthogonalUp25Seq4.blockedSegments,
+        .blockedSegments = blockedSegmentsRotate(kRightEighthToDiagUp25Seq0.blockedSegments, 2),
     };
 
     static constexpr SequenceDescriptor kRightEighthToOrthogonalDown25Seq0 = {
@@ -6345,7 +6349,11 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0010,
         .flags = { SequenceFlag::hasHeightMarker },
         .woodenSupports = { WoodenSupportSubType::neSw, WoodenSupportTransitionType::up25Deg },
-        .blockedSegments = kLeftEighthToDiagUp25Seq0.blockedSegments,
+        .blockedSegments = { {
+            { PS::centre, PS::topRight, PS::bottomLeft },                  // narrow
+            { PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                  // wide
+        } },
     };
 
     static constexpr SequenceDescriptor kLeftEighthBankToDiagUp25Seq1 = {
@@ -10341,7 +10349,7 @@ namespace OpenRCT2::TrackMetadata
         .sequenceData = { 4, { kDiagDown25Seq0, kDiagDown25Seq1, kDiagDown25Seq2, kDiagDown25Seq3 } },
     };
 
-    static constexpr auto kTrackElementDescriptors = std::to_array<TrackElementDescriptor>({
+    static constexpr auto kTrackElementDescriptorsBase = std::to_array<TrackElementDescriptor>({
         kTEDFlat,
         kTEDEndStation,
         kTEDBeginStation,
@@ -10693,7 +10701,23 @@ namespace OpenRCT2::TrackMetadata
         kTEDRightEighthDiveLoopDownToDiag,
         kTEDDiagDown25Brakes,
     });
-    static_assert(kTrackElementDescriptors.size() == EnumValue(TrackElemType::count));
+    static_assert(kTrackElementDescriptorsBase.size() == EnumValue(TrackElemType::count));
+
+    // Sequences without inverted blocked segments use the narrow ones
+    static consteval auto fillInvertedBlockedSegments(auto descriptors)
+    {
+        for (auto& ted : descriptors)
+        {
+            for (auto& sequence : ted.sequenceData.sequences)
+            {
+                auto& inverted = sequence.blockedSegments[EnumValue(BlockedSegmentsType::inverted)];
+                if (inverted == kSegmentsNone)
+                    inverted = sequence.blockedSegments[EnumValue(BlockedSegmentsType::narrow)];
+            }
+        }
+        return descriptors;
+    }
+    static constexpr auto kTrackElementDescriptors = fillInvertedBlockedSegments(kTrackElementDescriptorsBase);
 
 #pragma endregion
 

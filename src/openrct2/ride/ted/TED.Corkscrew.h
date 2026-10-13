@@ -230,7 +230,7 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .blockedSegments = { {
             { PS::top, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                             // inverted
+            { PS::centre, PS::topRight, PS::bottomLeft },                       // inverted
             kSegmentsUnimplemented,                                             // wide
         } },
     };
@@ -240,7 +240,7 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0010,
         .blockedSegments = { {
             { PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                                       // inverted
+            { PS::right, PS::bottom, PS::centre, PS::bottomLeft, PS::bottomRight },       // inverted
             kSegmentsUnimplemented,                                                       // wide
         } },
     };
@@ -250,8 +250,9 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0011,
         .blockedSegments = { {
             { PS::left, PS::centre, PS::topLeft, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                // inverted
-            kSegmentsUnimplemented,                                // wide
+            { PS::top, PS::left, PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft,
+              PS::bottomRight },    // inverted
+            kSegmentsUnimplemented, // wide
         } },
     };
 
@@ -271,7 +272,7 @@ namespace OpenRCT2::TrackMetadata
         .invertSegmentBlocking = true,
         .blockedSegments = { {
             { PS::left, PS::bottom, PS::centre, PS::topLeft, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                             // inverted
+            kSegmentsAll,                                                                       // inverted
             kSegmentsUnimplemented,                                                             // wide
         } },
     };
@@ -283,7 +284,7 @@ namespace OpenRCT2::TrackMetadata
         .invertSegmentBlocking = true,
         .blockedSegments = { {
             { PS::left, PS::bottom, PS::centre, PS::topLeft, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                                             // inverted
+            { PS::centre, PS::topLeft, PS::bottomRight },                                       // inverted
             kSegmentsUnimplemented,                                                             // wide
         } },
     };

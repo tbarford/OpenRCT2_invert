@@ -53,9 +53,9 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0000,
         .flags = { SequenceFlag::hasHeightMarker },
         .blockedSegments = { {
-            { PS::right, PS::centre, PS::topRight, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                   // inverted
-            kSegmentsUnimplemented,                                   // wide
+            { PS::right, PS::centre, PS::topRight, PS::bottomRight },                                        // narrow
+            { PS::left, PS::right, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsUnimplemented,                                                                          // wide
         } },
     };
     static constexpr SequenceDescriptor kLeftEighthDiveLoopUpToOrthogonalSeq1 = {
@@ -63,8 +63,9 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0110,
         .blockedSegments = { {
             { PS::top, PS::centre, PS::topLeft, PS::topRight }, // narrow
-            kSegmentsUnimplemented,                             // inverted
-            kSegmentsUnimplemented,                             // wide
+            { PS::top, PS::left, PS::right, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft,
+              PS::bottomRight },    // inverted
+            kSegmentsUnimplemented, // wide
         } },
     };
     static constexpr SequenceDescriptor kLeftEighthDiveLoopUpToOrthogonalSeq2 = {
@@ -72,8 +73,9 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b1001,
         .blockedSegments = { {
             { PS::bottom, PS::centre, PS::bottomLeft, PS::bottomRight }, // narrow
-            kSegmentsUnimplemented,                                      // inverted
-            kSegmentsUnimplemented,                                      // wide
+            { PS::top, PS::left, PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft,
+              PS::bottomRight },    // inverted
+            kSegmentsUnimplemented, // wide
         } },
     };
     static constexpr SequenceDescriptor kLeftEighthDiveLoopUpToOrthogonalSeq3 = {
@@ -81,7 +83,7 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b0010,
         .blockedSegments = { {
             { PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                                       // inverted
+            kSegmentsAll,                                                                 // inverted
             kSegmentsUnimplemented,                                                       // wide
         } },
     };
@@ -90,9 +92,9 @@ namespace OpenRCT2::TrackMetadata
         .allowedWallEdges = 0b1010,
         .invertSegmentBlocking = true,
         .blockedSegments = { {
-            { PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                                       // inverted
-            kSegmentsUnimplemented,                                                       // wide
+            { PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft },   // narrow
+            { PS::top, PS::right, PS::centre, PS::topLeft, PS::topRight, PS::bottomRight }, // inverted
+            kSegmentsUnimplemented,                                                         // wide
         } },
     };
     static constexpr SequenceDescriptor kLeftEighthDiveLoopUpToOrthogonalSeq5 = {
@@ -102,7 +104,7 @@ namespace OpenRCT2::TrackMetadata
         .invertSegmentBlocking = true,
         .blockedSegments = { {
             { PS::top, PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft }, // narrow
-            kSegmentsUnimplemented,                                                       // inverted
+            { PS::centre, PS::topRight, PS::bottomLeft },                                 // inverted
             kSegmentsUnimplemented,                                                       // wide
         } },
     };
