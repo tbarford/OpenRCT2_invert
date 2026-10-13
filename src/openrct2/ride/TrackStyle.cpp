@@ -329,6 +329,10 @@ namespace OpenRCT2
             array[EnumValue(TrackGroup::sBend)] = BlockedSegmentsType::wide;
             array[EnumValue(TrackGroup::brakes)] = BlockedSegmentsType::wide;
             array[EnumValue(TrackGroup::blockBrakes)] = BlockedSegmentsType::wide;
+            array[EnumValue(TrackGroup::helixUpBankedQuarter)] = BlockedSegmentsType::wide;
+            array[EnumValue(TrackGroup::helixDownBankedQuarter)] = BlockedSegmentsType::wide;
+            array[EnumValue(TrackGroup::helixUpUnbankedQuarter)] = BlockedSegmentsType::wide;
+            array[EnumValue(TrackGroup::helixDownUnbankedQuarter)] = BlockedSegmentsType::wide;
             return array;
         }();
 
@@ -540,6 +544,30 @@ namespace OpenRCT2
         return blockedSegmentsType;
     }
 
+    // these block one more segment than the inverted segments on some eighth turn tiles, which keeps the supports away
+    // from the swinging trains.
+    // kSegmentsNone uses the inverted segments.
+    static_assert(
+        EnumValue(TrackElemType::rightEighthToDiag) == EnumValue(TrackElemType::leftEighthToDiag) + 1
+        && EnumValue(TrackElemType::leftEighthToOrthogonal) == EnumValue(TrackElemType::leftEighthToDiag) + 2
+        && EnumValue(TrackElemType::rightEighthToOrthogonal) == EnumValue(TrackElemType::leftEighthToDiag) + 3);
+    static constexpr const auto kSuspendedEighthSegments = []() consteval {
+        std::array<std::array<PaintSegments, 5>, 4> array{};
+        // leftEighthToDiag
+        array[0][0] = { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
+        array[0][4] = { PaintSegment::right,    PaintSegment::bottom,     PaintSegment::centre,     PaintSegment::topLeft,
+                        PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
+        // rightEighthToDiag
+        array[1][0] = { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomLeft };
+        // leftEighthToOrthogonal
+        array[2][4] = { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
+        // rightEighthToOrthogonal
+        array[3][0] = { PaintSegment::top,      PaintSegment::right,      PaintSegment::centre,     PaintSegment::topLeft,
+                        PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
+        array[3][4] = { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomRight };
+        return array;
+    }();
+
     static PaintSegments OverrideBlockedSegments(
         const TrackStyle trackStyle, const TrackElemType trackElemType, const uint8_t sequence, const PaintSegments segments)
     {
@@ -590,40 +618,11 @@ namespace OpenRCT2
         }
         if (trackStyle == TrackStyle::miniSuspendedCoaster || trackStyle == TrackStyle::suspendedSwingingCoaster)
         {
-            // these block more segments presumably so that the supports are away from the swinging trains
-            constexpr PaintSegments leftEighthToDiagSeq0 = { PaintSegment::centre, PaintSegment::topRight,
-                                                             PaintSegment::bottomLeft, PaintSegment::bottomRight };
-            constexpr PaintSegments leftEighthToDiagSeq4 = { PaintSegment::right,      PaintSegment::bottom,
-                                                             PaintSegment::centre,     PaintSegment::topLeft,
-                                                             PaintSegment::topRight,   PaintSegment::bottomLeft,
-                                                             PaintSegment::bottomRight };
-            if (trackElemType == TrackElemType::leftEighthToDiag)
+            const size_t piece = static_cast<size_t>(EnumValue(trackElemType)) - EnumValue(TrackElemType::leftEighthToDiag);
+            if (piece < kSuspendedEighthSegments.size() && sequence < kSuspendedEighthSegments[piece].size()
+                && kSuspendedEighthSegments[piece][sequence] != kSegmentsNone)
             {
-                if (sequence == 0)
-                    return leftEighthToDiagSeq0;
-                else if (sequence == 4)
-                    return leftEighthToDiagSeq4;
-            }
-            else if (trackElemType == TrackElemType::rightEighthToDiag)
-            {
-                if (sequence == 0)
-                    return paintSegmentsFlipXAxis(leftEighthToDiagSeq0);
-                else if (sequence == 4)
-                    return paintSegmentsFlipXAxis(leftEighthToDiagSeq4);
-            }
-            else if (trackElemType == TrackElemType::leftEighthToOrthogonal)
-            {
-                if (sequence == 0)
-                    return paintSegmentsRotate(paintSegmentsFlipXAxis(leftEighthToDiagSeq4), 2);
-                else if (sequence == 4)
-                    return paintSegmentsRotate(paintSegmentsFlipXAxis(leftEighthToDiagSeq0), 2);
-            }
-            else if (trackElemType == TrackElemType::rightEighthToOrthogonal)
-            {
-                if (sequence == 0)
-                    return paintSegmentsRotate(leftEighthToDiagSeq4, 3);
-                else if (sequence == 4)
-                    return paintSegmentsRotate(leftEighthToDiagSeq0, 3);
+                return kSuspendedEighthSegments[piece][sequence];
             }
         }
         if (trackStyle == TrackStyle::multiDimensionRollerCoaster)
