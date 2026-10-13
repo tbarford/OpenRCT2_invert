@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "../paint/tile_element/Segment.h"
 #include "TrackPaint.h"
 
 #include <cstdint>
@@ -101,3 +102,22 @@ enum class TrackStyle : uint8_t
 };
 
 TrackPaintFunction GetTrackPaintFunction(TrackStyle trackStyle, OpenRCT2::TrackElemType trackType);
+
+namespace OpenRCT2
+{
+    struct TrackSequenceBlockedSegments
+    {
+        PaintSegments segments = kSegmentsNone;
+        bool beforeSupports = false;
+    };
+
+    // Styles that return true have their segments blocked by PaintTrack using the track sequence data, instead of by
+    // their paint functions.
+    constexpr bool trackStyleBlocksSegmentsCentrally(TrackStyle)
+    {
+        return false;
+    }
+
+    TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
+        TrackStyle trackStyle, TrackElemType trackElemType, uint8_t sequence);
+} // namespace OpenRCT2
