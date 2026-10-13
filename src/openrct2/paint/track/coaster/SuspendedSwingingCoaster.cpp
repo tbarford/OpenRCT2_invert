@@ -7,6 +7,7 @@
  * OpenRCT2 is licensed under the GNU General Public License version 3.
  *****************************************************************************/
 
+#include "../../../SpriteIds.h"
 #include "../../../ride/TrackPaint.h"
 #include "../../../ride/ted/TrackElemType.h"
 #include "../../../world/tile_element/TrackElement.h"
@@ -19,6 +20,8 @@
 using namespace OpenRCT2;
 
 static constexpr TunnelGroup kTunnelGroup = TunnelGroup::inverted;
+static constexpr uint8_t kInvertedSpriteOffset = 29;
+static constexpr uint8_t kSupportHeight = 44;
 
 static constexpr ImageIndex kSuspendedSwingingRCDiagFlatImages[2][kNumOrthogonalDirections] = {
     { 26183, 26184, 26185, 26186 },
@@ -4595,6 +4598,16238 @@ static void SuspendedSwingingRCTrackBlockBrakes(
     PaintUtilSetGeneralSupportHeight(session, height + 48);
 }
 
+// added by orct2
+
+/** rct2: 0x008A93D8 */
+static void SuspendedSwingingRCTrackFlatToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 0)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 1)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 2)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 3)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+              PaintSegment::bottomRight },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        MetalASupportsPaintSetup(
+            session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+    }
+
+    PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    PaintUtilSetGeneralSupportHeight(session, height + 48);
+}
+
+/** rct2: 0x008A93E8 */
+static void SuspendedSwingingRCTrackFlatToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 4)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 5)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 6)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 7)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+              PaintSegment::bottomLeft },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        MetalASupportsPaintSetup(
+            session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+    }
+
+    PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    PaintUtilSetGeneralSupportHeight(session, height + 48);
+}
+
+/** rct2: 0x008A93F8 */
+static void SuspendedSwingingRCTrackLeftBankToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 6)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 7)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 4)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 5)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+              PaintSegment::bottomRight },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        MetalASupportsPaintSetup(
+            session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+    }
+
+    PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    PaintUtilSetGeneralSupportHeight(session, height + 48);
+}
+
+/** rct2: 0x008A9408 */
+static void SuspendedSwingingRCTrackRightBankToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 2)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 3)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 0)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 1)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+              PaintSegment::bottomLeft },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        MetalASupportsPaintSetup(
+            session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+    }
+
+    PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    PaintUtilSetGeneralSupportHeight(session, height + 48);
+}
+
+/** rct2: 0x008A9418 */
+static void SuspendedSwingingRCTrackBankedLeftQuarterTurn5(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_CURVE_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9428 */
+static void SuspendedSwingingRCTrackBankedRightQuarterTurn5(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn5TilesToRightQuarterTurn5Tiles[trackSequence];
+    SuspendedSwingingRCTrackBankedLeftQuarterTurn5(
+        session, ride, trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9438 */
+static void SuspendedSwingingRCTrackLeftBankTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 8)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction, session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 9)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 10)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 11)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+              PaintSegment::bottomRight },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A9448 */
+static void SuspendedSwingingRCTrackRightBankTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 12)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 13)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 14)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 15)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+              PaintSegment::bottomLeft },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A9458 */
+static void SuspendedSwingingRCTrack25DegUpToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 16)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 17)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 18)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 19)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+              PaintSegment::bottomRight },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A9468 */
+static void SuspendedSwingingRCTrack25DegUpToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 20)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 21)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 22)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 23)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+              PaintSegment::bottomLeft },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A9478 */
+static void SuspendedSwingingRCTrackLeftBankTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpToRightBank(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9488 */
+static void SuspendedSwingingRCTrackRightBankTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpToLeftBank(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9498 */
+static void SuspendedSwingingRCTrack25DegDownToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBankTo25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A94A8 */
+static void SuspendedSwingingRCTrack25DegDownToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBankTo25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A94B8 */
+static void SuspendedSwingingRCTrackLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 24)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 25)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 26)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION + 27)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+              PaintSegment::bottomRight },
+            direction),
+        0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        MetalASupportsPaintSetup(
+            session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+    }
+
+    PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    PaintUtilSetGeneralSupportHeight(session, height + 48);
+}
+
+/** rct2: 0x008A94C8 */
+static void SuspendedSwingingRCTrackRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBank(session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9538 */
+static void SuspendedSwingingRCTrackLeftVerticalLoop(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 8)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 10, 7 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 5)),
+                        { 0, 14, height + kInvertedSpriteOffset },
+                        { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 63 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 9)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 13)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 29, 20, height + kInvertedSpriteOffset }, { 2, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 2)),
+                        { 16, 0, height + 2 }, { { 16, 29, height + 2 }, { 5, 2, 119 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 6)),
+                        { 12, 0, height + 2 }, { { 0, -6, height + 2 }, { 32, 2, 119 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 10)),
+                        { 10, 16, height + 2 }, { { 10, 0, height + 2 }, { 4, 2, 119 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 14)),
+                        { 16, 16, height + 2 }, { { 29, 29, height + 2 }, { 2, 2, 119 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 3)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 7)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 11)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 15)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 5:
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 11)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 15)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 3)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 7)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 7:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 10)),
+                        { 10, 16, height + 2 }, { { 10, 0, height + 2 }, { 4, 2, 119 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 14)),
+                        { 16, 16, height + 2 }, { { 29, 29, height + 2 }, { 2, 2, 119 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 2)),
+                        { 16, 0, height + 2 }, { { 16, 29, height + 2 }, { 5, 2, 119 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 6)),
+                        { 12, 0, height + 2 }, { { 0, -6, height + 2 }, { 32, 2, 119 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 8:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 9)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 13)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 29, 20, height + kInvertedSpriteOffset }, { 2, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 5)),
+                        { 0, 14, height + kInvertedSpriteOffset },
+                        { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 63 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 9:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 8)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 10, 7 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+/** rct2: 0x008A9548 */
+static void SuspendedSwingingRCTrackRightVerticalLoop(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 16)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 10, 7 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 20)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 24)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 28)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::right, PaintSegment::bottom, PaintSegment::centre,
+                      PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 17)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 29, 20, height + kInvertedSpriteOffset }, { 2, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 21)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 25)),
+                        { 0, 14, height + kInvertedSpriteOffset },
+                        { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 63 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 18)),
+                        { 16, 16, height + 2 }, { { 29, 29, height + 2 }, { 2, 2, 119 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 22)),
+                        { 10, 16, height + 2 }, { { 10, 0, height + 2 }, { 4, 2, 119 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 26)),
+                        { 12, 0, height + 2 }, { { 0, -6, height + 2 }, { 32, 2, 119 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 30)),
+                        { 16, 0, height + 2 }, { { 16, 29, height + 2 }, { 5, 2, 119 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 19)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 23)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 27)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 31)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 5:
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 27)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 31)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 19)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 23)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 7:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 26)),
+                        { 12, 0, height + 2 }, { { 0, -6, height + 2 }, { 32, 2, 119 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 30)),
+                        { 16, 0, height + 2 }, { { 16, 29, height + 2 }, { 5, 2, 119 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 18)),
+                        { 16, 16, height + 2 }, { { 29, 29, height + 2 }, { 2, 2, 119 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 22)),
+                        { 10, 16, height + 2 }, { { 10, 0, height + 2 }, { 4, 2, 119 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 8:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 25)),
+                        { 0, 14, height + kInvertedSpriteOffset },
+                        { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 63 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 17)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 29, 20, height + kInvertedSpriteOffset }, { 2, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 21)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 9:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 24)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 28)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 16)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 10, 7 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_LOOP + 20)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 11,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+/** rct2: 0x008A95A8 */
+static void SuspendedSwingingRCTrackLeftQuarterTurn3Bank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_CURVE_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A95B8 */
+static void SuspendedSwingingRCTrackRightQuarterTurn3Bank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn3TilesToRightQuarterTurn3Tiles[trackSequence];
+    SuspendedSwingingRCTrackLeftQuarterTurn3Bank(
+        session, ride, trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+/** rct2: 0x008A9608 */
+static void SuspendedSwingingRCTrackLeftTwistDownToUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 3)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 6)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 9)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 1)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 7)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 10)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 2)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 5)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 8)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 11)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 44, session.SupportColours);
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9618 */
+static void SuspendedSwingingRCTrackRightTwistDownToUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 15)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 18)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 21)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 13)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 16)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 19)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 22)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 14)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 17)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 20)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 23)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 44, session.SupportColours);
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9628 */
+static void SuspendedSwingingRCTrackLeftTwistUpToDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 8)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 11)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 2)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 5)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 44, session.SupportColours);
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 7)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 10)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 1)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 6)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 9)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 3)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9638 */
+static void SuspendedSwingingRCTrackRightTwistUpToDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 20)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 23)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 14)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 17)),
+                        { 0, 6, height }, { 32, 20, 3 });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 44, session.SupportColours);
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 19)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 22)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 13)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 16)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 18)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 21)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_INLINE_TWIST + 15)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9648 */
+static void SuspendedSwingingRCTrackHalfLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 8)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 5)),
+                        { 0, 14, height + kInvertedSpriteOffset },
+                        { { 0, 29, height + kInvertedSpriteOffset }, { 32, 2, 63 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 9)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 13)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { { 29, 20, height + kInvertedSpriteOffset }, { 2, 2, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 2)),
+                        { 16, 0, height + 2 }, { { 16, 29, height + 2 }, { 5, 2, 119 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 6)),
+                        { 12, 0, height + 2 }, { { 0, -6, height + 2 }, { 32, 2, 119 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 10)),
+                        { 10, 16, height + 2 }, { { 10, 0, height + 2 }, { 4, 2, 119 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 14)),
+                        { 16, 16, height + 2 }, { { 29, 29, height + 2 }, { 2, 2, 119 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 3)),
+                        { 0, 0, height + 34 }, { { 0, 6, height + 34 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 7)),
+                        { 0, 0, height + 34 }, { { 0, 0, height - 6 }, { 2, 2, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 11)),
+                        { 0, 16, height + 34 }, { { 0, 0, height - 6 }, { 32, 2, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_HALF_LOOP + 15)),
+                        { 0, 16, height + 34 }, { { 0, 6, height + 34 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 32, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A9658 */
+static void SuspendedSwingingRCTrackHalfLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackHalfLoopUp(session, ride, 3 - trackSequence, direction, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9668 */
+static void SuspendedSwingingRCTrackLeftCorkscrewUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::right, PaintSegment::bottom, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 16, session.SupportColours);
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A9678 */
+static void SuspendedSwingingRCTrackRightCorkscrewUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 33 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 6, height + 24 }, { 20, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(session, kSegmentsAll, 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_CORKSCREW + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 39 }, { 20, 32, 3 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 16, session.SupportColours);
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A9688 */
+static void SuspendedSwingingRCTrackLeftCorkscrewDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightCorkscrewUp(
+        session, ride, 2 - trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9698 */
+static void SuspendedSwingingRCTrackRightCorkscrewDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftCorkscrewUp(
+        session, ride, 2 - trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+/** rct2: 0x008A96F8 */
+static void SuspendedSwingingRCTrackLeftQuarterBankedHelixLargeUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 14, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height + 16, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height + 16, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9708 */
+static void SuspendedSwingingRCTrackRightQuarterBankedHelixLargeUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 35 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 43 }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 14, session.SupportColours);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height + 16, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height + 16, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9718 */
+static void SuspendedSwingingRCTrackLeftQuarterBankedHelixLargeDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 14, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 16, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_RIGHT_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9728 */
+static void SuspendedSwingingRCTrackRightQuarterBankedHelixLargeDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 43 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 14, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 16, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 43 }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 43 }, { 16, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_HELIX_LEFT_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 35 }, { 20, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2, session.SupportColours);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9A38 */
+static void SuspendedSwingingRCTrack25DegUpLeftBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 32)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 33)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 34)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 35)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9A48 */
+static void SuspendedSwingingRCTrack25DegUpRightBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 36)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 37)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 38)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 39)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+/** rct2: 0x008A9A58 */
+static void SuspendedSwingingRCTrack25DegDownLeftBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpRightBanked(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9A68 */
+static void SuspendedSwingingRCTrack25DegDownRightBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpLeftBanked(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+/** rct2: 0x008A9938 */
+static void SuspendedSwingingRCTrackLeftEighthBankToDiag(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 34, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 18, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9948 */
+static void SuspendedSwingingRCTrackRightEighthBankToDiag(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 34, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 4, height + kInvertedSpriteOffset }, { 28, 28, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 18, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CURVE_BANKED + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9958 */
+static void SuspendedSwingingRCTrackLeftEighthBankToOrthogonal(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackRightEighthBankToDiag(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9968 */
+static void SuspendedSwingingRCTrackRightEighthBankToOrthogonal(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackLeftEighthBankToDiag(
+        session, ride, trackSequence, (direction + 3) & 3, height, trackElement, supportType);
+}
+/** rct2: 0x008A9878 */
+static void SuspendedSwingingRCTrackDiagFlatToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 3)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 0)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 2)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 1)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9888 */
+static void SuspendedSwingingRCTrackDiagFlatToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 7)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 4)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 6)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 5)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9898 */
+static void SuspendedSwingingRCTrackDiagLeftBankToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 5)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 6)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 4)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 7)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A98A8 */
+static void SuspendedSwingingRCTrackDiagRightBankToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 1)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 2)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 0)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 3)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A98D8 */
+static void SuspendedSwingingRCTrackDiagLeftBankTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 11)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 8)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 10)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 9)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A98E8 */
+static void SuspendedSwingingRCTrackDiagRightBankTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A98B8 */
+static void SuspendedSwingingRCTrackDiag25DegUpToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+/** rct2: 0x008A98C8 */
+static void SuspendedSwingingRCTrackDiag25DegUpToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 23)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 20)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 22)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 21)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+/** rct2: 0x008A98F8 */
+static void SuspendedSwingingRCTrackDiagLeftBankTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 21)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 22)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 20)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 23)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+            break;
+    }
+
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9908 */
+static void SuspendedSwingingRCTrackDiagRightBankTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+            break;
+    }
+
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9918 */
+static void SuspendedSwingingRCTrackDiag25DegDownToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A9928 */
+static void SuspendedSwingingRCTrackDiag25DegDownToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 9)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 10)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 8)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 11)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+/** rct2: 0x008A9858 */
+static void SuspendedSwingingRCTrackDiagLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 27)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 24)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 26)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 25)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9868 */
+static void SuspendedSwingingRCTrackDiagRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 25)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 26)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 24)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BANK_TRANSITION_DIAGONAL + 27)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+/** rct2: 0x008A9978 */
+static void SuspendedSwingingRCTrackLeftLargeHalfLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 9 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 8, 0, height + 40 }, { 24, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 30, 16, height + 70 }, { 2, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 24, 0, height + kInvertedSpriteOffset }, { 8, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 30, 16, height + 100 }, { 2, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 224);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 30, 30, height + 80 }, { 2, 2, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 16, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height }, { 16, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 30, 0, height + 90 }, { 2, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 128);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 227 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 227 }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 224);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 30, height + kSupportHeight - 44,
+                session.SupportColours);
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 32, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 40);
+            break;
+    }
+}
+
+/** rct2: 0x008A9988 */
+static void SuspendedSwingingRCTrackRightLargeHalfLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 42)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 49)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 43)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 19 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 50)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 70 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 44)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 51)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 70 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 100 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 45)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 52)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 100 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 224);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 90 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 46)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 53)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 30, 16, height + 110 }, { 2, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 128);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 227 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 40)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 47)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 54)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 227 }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 224);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 41)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 48)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_HALF_LOOP + 55)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 30, height + kSupportHeight - 44,
+                session.SupportColours);
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 32, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 40);
+            break;
+    }
+}
+
+/** rct2: 0x008A9998 */
+static void SuspendedSwingingRCTrackLeftLargeHalfLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightLargeHalfLoopUp(
+        session, ride, 6 - trackSequence, direction, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A99A8 */
+static void SuspendedSwingingRCTrackRightLargeHalfLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftLargeHalfLoopUp(session, ride, 6 - trackSequence, direction, height, trackElement, supportType);
+}
+/** rct2: 0x008A9A78 */
+static void SuspendedSwingingRCTrackLeftBankedQuarterTurn325DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 2)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 6)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 8, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 1)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 3)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 5)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 7)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 8, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+    }
+}
+
+/** rct2: 0x008A9A88 */
+static void SuspendedSwingingRCTrackRightBankedQuarterTurn325DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 8)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 10)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 14)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 8, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 9)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 11)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 13)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_SMALL_CURVE_BANKED + 15)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 8, session.SupportColours);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+    }
+}
+
+/** rct2: 0x008A9A98 */
+static void SuspendedSwingingRCTrackLeftBankedQuarterTurn325DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn3TilesToRightQuarterTurn3Tiles[trackSequence];
+    SuspendedSwingingRCTrackRightBankedQuarterTurn325DegUp(
+        session, ride, trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9AA8 */
+static void SuspendedSwingingRCTrackRightBankedQuarterTurn325DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn3TilesToRightQuarterTurn3Tiles[trackSequence];
+    SuspendedSwingingRCTrackLeftBankedQuarterTurn325DegUp(
+        session, ride, trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9BB8 */
+static void SuspendedSwingingRCTrackLeftBankedQuarterTurn525DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 5)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 10)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 15)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 11)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 16)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 2)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 7)),
+                        { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 12)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 3)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 18)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 4)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 9)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 14)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 19)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10, session.SupportColours);
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+    }
+}
+
+/** rct2: 0x008A9BC8 */
+static void SuspendedSwingingRCTrackRightBankedQuarterTurn525DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 20)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 25)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 30)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 35)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10, session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 21)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 26)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 27)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 32)),
+                        { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 37)),
+                        { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 5:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 23)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 38)),
+                        { 16, 0, height + kInvertedSpriteOffset }, { 16, 32, 3 });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 6:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 24)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 29)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 34)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_MEDIUM_CURVE_BANKED + 39)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10, session.SupportColours);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+    }
+}
+
+/** rct2: 0x008A9BD8 */
+static void SuspendedSwingingRCTrackLeftBankedQuarterTurn525DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn5TilesToRightQuarterTurn5Tiles[trackSequence];
+    SuspendedSwingingRCTrackRightBankedQuarterTurn525DegUp(
+        session, ride, trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9BE8 */
+static void SuspendedSwingingRCTrackRightBankedQuarterTurn525DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = kMapLeftQuarterTurn5TilesToRightQuarterTurn5Tiles[trackSequence];
+    SuspendedSwingingRCTrackLeftBankedQuarterTurn525DegUp(
+        session, ride, trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9AB8 */
+static void SuspendedSwingingRCTrack25DegUpToLeftBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 0)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 1)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 2)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 3)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9AC8 */
+static void SuspendedSwingingRCTrack25DegUpToRightBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 4)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 5)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 6)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 7)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9AD8 */
+static void SuspendedSwingingRCTrackLeftBanked25DegUpTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 8)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 9)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 10)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 11)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9AE8 */
+static void SuspendedSwingingRCTrackRightBanked25DegUpTo25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 12)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 13)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 14)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 15)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 18,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+/** rct2: 0x008A9AF8 */
+static void SuspendedSwingingRCTrack25DegDownToLeftBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBanked25DegUpTo25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B08 */
+static void SuspendedSwingingRCTrack25DegDownToRightBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBanked25DegUpTo25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B18 */
+static void SuspendedSwingingRCTrackLeftBanked25DegDownTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpToRightBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B28 */
+static void SuspendedSwingingRCTrackRightBanked25DegDownTo25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack25DegUpToLeftBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B38 */
+static void SuspendedSwingingRCTrackLeftBankedFlatToLeftBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 16)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 17)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 18)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 19)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A9B48 */
+static void SuspendedSwingingRCTrackRightBankedFlatToRightBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 20)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 21)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 22)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 23)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A9B58 */
+static void SuspendedSwingingRCTrackLeftBanked25DegUpToLeftBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 24)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 25)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 26)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 27)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A9B68 */
+static void SuspendedSwingingRCTrackRightBanked25DegUpToRightBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 28)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 29)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 30)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 31)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A9B78 */
+static void SuspendedSwingingRCTrackLeftBankedFlatToLeftBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBanked25DegUpToRightBankedFlat(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B88 */
+static void SuspendedSwingingRCTrackRightBankedFlatToRightBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBanked25DegUpToLeftBankedFlat(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9B98 */
+static void SuspendedSwingingRCTrackLeftBanked25DegDownToLeftBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBankedFlatToRightBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9BA8 */
+static void SuspendedSwingingRCTrackRightBanked25DegDownToRightBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBankedFlatToLeftBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A99B8 */
+static void SuspendedSwingingRCTrackFlatToLeftBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 40)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 41)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 42)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 43)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A99C8 */
+static void SuspendedSwingingRCTrackFlatToRightBanked25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 44)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 45)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 46)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 47)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 10,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 64);
+}
+
+/** rct2: 0x008A99D8 */
+static void SuspendedSwingingRCTrackLeftBanked25DegUpToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 48)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 49)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 50)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 51)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A99E8 */
+static void SuspendedSwingingRCTrackRightBanked25DegUpToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 52)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 53)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 54)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION + 55)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+            break;
+    }
+
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+    {
+        switch (direction)
+        {
+            case 0:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 1:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 2:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+            case 3:
+                MetalASupportsPaintSetup(
+                    session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                    session.SupportColours);
+                break;
+        }
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+    }
+    PaintUtilSetGeneralSupportHeight(session, height + 56);
+}
+
+/** rct2: 0x008A99F8 */
+static void SuspendedSwingingRCTrackFlatToLeftBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBanked25DegUpToFlat(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9A08 */
+static void SuspendedSwingingRCTrackFlatToRightBanked25DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBanked25DegUpToFlat(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9A18 */
+static void SuspendedSwingingRCTrackLeftBanked25DegDownToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackFlatToRightBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+/** rct2: 0x008A9A28 */
+static void SuspendedSwingingRCTrackRightBanked25DegDownToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackFlatToLeftBanked25DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+// inversions
+static void SuspendedSwingingRCTrackLeftEighthDiveLoopUpToOrthogonal(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::left, PaintSegment::centre,
+                      PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 4)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 0, height + 103 }, { 16, 30, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 0, height + 88 }, { 10, 10, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 112);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 0)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 93 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 136);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 65,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 8)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 1, 30, height + 0 }, { 1, 32, 32 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 144);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 1)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, -1, height + 33 }, { 32, 1, 64 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 5)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -8, -8, height + kInvertedSpriteOffset }, { 3, 3, 15 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 9)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 4, 4, height + 100 }, { 28, 28, 1 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 20, 2, height + 100 }, { 28, 28, 1 } });
+
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 136);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 2)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 1, height + 0 }, { 1, 32, 64 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 6)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 1, height + 0 }, { 32, 1, 64 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 10)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 30, 30, height + 0 }, { 8, 8, 64 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 0, 20, height + kInvertedSpriteOffset + 26 }, { 32, 1, 10 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft,
+                      PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 5:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 3)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 7)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 11 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 8,
+                        session.SupportColours);
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 11)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 11 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 8,
+                        session.SupportColours);
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 11,
+                        session.SupportColours);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightEighthDiveLoopUpToOrthogonal(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 20)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 0, height + 103 }, { 16, 30, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 28)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 0, height + 88 }, { 10, 10, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::left, PaintSegment::centre,
+                      PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 112);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 24)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 93 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::left, PaintSegment::centre,
+                      PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 136);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 1, 30, height + 0 }, { 1, 32, 32 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 65,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 48,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 144);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 4, 4, height + 100 }, { 28, 28, 1 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 21)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -8, -8, height + kInvertedSpriteOffset }, { 3, 3, 15 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 25)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, -1, height + 33 }, { 1, 32, 64 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 29)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 2, 2, height + 100 }, { 28, 28, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 136);
+            break;
+        case 4:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 30, 30, height + 0 }, { 8, 8, 64 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 22)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 0, 1, height + 0 }, { 32, 1, 64 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 26)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { 1, 0, height + 0 }, { 32, 1, 64 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 30)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 20, 0, height + kInvertedSpriteOffset + 26 }, { 1, 32, 10 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft,
+                      PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 5:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 11 }, { 20, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 8,
+                        session.SupportColours);
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 23)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 11 }, { 20, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 8,
+                        session.SupportColours);
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 27)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 9,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_DIVE_LOOP + 31)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 9,
+                        session.SupportColours);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftEighthDiveLoopDownToDiag(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightEighthDiveLoopUpToOrthogonal(
+        session, ride, 5 - trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightEighthDiveLoopToDownOrthogonal(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftEighthDiveLoopUpToOrthogonal(
+        session, ride, 5 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftMediumHalfLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 0),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 5),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 10),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 15),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 1),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 6),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 11),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 16),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::top },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + kInvertedSpriteOffset + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 2),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 28, 0, height + kInvertedSpriteOffset + 50 }, { 1, 26, 50 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 7),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, -16, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 12),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 17),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 28, 0, height + kInvertedSpriteOffset + 50 }, { 1, 26, 50 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::centre, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 3),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 28, 6, height + 120 }, { 1, 20, 30 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 8),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 13),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 18),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 25, height + 8 }, { 32, 1, 140 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::bottomRight, PaintSegment::centre, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 168);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight,
+                      PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 4),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 9),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 14),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 19),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 48, height + kSupportHeight - 44,
+                session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 48, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightMediumHalfLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 20),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 25),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 30),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 35),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 21),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 26),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 31),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 36),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 80 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 22),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 28, 0, height + kInvertedSpriteOffset + 50 }, { 1, 26, 50 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 27),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 32),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, -16, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 37),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 28, 0, height + kInvertedSpriteOffset + 50 }, { 1, 26, 50 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::bottomRight, PaintSegment::centre, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 160);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 23),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 25, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 28),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 33),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 8 }, { 32, 1, 140 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 38),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 28, 6, height + 120 }, { 1, 20, 30 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 160);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::top },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 24),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 29),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 34),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_MEDIUM_HALF_LOOP + 39),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 48 }, { 32, 20, 1 } });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 48, height + kSupportHeight - 44,
+                session.SupportColours);
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 48, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftMediumHalfLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightMediumHalfLoopUp(
+        session, ride, 4 - trackSequence, direction, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightMediumHalfLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftMediumHalfLoopUp(
+        session, ride, 4 - trackSequence, direction, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftZeroGRollUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 31, height + kInvertedSpriteOffset }, { 40, 1, 32 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 78);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 40, 20, 1 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 26, height + kInvertedSpriteOffset }, { 32, 1, 32 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottomRight, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::centre, PaintSegment::topRight },
+                    direction),
+
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 3 }, { 40, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 3 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 7 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 7 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightZeroGRollUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::topRight, PaintSegment::centre, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 14,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 31, height + kInvertedSpriteOffset }, { 40, 1, 32 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 3 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 86);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 26, height + kInvertedSpriteOffset }, { 32, 1, 32 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 40, 20, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::topLeft, PaintSegment::left, PaintSegment::bottomLeft,
+                      PaintSegment::centre, PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 7 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 7 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 3 }, { 32, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 14,
+                        session.SupportColours);
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_ZERO_G_ROLL + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 3 }, { 40, 20, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+
+                    break;
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftZeroGRollDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftZeroGRollUp(
+        session, ride, 2 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightZeroGRollDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightZeroGRollUp(
+        session, ride, 2 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftLargeZeroGRollUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::right, PaintSegment::bottomRight, PaintSegment::centre,
+                      PaintSegment::bottom },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 93 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 39,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + kInvertedSpriteOffset }, { 24, 1, 50 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 62,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 4, height + kInvertedSpriteOffset + 11 }, { 32, 1, 50 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 26, height + kInvertedSpriteOffset + 11 }, { 32, 1, 50 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 60,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 93 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 56,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 1:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 26, 2, 81 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 93 }, { 26, 20, 1 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 81 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height + 11 }, { 32, 2, 92 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height + 11 }, { 32, 2, 81 } });
+
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottomRight, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::centre, PaintSegment::topRight },
+                    direction),
+
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height }, { 32, 1, 64 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height }, { 32, 1, 48 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height }, { 30, 1, 64 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 30, height }, { 30, 1, 64 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height }, { 30, 1, 64 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottomRight, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::centre, PaintSegment::topRight },
+                    direction),
+
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightLargeZeroGRollUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::top, PaintSegment::topLeft, PaintSegment::centre,
+                      PaintSegment::left },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 93 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 56,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 4, height + kInvertedSpriteOffset + 11 }, { 24, 1, 50 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 26, height + kInvertedSpriteOffset + 11 }, { 24, 1, 50 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 60,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + kInvertedSpriteOffset }, { 24, 1, 50 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 62,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 93 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 39,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height + 11 }, { 32, 1, 81 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 26, height + 11 }, { 32, 1, 92 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 1, 81 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 26, 1, 81 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 93 }, { 26, 20, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::topRight }, // FIXED: Mirrored perfectly from Left across TR-C-BL
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 26, height }, { 30, 1, 64 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 26, height }, { 30, 1, 64 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 1, 26, height }, { 30, 1, 64 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height }, { 32, 1, 48 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height }, { 32, 1, 64 } });
+                    break;
+            }
+
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::topRight }, // FIXED: Mirrored perfectly from Left across TR-C-BL
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 3:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_ZERO_G_ROLL + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 16, height + 31 }, { 28, 14, 2 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 6, height + kSupportHeight - 23,
+                        session.SupportColours);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftLargeZeroGRollDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftLargeZeroGRollUp(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightLargeZeroGRollDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightLargeZeroGRollUp(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftBarrelRollUpToDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::bottomRight, PaintSegment::topRight, PaintSegment::centre },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 28 }, { 32, 20, 0 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 28 }, { 32, 20, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 13,
+                        session.SupportColours);
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 13,
+                        session.SupportColours);
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+
+                    break;
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 32, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 32, kTunnelGroup, TunnelSubType::tall);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightBarrelRollUpToDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::centre },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 2,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 42)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 43)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 28 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 1,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 28 }, { 32, 20, 0 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 28 }, { 32, 20, 0 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 44)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 45)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 0 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 12,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 40)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 41)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 13,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 46)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_BARREL_ROLL + 47)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 2 }, { 32, 20, 0 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight - 13,
+                        session.SupportColours);
+                    break;
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 32, kTunnelGroup, TunnelSubType::tall);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 32, kTunnelGroup, TunnelSubType::tall);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftBarrelRollDownToUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBarrelRollUpToDown(
+        session, ride, 2 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightBarrelRollDownToUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBarrelRollUpToDown(
+        session, ride, 2 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftLargeCorkscrewUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::bottomRight, PaintSegment::right, PaintSegment::bottom,
+                      PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 1, 40 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 16 }, { 16, 16, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 48 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 16 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 16 }, { 16, 16, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 48 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 48 }, { 16, 16, 3 } });
+
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 24 }, { 20, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 5:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, 3 - direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightLargeCorkscrewUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 40)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 32 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::topLeft,
+                      PaintSegment::top },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 1, 40 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 41)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 40 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 16, height + 48 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 16 }, { 16, 16, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + 48 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + 16 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 42)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 16 }, { 16, 16, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 43)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + 48 }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::left, PaintSegment::centre,
+                      PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight, PaintSegment::left,
+                      PaintSegment::centre, PaintSegment::right, PaintSegment::bottomLeft, PaintSegment::bottom,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 24 }, { 20, 32, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 44)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 } });
+
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 5:
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_LARGE_CORKSCREW + 45)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 6, 0, height + 40 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 6, height + kSupportHeight - 10,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height + 40, kTunnelGroup, TunnelSubType::flat);
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, 3 - direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftLargeCorkscrewDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightLargeCorkscrewUp(
+        session, ride, 5 - trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightLargeCorkscrewDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftLargeCorkscrewUp(
+        session, ride, 5 - trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+
+// transitions
+static void SuspendedSwingingRCTrackFlatTo60DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    PaintUtilSetSegmentSupportHeight(
+        session,
+        PaintUtilRotateSegments(
+            { PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::topRight, PaintSegment::bottomRight }, direction),
+        0xFFFF, 0);
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 0)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 16 }, { 32, 20, 3 } });
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 2)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + kInvertedSpriteOffset }, { 32, 2, 43 } });
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 1)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 29, 4, height + kInvertedSpriteOffset }, { 1, 24, 43 } });
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 4)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + kInvertedSpriteOffset }, { 32, 2, 43 } });
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 3)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 29, 4, height + kInvertedSpriteOffset }, { 1, 24, 43 } });
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 5)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 16 }, { 32, 20, 3 } });
+            break;
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 24, kTunnelGroup, TunnelSubType::slopeEnd);
+    }
+
+    PaintUtilSetGeneralSupportHeight(session, height + 72);
+}
+
+static void SuspendedSwingingRCTrack60DegUpToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    switch (direction)
+    {
+        case 0:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 6)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 24 }, { 32, 20, 3 } });
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 20, session.SupportColours);
+            break;
+        case 1:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 7)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 1, kInvertedSpriteOffset + 24 } });
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 8)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 24 }, { 32, 20, 3 } });
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 20, session.SupportColours);
+            break;
+        case 2:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 10)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height }, { 32, 1, kInvertedSpriteOffset + 24 } });
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 9)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 24 }, { 32, 20, 3 } });
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 20, session.SupportColours);
+            break;
+        case 3:
+            PaintAddImageAsParentRotated(
+                session, direction,
+                session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 11)),
+                { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset + 24 }, { 32, 20, 3 } });
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 20, session.SupportColours);
+            break;
+    }
+
+    if (direction == 0 || direction == 3)
+    {
+        PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+    }
+    else
+    {
+        PaintUtilPushTunnelRotated(session, direction, height + 24, kTunnelGroup, TunnelSubType::flat);
+    }
+
+    PaintUtilSetGeneralSupportHeight(session, height + 80);
+}
+
+static void SuspendedSwingingRCTrackFlatTo60DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack60DegUpToFlat(session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrack60DegDownToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackFlatTo60DegUp(session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+static void SuspendedSwingingRCTrackFlatTo60DegUpLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 0),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 4),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 8),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 12),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 4,
+                            session.SupportColours);
+                        break;
+                    case 1:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 4,
+                            session.SupportColours);
+                        break;
+                    case 2:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 4,
+                            session.SupportColours);
+                        break;
+                    case 3:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 4,
+                            session.SupportColours);
+                        break;
+                }
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 1),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 5),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 9),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 13),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+                if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+                {
+                    switch (direction)
+                    {
+                        case 0:
+                            MetalASupportsPaintSetup(
+                                session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 21,
+                                session.SupportColours);
+                            break;
+                        case 1:
+                            MetalASupportsPaintSetup(
+                                session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 21,
+                                session.SupportColours);
+                            break;
+                        case 2:
+                            MetalASupportsPaintSetup(
+                                session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 21,
+                                session.SupportColours);
+                            break;
+                        case 3:
+                            MetalASupportsPaintSetup(
+                                session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 21,
+                                session.SupportColours);
+                            break;
+                    }
+                }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 2),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 49 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 6),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 49 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 10),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 49 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 14),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 49 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 28,
+                            session.SupportColours);
+                        break;
+                    case 1:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 32,
+                            session.SupportColours);
+                        break;
+                    case 2:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 28,
+                            session.SupportColours);
+                        break;
+                    case 3:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 28,
+                            session.SupportColours);
+                        break;
+                }
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 3),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 83 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 7),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 75 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 11),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 75 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 15),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 83 }, { 32, 20, 3 } });
+                    break;
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 24, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 24, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrack60DegUpToFlatLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 16),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 83 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 20),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 75 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 24),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 75 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 28),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 83 }, { 32, 20, 3 } });
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 17),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 57 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 21),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 57 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 25),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 57 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 29),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 57 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 28,
+                            session.SupportColours);
+                        break;
+                    case 1:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 30,
+                            session.SupportColours);
+                        break;
+                    case 2:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 32,
+                            session.SupportColours);
+                        break;
+                    case 3:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 30,
+                            session.SupportColours);
+                        break;
+                }
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 88);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 18),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 22),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 26),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 30),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 45 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 21,
+                            session.SupportColours);
+                        break;
+                    case 1:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 21,
+                            session.SupportColours);
+                        break;
+                    case 2:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 21,
+                            session.SupportColours);
+                        break;
+                    case 3:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 21,
+                            session.SupportColours);
+                        break;
+                }
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 19),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 23),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 27),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP + 31),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 37 }, { 32, 20, 3 } });
+                    break;
+            }
+            if (TrackPaintUtilShouldPaintSupports(session.MapPosition))
+            {
+                switch (direction)
+                {
+                    case 0:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 4,
+                            session.SupportColours);
+                        break;
+                    case 1:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 8,
+                            session.SupportColours);
+                        break;
+                    case 2:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 10,
+                            session.SupportColours);
+                        break;
+                    case 3:
+                        MetalASupportsPaintSetup(
+                            session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                            session.SupportColours);
+                        break;
+                }
+            }
+            switch (direction)
+            {
+                case 1:
+                    PaintUtilPushTunnelRight(session, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+                    break;
+                case 2:
+                    PaintUtilPushTunnelLeft(session, height + 8, kTunnelGroup, TunnelSubType::flatTo25Deg);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackFlatTo60DegDownLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack60DegUpToFlatLongBase(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrack60DegDownToFlatLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackFlatTo60DegUpLongBase(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagFlatTo60DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiag60DegUpToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagFlatTo60DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 20,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 53 }, { 32, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 20,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 20,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 20,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiag60DegDownToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SMALL_FLAT_TO_STEEP + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 40 }, { 32, 32, 1 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagFlatTo60DegUpLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 9)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 40);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 0)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 6)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 14,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 3)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 14,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 9,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 10)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 24 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 22,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 1)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 24 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 5:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 7)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 24 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 6:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 4)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 24 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 40,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 11)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 44,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 7:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 2)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 128);
+            break;
+        case 8:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 8)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 128);
+            break;
+        case 9:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 5)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 144);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiag60DegUpToFlatLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 21)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 112);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 104);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 64 }, { 32, 32, 3 } });
+
+                    break;
+
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 22)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 72 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 120);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 32 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 5:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 32 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 6:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 32 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 22,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 23)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 32 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 24,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 7:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 8:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::bottom, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 20)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 9:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::centre }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 12,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_FLAT_TO_STEEP_DIAGONAL + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset },
+                        { { -16, -16, height + kInvertedSpriteOffset + 8 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 12,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagFlatTo60DegDownLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiag60DegUpToFlatLongBase(
+        session, ride, 9 - trackSequence, direction ^ 2, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiag60DegDownToFlatLongBase(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagFlatTo60DegUpLongBase(
+        session, ride, 9 - trackSequence, direction ^ 2, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftBankToLeftQuarterTurn3Tile25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 0)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 2)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 4)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 6)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topRight, PaintSegment::topLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 1)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 3)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 9,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 5)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 9,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 7)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 2:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 3:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightBankToRightQuarterTurn3Tile25DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft,
+                      PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 8)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 10)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 12)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 14)),
+                        { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 3 });
+                    break;
+            }
+            MetalASupportsPaintSetup(
+                session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 6, session.SupportColours);
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height, kTunnelGroup, TunnelSubType::flat);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 2:
+            PaintUtilSetGeneralSupportHeight(session, height + 48);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::topLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 9)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomRightSide, 0, height + kSupportHeight + 9,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 11)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomLeftSide, 0, height + kSupportHeight + 9,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 13)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topLeftSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_TURN_BANK_TRANSITION + 15)),
+                        { 6, 0, height + kInvertedSpriteOffset }, { 20, 32, 3 });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topRightSide, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            switch (direction)
+            {
+                case 0:
+                    PaintUtilPushTunnelRight(session, height, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+                case 1:
+                    PaintUtilPushTunnelLeft(session, height, kTunnelGroup, TunnelSubType::slopeEnd);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftQuarterTurn3Tile25DegDownToLeftBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightBankToRightQuarterTurn3Tile25DegUp(
+        session, ride, 3 - trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+static void SuspendedSwingingRCTrackRightQuarterTurn3Tile25DegDownToRightBank(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftBankToLeftQuarterTurn3Tile25DegUp(
+        session, ride, 3 - trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+static void SuspendedSwingingRCTrack60DegUpTo90DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            if (trackElement.hasChain())
+            {
+                switch (direction)
+                {
+                    case 0:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 0),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 1:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 1),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 2:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 2),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 3:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 3),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                }
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case 0:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 0),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 1:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 1),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 2:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 2),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 3:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 3),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                }
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+            PaintUtilSetVerticalTunnel(session, height + 56);
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrack90DegDownTo60DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack60DegUpTo90DegUp(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrack90DegUpTo60DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    if (trackElement.hasChain())
+    {
+        switch (direction)
+        {
+            case 0:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 4),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                break;
+            case 1:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 5),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                break;
+            case 2:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 6),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                break;
+            case 3:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 7),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                break;
+        }
+    }
+    else
+    {
+        switch (direction)
+        {
+            case 0:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 4),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                break;
+            case 1:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 5),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                break;
+            case 2:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 6),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                break;
+            case 3:
+                PaintAddImageAsParentRotated(
+                    session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 7),
+                    { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                break;
+        }
+    }
+    switch (direction)
+    {
+        case 1:
+            PaintUtilPushTunnelRight(session, height + 48, kTunnelGroup, TunnelSubType::slopeEnd);
+            break;
+        case 2:
+            PaintUtilPushTunnelLeft(session, height + 48, kTunnelGroup, TunnelSubType::slopeEnd);
+            break;
+    }
+    PaintUtilSetSegmentSupportHeight(session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+    PaintUtilSetGeneralSupportHeight(session, height + 96);
+}
+
+static void SuspendedSwingingRCTrack60DegDownTo90DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            if (trackElement.hasChain())
+            {
+                switch (direction)
+                {
+                    case 0:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 6),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 1:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 7),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 2:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 4),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 3:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 5),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                }
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case 0:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 6),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                    case 1:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 7),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 2:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 4),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 85 }, { 32, 20, 3 } });
+                        break;
+                    case 3:
+                        PaintAddImageAsParentRotated(
+                            session, direction,
+                            session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 5),
+                            { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 55 } });
+                        break;
+                }
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 48, kTunnelGroup, TunnelSubType::slopeEnd);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 1:
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrack90DegUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+
+        {
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 8),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 61 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 9),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 10),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction, session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL + 11),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 61 }, { 32, 20, 3 } });
+                    break;
+            }
+        }
+            PaintUtilSetVerticalTunnel(session, height + 32);
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + kDefaultGeneralSupportHeight);
+            break;
+        case 1:
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrack90DegDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack90DegUp(session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftQuarterTurn1TileUp90(
+    PaintSession& session, const Ride& ride, const uint8_t trackSequence, const Direction direction, const int32_t height,
+    const TrackElement& trackElement, const SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 0),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 1),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 4, 0, height + 11 }, { 2, 32, 31 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 2),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 3),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 4),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 5),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 6),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetVerticalTunnel(session, height + 96);
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 1:
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightQuarterTurn1TileUp90(
+    PaintSession& session, const Ride& ride, const uint8_t trackSequence, const Direction direction, const int32_t height,
+    const TrackElement& trackElement, const SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 7),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 8),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 9),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 10),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 11),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 4, height + 11 }, { 32, 2, 31 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 12),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(SPR_TRACKS_SUSPENDED_SWINGING_COASTER_VERTICAL_TWIST + 13),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 125 }, { 32, 20, 3 } });
+                    break;
+            }
+            PaintUtilSetVerticalTunnel(session, height + 96);
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 1:
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftQuarterTurn1TileDown90(
+    PaintSession& session, const Ride& ride, const uint8_t trackSequence, const Direction direction, const int32_t height,
+    const TrackElement& trackElement, const SupportType supportType)
+{
+    SuspendedSwingingRCTrackRightQuarterTurn1TileUp90(
+        session, ride, trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightQuarterTurn1TileDown90(
+    PaintSession& session, const Ride& ride, const uint8_t trackSequence, const Direction direction, const int32_t height,
+    const TrackElement& trackElement, const SupportType supportType)
+{
+    SuspendedSwingingRCTrackLeftQuarterTurn1TileUp90(
+        session, ride, trackSequence, (direction - 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrack90DegToInvertedFlatQuarterLoopUp(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 28, 6, height + kInvertedSpriteOffset }, { 2, 20, 31 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 16 }, { 20, 1, 48 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 16 }, { 20, 1, 48 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 28, 6, height + kInvertedSpriteOffset }, { 2, 20, 31 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 120);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 25, height + kInvertedSpriteOffset + 1 }, { 32, 1, 32 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 16 }, { 20, 1, 48 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + 16 }, { 20, 1, 48 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 6, height + kInvertedSpriteOffset }, { 32, 20, 1 } });
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 25, height + kInvertedSpriteOffset + 1 }, { 32, 1, 32 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 96);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 4 }, { 32, 20, 1 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 4 }, { 32, 20, 1 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 4 }, { 32, 20, 1 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_QUARTER_LOOP + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 4 }, { 32, 20, 1 } });
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 32, kTunnelGroup, TunnelSubType::flat);
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 68);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackInvertedFlatTo90DegQuarterLoopDown(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrack90DegToInvertedFlatQuarterLoopUp(
+        session, ride, 2 - trackSequence, direction, height, trackElement, supportType);
+}
+
+// diag banks and wide turns
+
+// wide turn - unbanked
+static void SuspendedSwingingRCTrackLeftEighthToDiagUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftEighthToOrthogonalUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::right, PaintSegment::bottomRight,
+                      PaintSegment::bottomLeft, PaintSegment::topRight, PaintSegment::topLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 40)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 44)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomRight, PaintSegment::bottom, PaintSegment::centre, PaintSegment::right,
+                      PaintSegment::bottomLeft, PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 41)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 45)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 42)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 46)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::left, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 43)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 47)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 1 || direction == 2)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 16, kTunnelGroup, TunnelSubType::slopeEnd);
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightEighthToDiagUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session, PaintUtilRotateSegments(BlockedSegments::kStraightFlat, direction), 0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::topRight, PaintSegment::bottom, PaintSegment::centre,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre,
+                      PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightEighthToOrthogonalUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::left, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight, PaintSegment::topLeft, PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 48)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 52)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 56)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 60)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::right, PaintSegment::topLeft,
+                      PaintSegment::top },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 49)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 17,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 53)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 17,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 57)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 61)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::topRight, PaintSegment::top, PaintSegment::topLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottomRight, PaintSegment::centre, PaintSegment::bottomRight,
+                      PaintSegment::left },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 50)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 54)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 58)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 62)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomRight }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 51)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 55)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 59)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE + 63)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 1)
+            {
+                PaintUtilPushTunnelRotated(session, direction + 1, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftEighthToDiagDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    uint8_t map[5] = { 4, 3, 1, 2, 0 };
+    trackSequence = map[trackSequence];
+    SuspendedSwingingRCTrackRightEighthToOrthogonalUp25(
+        session, ride, trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftEighthToOrthogonalDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackRightEighthToDiagUp25(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightEighthToDiagDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    uint8_t map[5] = { 4, 3, 1, 2, 0 };
+    trackSequence = map[trackSequence];
+    SuspendedSwingingRCTrackLeftEighthToOrthogonalUp25(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightEighthToOrthogonalDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackLeftEighthToDiagUp25(
+        session, ride, trackSequence, (direction + 3) & 3, height, trackElement, supportType);
+}
+
+// wide turn - banked
+static void SuspendedSwingingRCTrackLeftEighthBankToDiagUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::right, PaintSegment::bottomRight, PaintSegment::bottom,
+                      PaintSegment::left, PaintSegment::centre, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 0)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 4)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 8)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 12)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 1)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 5)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 9)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 13)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre,
+                      PaintSegment::topRight, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 2)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 6)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 10)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 14)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::topLeft, PaintSegment::left, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::bottom, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::bottomRight, PaintSegment::topLeft, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 3)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 7)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 11)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 15)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftEighthBankToOrthogonalUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::right, PaintSegment::bottomRight,
+                      PaintSegment::bottomLeft, PaintSegment::topRight, PaintSegment::topLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 32)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 36)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 40)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 44)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomRight, PaintSegment::bottom, PaintSegment::centre, PaintSegment::right,
+                      PaintSegment::bottomLeft, PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 33)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 17,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 37)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 17,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 41)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 19,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 45)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 15,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::topLeft, PaintSegment::top, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 34)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 38)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 42)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 46)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 32, 16, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::centre, PaintSegment::topRight,
+                      PaintSegment::left, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottomLeft, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 35)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 39)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 43)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 47)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 1 || direction == 2)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightEighthBankToDiagUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topRight, PaintSegment::top, PaintSegment::topLeft, PaintSegment::left,
+                      PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 16)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 20)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 24)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 28)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 6, height + kInvertedSpriteOffset + 8 }, { 32, 20, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 3)
+            {
+                PaintUtilPushTunnelRotated(session, direction, height - 8, kTunnelGroup, TunnelSubType::slopeStart);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::topRight, PaintSegment::bottom, PaintSegment::centre,
+                      PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 17)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 21)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 25)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 29)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 32, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::topLeft, PaintSegment::top, PaintSegment::centre,
+                      PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 18)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 22)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 26)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 30)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 13,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::bottomRight, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft, PaintSegment::topRight,
+                      PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 19)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 16, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 23)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 0, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 27)),
+                        { 0, 0, height + kInvertedSpriteOffset }, { { 0, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 31)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackRightEighthBankToOrthogonalUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::left, PaintSegment::bottomLeft,
+                      PaintSegment::bottomRight, PaintSegment::topLeft, PaintSegment::topRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 48)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 52)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 56)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 60)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 16, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::centre, PaintSegment::topRight, PaintSegment::right, PaintSegment::topLeft,
+                      PaintSegment::top },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 49)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 19,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 53)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 19,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 57)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 19,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 61)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 16, height + kInvertedSpriteOffset + 16 }, { 16, 16, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 17,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments({ PaintSegment::topRight, PaintSegment::top, PaintSegment::topLeft }, direction),
+                0xFFFF, 0);
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::bottomRight, PaintSegment::centre, PaintSegment::bottomRight,
+                      PaintSegment::left },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 50)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 54)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 58)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 0, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 62)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 16, 0, height + kInvertedSpriteOffset + 8 }, { 16, 32, 3 } });
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 4:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::topLeft, PaintSegment::centre, PaintSegment::bottomRight, PaintSegment::top,
+                      PaintSegment::topRight, PaintSegment::right },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 51)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 55)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 59)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex((SPR_TRACKS_SUSPENDED_SWINGING_COASTER_GENTLE_LARGE_CURVE_BANKED + 63)),
+                        { 0, 0, height + kInvertedSpriteOffset },
+                        { { 6, 0, height + kInvertedSpriteOffset + 8 }, { 20, 32, 3 } });
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::centre, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+            }
+            if (direction == 0 || direction == 1)
+            {
+                PaintUtilPushTunnelRotated(session, direction + 1, height + 8, kTunnelGroup, TunnelSubType::slopeEnd);
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackLeftEighthBankToDiagDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    uint8_t map[5] = { 4, 3, 1, 2, 0 };
+    trackSequence = map[trackSequence];
+    SuspendedSwingingRCTrackRightEighthBankToOrthogonalUp25(
+        session, ride, trackSequence, (direction + 1) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightEighthBankToDiagDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    uint8_t map[5] = { 4, 3, 1, 2, 0 };
+    trackSequence = map[trackSequence];
+    SuspendedSwingingRCTrackLeftEighthBankToOrthogonalUp25(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackLeftEighthBankToOrthogonalDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackRightEighthBankToDiagUp25(
+        session, ride, trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackRightEighthBankToOrthogonalDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    trackSequence = mapLeftEighthTurnToOrthogonal[trackSequence];
+    SuspendedSwingingRCTrackLeftEighthBankToDiagUp25(
+        session, ride, trackSequence, (direction + 3) & 3, height, trackElement, supportType);
+}
+
+// diag banked track and transitions
+
+static void SuspendedSwingingRCTrackDiagUp25ToLeftBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 3)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 0)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 2)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 1)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagUp25ToRightBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 7)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 4)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 6)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 5)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedUp25ToUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 11)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 8)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 10)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 9)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedUp25ToUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 15)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 12)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 14)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 18,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 13)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagDown25ToLeftBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagRightBankedUp25ToUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagDown25ToRightBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagLeftBankedUp25ToUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedDown25ToDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagUp25ToRightBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedDown25ToDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagUp25ToLeftBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedFlatToLeftBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 19)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 16)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 18)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 72);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 17)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedFlatToRightBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 23)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 20)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 22)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 21)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedUp25ToLeftBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 27)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 24)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 10,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 26)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 25)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedUp25ToRightBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 31)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 28)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 30)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 29)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedFlatToLeftBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagRightBankedUp25ToRightBankedFlat(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedFlatToRightBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagLeftBankedUp25ToLeftBankedFlat(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedDown25ToLeftBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagRightBankedFlatToRightBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedDown25ToRightBankedFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagLeftBankedFlatToLeftBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagUp25LeftBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 35)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 32)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 34)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 33)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagUp25RightBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 39)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 36)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 38)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 37)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 45 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 16,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 80);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagDown25LeftBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagUp25RightBanked(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagDown25RightBanked(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagUp25LeftBanked(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagFlatToLeftBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 43)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 40)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 42)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 41)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagFlatToRightBankedUp25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 47)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 44)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 46)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 45)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 4,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedUp25ToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 51)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 48)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 50)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 56);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 49)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedUp25ToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    switch (trackSequence)
+    {
+        case 0:
+            switch (direction)
+            {
+                case 3:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 55)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::right, PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 1:
+            switch (direction)
+            {
+                case 0:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 52)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::top, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight }, direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 2:
+            switch (direction)
+            {
+                case 2:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 54)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    break;
+            }
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::bottom, PaintSegment::centre, PaintSegment::bottomLeft, PaintSegment::bottomRight },
+                    direction),
+                0xFFFF, 0);
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+        case 3:
+            PaintUtilSetSegmentSupportHeight(
+                session,
+                PaintUtilRotateSegments(
+                    { PaintSegment::left, PaintSegment::centre, PaintSegment::topLeft, PaintSegment::bottomLeft }, direction),
+                0xFFFF, 0);
+            switch (direction)
+            {
+                case 0:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::leftCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 1:
+                    PaintAddImageAsParentRotated(
+                        session, direction,
+                        session.TrackColours.WithIndex(
+                            (SPR_TRACKS_SUSPENDED_SWINGING_COASTER_SLOPE_BANK_TRANSITION_DIAGONAL + 53)),
+                        { -16, -16, height + kInvertedSpriteOffset }, { { -16, -16, height + 37 }, { 32, 32, 3 } });
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::topCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 2:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::rightCorner, 0, height + kSupportHeight + 8,
+                        session.SupportColours);
+                    break;
+                case 3:
+                    MetalASupportsPaintSetup(
+                        session, supportType.metal, MetalSupportPlace::bottomCorner, 0, height + kSupportHeight + 6,
+                        session.SupportColours);
+                    break;
+            }
+
+            PaintUtilSetGeneralSupportHeight(session, height + 64);
+            break;
+    }
+}
+
+static void SuspendedSwingingRCTrackDiagFlatToLeftBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagRightBankedUp25ToFlat(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagFlatToRightBankedDown25(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagLeftBankedUp25ToFlat(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagLeftBankedDown25ToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagFlatToRightBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
+static void SuspendedSwingingRCTrackDiagRightBankedDown25ToFlat(
+    PaintSession& session, const Ride& ride, uint8_t trackSequence, uint8_t direction, int32_t height,
+    const TrackElement& trackElement, SupportType supportType)
+{
+    SuspendedSwingingRCTrackDiagFlatToLeftBankedUp25(
+        session, ride, 3 - trackSequence, (direction + 2) & 3, height, trackElement, supportType);
+}
+
 TrackPaintFunction GetTrackPaintFunctionSuspendedSwingingRC(TrackElemType trackType)
 {
     switch (trackType)
@@ -4675,6 +20910,14 @@ TrackPaintFunction GetTrackPaintFunctionSuspendedSwingingRC(TrackElemType trackT
             return SuspendedSwingingRCTrackLeftEighthToOrthogonal;
         case TrackElemType::rightEighthToOrthogonal:
             return SuspendedSwingingRCTrackRightEighthToOrthogonal;
+        case TrackElemType::leftEighthBankToDiag:
+            return SuspendedSwingingRCTrackLeftEighthBankToDiag;
+        case TrackElemType::rightEighthBankToDiag:
+            return SuspendedSwingingRCTrackRightEighthBankToDiag;
+        case TrackElemType::leftEighthBankToOrthogonal:
+            return SuspendedSwingingRCTrackLeftEighthBankToOrthogonal;
+        case TrackElemType::rightEighthBankToOrthogonal:
+            return SuspendedSwingingRCTrackRightEighthBankToOrthogonal;
         case TrackElemType::diagFlat:
             return SuspendedSwingingRCTrackDiagFlat;
         case TrackElemType::diagUp25:
@@ -4703,6 +20946,415 @@ TrackPaintFunction GetTrackPaintFunctionSuspendedSwingingRC(TrackElemType trackT
             return SuspendedSwingingRCTrackDiag25DegDownToFlat;
         case TrackElemType::blockBrakes:
             return SuspendedSwingingRCTrackBlockBrakes;
+        case TrackElemType::leftBankedQuarterTurn3TileUp25:
+            return SuspendedSwingingRCTrackLeftBankedQuarterTurn325DegUp;
+        case TrackElemType::rightBankedQuarterTurn3TileUp25:
+            return SuspendedSwingingRCTrackRightBankedQuarterTurn325DegUp;
+        case TrackElemType::leftBankedQuarterTurn3TileDown25:
+            return SuspendedSwingingRCTrackLeftBankedQuarterTurn325DegDown;
+        case TrackElemType::rightBankedQuarterTurn3TileDown25:
+            return SuspendedSwingingRCTrackRightBankedQuarterTurn325DegDown;
+        case TrackElemType::leftBankedQuarterTurn5TileUp25:
+            return SuspendedSwingingRCTrackLeftBankedQuarterTurn525DegUp;
+        case TrackElemType::rightBankedQuarterTurn5TileUp25:
+            return SuspendedSwingingRCTrackRightBankedQuarterTurn525DegUp;
+        case TrackElemType::leftBankedQuarterTurn5TileDown25:
+            return SuspendedSwingingRCTrackLeftBankedQuarterTurn525DegDown;
+        case TrackElemType::rightBankedQuarterTurn5TileDown25:
+            return SuspendedSwingingRCTrackRightBankedQuarterTurn525DegDown;
+        case TrackElemType::up25ToLeftBankedUp25:
+            return SuspendedSwingingRCTrack25DegUpToLeftBanked25DegUp;
+        case TrackElemType::up25ToRightBankedUp25:
+            return SuspendedSwingingRCTrack25DegUpToRightBanked25DegUp;
+        case TrackElemType::leftBankedUp25ToUp25:
+            return SuspendedSwingingRCTrackLeftBanked25DegUpTo25DegUp;
+        case TrackElemType::rightBankedUp25ToUp25:
+            return SuspendedSwingingRCTrackRightBanked25DegUpTo25DegUp;
+        case TrackElemType::down25ToLeftBankedDown25:
+            return SuspendedSwingingRCTrack25DegDownToLeftBanked25DegDown;
+        case TrackElemType::down25ToRightBankedDown25:
+            return SuspendedSwingingRCTrack25DegDownToRightBanked25DegDown;
+        case TrackElemType::leftBankedDown25ToDown25:
+            return SuspendedSwingingRCTrackLeftBanked25DegDownTo25DegDown;
+        case TrackElemType::rightBankedDown25ToDown25:
+            return SuspendedSwingingRCTrackRightBanked25DegDownTo25DegDown;
+        case TrackElemType::leftBankedFlatToLeftBankedUp25:
+            return SuspendedSwingingRCTrackLeftBankedFlatToLeftBanked25DegUp;
+        case TrackElemType::rightBankedFlatToRightBankedUp25:
+            return SuspendedSwingingRCTrackRightBankedFlatToRightBanked25DegUp;
+        case TrackElemType::leftBankedUp25ToLeftBankedFlat:
+            return SuspendedSwingingRCTrackLeftBanked25DegUpToLeftBankedFlat;
+        case TrackElemType::rightBankedUp25ToRightBankedFlat:
+            return SuspendedSwingingRCTrackRightBanked25DegUpToRightBankedFlat;
+        case TrackElemType::leftBankedFlatToLeftBankedDown25:
+            return SuspendedSwingingRCTrackLeftBankedFlatToLeftBanked25DegDown;
+        case TrackElemType::rightBankedFlatToRightBankedDown25:
+            return SuspendedSwingingRCTrackRightBankedFlatToRightBanked25DegDown;
+        case TrackElemType::leftBankedDown25ToLeftBankedFlat:
+            return SuspendedSwingingRCTrackLeftBanked25DegDownToLeftBankedFlat;
+        case TrackElemType::rightBankedDown25ToRightBankedFlat:
+            return SuspendedSwingingRCTrackRightBanked25DegDownToRightBankedFlat;
+        case TrackElemType::flatToLeftBankedUp25:
+            return SuspendedSwingingRCTrackFlatToLeftBanked25DegUp;
+        case TrackElemType::flatToRightBankedUp25:
+            return SuspendedSwingingRCTrackFlatToRightBanked25DegUp;
+        case TrackElemType::leftBankedUp25ToFlat:
+            return SuspendedSwingingRCTrackLeftBanked25DegUpToFlat;
+        case TrackElemType::rightBankedUp25ToFlat:
+            return SuspendedSwingingRCTrackRightBanked25DegUpToFlat;
+        case TrackElemType::flatToLeftBankedDown25:
+            return SuspendedSwingingRCTrackFlatToLeftBanked25DegDown;
+        case TrackElemType::flatToRightBankedDown25:
+            return SuspendedSwingingRCTrackFlatToRightBanked25DegDown;
+        case TrackElemType::leftBankedDown25ToFlat:
+            return SuspendedSwingingRCTrackLeftBanked25DegDownToFlat;
+        case TrackElemType::rightBankedDown25ToFlat:
+            return SuspendedSwingingRCTrackRightBanked25DegDownToFlat;
+
+        // orct2
+        case TrackElemType::flatToLeftBank:
+            return SuspendedSwingingRCTrackFlatToLeftBank;
+        case TrackElemType::flatToRightBank:
+            return SuspendedSwingingRCTrackFlatToRightBank;
+        case TrackElemType::leftBankToFlat:
+            return SuspendedSwingingRCTrackLeftBankToFlat;
+        case TrackElemType::rightBankToFlat:
+            return SuspendedSwingingRCTrackRightBankToFlat;
+        case TrackElemType::bankedLeftQuarterTurn5Tiles:
+            return SuspendedSwingingRCTrackBankedLeftQuarterTurn5;
+        case TrackElemType::bankedRightQuarterTurn5Tiles:
+            return SuspendedSwingingRCTrackBankedRightQuarterTurn5;
+        case TrackElemType::leftBankToUp25:
+            return SuspendedSwingingRCTrackLeftBankTo25DegUp;
+        case TrackElemType::rightBankToUp25:
+            return SuspendedSwingingRCTrackRightBankTo25DegUp;
+        case TrackElemType::up25ToLeftBank:
+            return SuspendedSwingingRCTrack25DegUpToLeftBank;
+        case TrackElemType::up25ToRightBank:
+            return SuspendedSwingingRCTrack25DegUpToRightBank;
+        case TrackElemType::leftBankToDown25:
+            return SuspendedSwingingRCTrackLeftBankTo25DegDown;
+        case TrackElemType::rightBankToDown25:
+            return SuspendedSwingingRCTrackRightBankTo25DegDown;
+        case TrackElemType::down25ToLeftBank:
+            return SuspendedSwingingRCTrack25DegDownToLeftBank;
+        case TrackElemType::down25ToRightBank:
+            return SuspendedSwingingRCTrack25DegDownToRightBank;
+        case TrackElemType::leftBank:
+            return SuspendedSwingingRCTrackLeftBank;
+        case TrackElemType::rightBank:
+            return SuspendedSwingingRCTrackRightBank;
+        case TrackElemType::leftVerticalLoop:
+            return SuspendedSwingingRCTrackLeftVerticalLoop;
+        case TrackElemType::rightVerticalLoop:
+            return SuspendedSwingingRCTrackRightVerticalLoop;
+        case TrackElemType::leftBankedQuarterTurn3Tiles:
+            return SuspendedSwingingRCTrackLeftQuarterTurn3Bank;
+        case TrackElemType::rightBankedQuarterTurn3Tiles:
+            return SuspendedSwingingRCTrackRightQuarterTurn3Bank;
+        case TrackElemType::leftTwistDownToUp:
+            return SuspendedSwingingRCTrackLeftTwistDownToUp;
+        case TrackElemType::rightTwistDownToUp:
+            return SuspendedSwingingRCTrackRightTwistDownToUp;
+        case TrackElemType::leftTwistUpToDown:
+            return SuspendedSwingingRCTrackLeftTwistUpToDown;
+        case TrackElemType::rightTwistUpToDown:
+            return SuspendedSwingingRCTrackRightTwistUpToDown;
+        case TrackElemType::halfLoopUp:
+            return SuspendedSwingingRCTrackHalfLoopUp;
+        case TrackElemType::halfLoopDown:
+            return SuspendedSwingingRCTrackHalfLoopDown;
+        case TrackElemType::leftCorkscrewUp:
+            return SuspendedSwingingRCTrackLeftCorkscrewUp;
+        case TrackElemType::rightCorkscrewUp:
+            return SuspendedSwingingRCTrackRightCorkscrewUp;
+        case TrackElemType::leftCorkscrewDown:
+            return SuspendedSwingingRCTrackLeftCorkscrewDown;
+        case TrackElemType::rightCorkscrewDown:
+            return SuspendedSwingingRCTrackRightCorkscrewDown;
+        case TrackElemType::leftQuarterBankedHelixLargeUp:
+            return SuspendedSwingingRCTrackLeftQuarterBankedHelixLargeUp;
+        case TrackElemType::rightQuarterBankedHelixLargeUp:
+            return SuspendedSwingingRCTrackRightQuarterBankedHelixLargeUp;
+        case TrackElemType::leftQuarterBankedHelixLargeDown:
+            return SuspendedSwingingRCTrackLeftQuarterBankedHelixLargeDown;
+        case TrackElemType::rightQuarterBankedHelixLargeDown:
+            return SuspendedSwingingRCTrackRightQuarterBankedHelixLargeDown;
+        case TrackElemType::up25LeftBanked:
+            return SuspendedSwingingRCTrack25DegUpLeftBanked;
+        case TrackElemType::up25RightBanked:
+            return SuspendedSwingingRCTrack25DegUpRightBanked;
+        case TrackElemType::down25LeftBanked:
+            return SuspendedSwingingRCTrack25DegDownLeftBanked;
+        case TrackElemType::down25RightBanked:
+            return SuspendedSwingingRCTrack25DegDownRightBanked;
+        case TrackElemType::diagFlatToLeftBank:
+            return SuspendedSwingingRCTrackDiagFlatToLeftBank;
+        case TrackElemType::diagFlatToRightBank:
+            return SuspendedSwingingRCTrackDiagFlatToRightBank;
+        case TrackElemType::diagLeftBankToFlat:
+            return SuspendedSwingingRCTrackDiagLeftBankToFlat;
+        case TrackElemType::diagRightBankToFlat:
+            return SuspendedSwingingRCTrackDiagRightBankToFlat;
+        case TrackElemType::diagLeftBankToUp25:
+            return SuspendedSwingingRCTrackDiagLeftBankTo25DegUp;
+        case TrackElemType::diagRightBankToUp25:
+            return SuspendedSwingingRCTrackDiagRightBankTo25DegUp;
+        case TrackElemType::diagUp25ToLeftBank:
+            return SuspendedSwingingRCTrackDiag25DegUpToLeftBank;
+        case TrackElemType::diagUp25ToRightBank:
+            return SuspendedSwingingRCTrackDiag25DegUpToRightBank;
+        case TrackElemType::diagLeftBankToDown25:
+            return SuspendedSwingingRCTrackDiagLeftBankTo25DegDown;
+        case TrackElemType::diagRightBankToDown25:
+            return SuspendedSwingingRCTrackDiagRightBankTo25DegDown;
+        case TrackElemType::diagDown25ToLeftBank:
+            return SuspendedSwingingRCTrackDiag25DegDownToLeftBank;
+        case TrackElemType::diagDown25ToRightBank:
+            return SuspendedSwingingRCTrackDiag25DegDownToRightBank;
+        case TrackElemType::diagLeftBank:
+            return SuspendedSwingingRCTrackDiagLeftBank;
+        case TrackElemType::diagRightBank:
+            return SuspendedSwingingRCTrackDiagRightBank;
+        case TrackElemType::leftLargeHalfLoopUp:
+            return SuspendedSwingingRCTrackLeftLargeHalfLoopUp;
+        case TrackElemType::rightLargeHalfLoopUp:
+            return SuspendedSwingingRCTrackRightLargeHalfLoopUp;
+        case TrackElemType::leftLargeHalfLoopDown:
+            return SuspendedSwingingRCTrackLeftLargeHalfLoopDown;
+        case TrackElemType::rightLargeHalfLoopDown:
+            return SuspendedSwingingRCTrackRightLargeHalfLoopDown;
+
+        // New Inversions
+        //  Medium half loops
+        case TrackElemType::leftMediumHalfLoopUp:
+            return SuspendedSwingingRCTrackLeftMediumHalfLoopUp;
+        case TrackElemType::rightMediumHalfLoopUp:
+            return SuspendedSwingingRCTrackRightMediumHalfLoopUp;
+        case TrackElemType::leftMediumHalfLoopDown:
+            return SuspendedSwingingRCTrackLeftMediumHalfLoopDown;
+        case TrackElemType::rightMediumHalfLoopDown:
+            return SuspendedSwingingRCTrackRightMediumHalfLoopDown;
+
+        // barrell rolls
+        case TrackElemType::leftBarrelRollUpToDown:
+            return SuspendedSwingingRCTrackLeftBarrelRollUpToDown;
+        case TrackElemType::rightBarrelRollUpToDown:
+            return SuspendedSwingingRCTrackRightBarrelRollUpToDown;
+        case TrackElemType::leftBarrelRollDownToUp:
+            return SuspendedSwingingRCTrackLeftBarrelRollDownToUp;
+        case TrackElemType::rightBarrelRollDownToUp:
+            return SuspendedSwingingRCTrackRightBarrelRollDownToUp;
+
+        // large corkscrew
+        case TrackElemType::leftLargeCorkscrewUp:
+            return SuspendedSwingingRCTrackLeftLargeCorkscrewUp;
+        case TrackElemType::rightLargeCorkscrewUp:
+            return SuspendedSwingingRCTrackRightLargeCorkscrewUp;
+        case TrackElemType::leftLargeCorkscrewDown:
+            return SuspendedSwingingRCTrackLeftLargeCorkscrewDown;
+        case TrackElemType::rightLargeCorkscrewDown:
+            return SuspendedSwingingRCTrackRightLargeCorkscrewDown;
+
+        // zero-g rolls
+        case TrackElemType::leftZeroGRollUp:
+            return SuspendedSwingingRCTrackLeftZeroGRollUp;
+        case TrackElemType::rightZeroGRollUp:
+            return SuspendedSwingingRCTrackRightZeroGRollUp;
+        case TrackElemType::leftZeroGRollDown:
+            return SuspendedSwingingRCTrackLeftZeroGRollDown;
+        case TrackElemType::rightZeroGRollDown:
+            return SuspendedSwingingRCTrackRightZeroGRollDown;
+        case TrackElemType::leftLargeZeroGRollUp:
+            return SuspendedSwingingRCTrackLeftLargeZeroGRollUp;
+        case TrackElemType::rightLargeZeroGRollUp:
+            return SuspendedSwingingRCTrackRightLargeZeroGRollUp;
+        case TrackElemType::leftLargeZeroGRollDown:
+            return SuspendedSwingingRCTrackLeftLargeZeroGRollDown;
+        case TrackElemType::rightLargeZeroGRollDown:
+            return SuspendedSwingingRCTrackRightLargeZeroGRollDown;
+
+        // dive loops
+        case TrackElemType::leftEighthDiveLoopUpToOrthogonal:
+            return SuspendedSwingingRCTrackLeftEighthDiveLoopUpToOrthogonal;
+        case TrackElemType::rightEighthDiveLoopUpToOrthogonal:
+            return SuspendedSwingingRCTrackRightEighthDiveLoopUpToOrthogonal;
+        case TrackElemType::leftEighthDiveLoopDownToDiag:
+            return SuspendedSwingingRCTrackLeftEighthDiveLoopDownToDiag;
+        case TrackElemType::rightEighthDiveLoopDownToDiag:
+            return SuspendedSwingingRCTrackRightEighthDiveLoopToDownOrthogonal;
+
+        // flat to steep transitions
+        // large
+        case TrackElemType::flatToUp60LongBase:
+            return SuspendedSwingingRCTrackFlatTo60DegUpLongBase;
+        case TrackElemType::up60ToFlatLongBase:
+            return SuspendedSwingingRCTrack60DegUpToFlatLongBase;
+        case TrackElemType::down60ToFlatLongBase:
+            return SuspendedSwingingRCTrack60DegDownToFlatLongBase;
+        case TrackElemType::flatToDown60LongBase:
+            return SuspendedSwingingRCTrackFlatTo60DegDownLongBase;
+
+        case TrackElemType::diagFlatToUp60LongBase:
+            return SuspendedSwingingRCTrackDiagFlatTo60DegUpLongBase;
+        case TrackElemType::diagUp60ToFlatLongBase:
+            return SuspendedSwingingRCTrackDiag60DegUpToFlatLongBase;
+        case TrackElemType::diagFlatToDown60LongBase:
+            return SuspendedSwingingRCTrackDiagFlatTo60DegDownLongBase;
+        case TrackElemType::diagDown60ToFlatLongBase:
+            return SuspendedSwingingRCTrackDiag60DegDownToFlatLongBase;
+
+            // small
+        case TrackElemType::flatToUp60:
+            return SuspendedSwingingRCTrackFlatTo60DegUp;
+        case TrackElemType::up60ToFlat:
+            return SuspendedSwingingRCTrack60DegUpToFlat;
+        case TrackElemType::flatToDown60:
+            return SuspendedSwingingRCTrackFlatTo60DegDown;
+        case TrackElemType::down60ToFlat:
+            return SuspendedSwingingRCTrack60DegDownToFlat;
+        case TrackElemType::diagFlatToUp60:
+            return SuspendedSwingingRCTrackDiagFlatTo60DegUp;
+        case TrackElemType::diagUp60ToFlat:
+            return SuspendedSwingingRCTrackDiag60DegUpToFlat;
+        case TrackElemType::diagFlatToDown60:
+            return SuspendedSwingingRCTrackDiagFlatTo60DegDown;
+        case TrackElemType::diagDown60ToFlat:
+            return SuspendedSwingingRCTrackDiag60DegDownToFlat;
+
+        // banked to sloped small turns
+        case TrackElemType::leftBankToLeftQuarterTurn3TilesUp25:
+            return SuspendedSwingingRCTrackLeftBankToLeftQuarterTurn3Tile25DegUp;
+        case TrackElemType::rightBankToRightQuarterTurn3TilesUp25:
+            return SuspendedSwingingRCTrackRightBankToRightQuarterTurn3Tile25DegUp;
+        case TrackElemType::leftQuarterTurn3TilesDown25ToLeftBank:
+            return SuspendedSwingingRCTrackLeftQuarterTurn3Tile25DegDownToLeftBank;
+        case TrackElemType::rightQuarterTurn3TilesDown25ToRightBank:
+            return SuspendedSwingingRCTrackRightQuarterTurn3Tile25DegDownToRightBank;
+
+        // vertical slopes and transitions
+        case TrackElemType::up90:
+            return SuspendedSwingingRCTrack90DegUp;
+        case TrackElemType::down90:
+            return SuspendedSwingingRCTrack90DegDown;
+        case TrackElemType::up60ToUp90:
+            return SuspendedSwingingRCTrack60DegUpTo90DegUp;
+        case TrackElemType::down90ToDown60:
+            return SuspendedSwingingRCTrack90DegDownTo60DegDown;
+        case TrackElemType::up90ToUp60:
+            return SuspendedSwingingRCTrack90DegUpTo60DegUp;
+        case TrackElemType::down60ToDown90:
+            return SuspendedSwingingRCTrack60DegDownTo90DegDown;
+
+        // Vertical turns
+        case TrackElemType::leftQuarterTurn1TileUp90:
+            return SuspendedSwingingRCTrackLeftQuarterTurn1TileUp90;
+        case TrackElemType::rightQuarterTurn1TileUp90:
+            return SuspendedSwingingRCTrackRightQuarterTurn1TileUp90;
+        case TrackElemType::leftQuarterTurn1TileDown90:
+            return SuspendedSwingingRCTrackLeftQuarterTurn1TileDown90;
+        case TrackElemType::rightQuarterTurn1TileDown90:
+            return SuspendedSwingingRCTrackRightQuarterTurn1TileDown90;
+
+        // quarter loops
+        case TrackElemType::invertedFlatToDown90QuarterLoop:
+            return SuspendedSwingingRCTrackInvertedFlatTo90DegQuarterLoopDown;
+        case TrackElemType::up90ToInvertedFlatQuarterLoop:
+            return SuspendedSwingingRCTrack90DegToInvertedFlatQuarterLoopUp;
+
+        // wide sloped turns
+        case TrackElemType::leftEighthToDiagUp25:
+            return SuspendedSwingingRCTrackLeftEighthToDiagUp25;
+        case TrackElemType::leftEighthToOrthogonalUp25:
+            return SuspendedSwingingRCTrackLeftEighthToOrthogonalUp25;
+        case TrackElemType::rightEighthToDiagUp25:
+            return SuspendedSwingingRCTrackRightEighthToDiagUp25;
+        case TrackElemType::rightEighthToOrthogonalUp25:
+            return SuspendedSwingingRCTrackRightEighthToOrthogonalUp25;
+        case TrackElemType::leftEighthToDiagDown25:
+            return SuspendedSwingingRCTrackLeftEighthToDiagDown25;
+        case TrackElemType::leftEighthToOrthogonalDown25:
+            return SuspendedSwingingRCTrackLeftEighthToOrthogonalDown25;
+        case TrackElemType::rightEighthToDiagDown25:
+            return SuspendedSwingingRCTrackRightEighthToDiagDown25;
+        case TrackElemType::rightEighthToOrthogonalDown25:
+            return SuspendedSwingingRCTrackRightEighthToOrthogonalDown25;
+
+        // wide sloped banked turns
+        case TrackElemType::leftEighthBankToDiagUp25:
+            return SuspendedSwingingRCTrackLeftEighthBankToDiagUp25;
+        case TrackElemType::rightEighthBankToDiagUp25:
+            return SuspendedSwingingRCTrackRightEighthBankToDiagUp25;
+        case TrackElemType::leftEighthBankToDiagDown25:
+            return SuspendedSwingingRCTrackLeftEighthBankToDiagDown25;
+        case TrackElemType::rightEighthBankToDiagDown25:
+            return SuspendedSwingingRCTrackRightEighthBankToDiagDown25;
+        case TrackElemType::leftEighthBankToOrthogonalUp25:
+            return SuspendedSwingingRCTrackLeftEighthBankToOrthogonalUp25;
+        case TrackElemType::rightEighthBankToOrthogonalUp25:
+            return SuspendedSwingingRCTrackRightEighthBankToOrthogonalUp25;
+        case TrackElemType::leftEighthBankToOrthogonalDown25:
+            return SuspendedSwingingRCTrackLeftEighthBankToOrthogonalDown25;
+        case TrackElemType::rightEighthBankToOrthogonalDown25:
+            return SuspendedSwingingRCTrackRightEighthBankToOrthogonalDown25;
+
+        // diag bank and slopes
+        case TrackElemType::diagUp25ToLeftBankedUp25:
+            return SuspendedSwingingRCTrackDiagUp25ToLeftBankedUp25;
+        case TrackElemType::diagUp25ToRightBankedUp25:
+            return SuspendedSwingingRCTrackDiagUp25ToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToUp25:
+            return SuspendedSwingingRCTrackDiagLeftBankedUp25ToUp25;
+        case TrackElemType::diagRightBankedUp25ToUp25:
+            return SuspendedSwingingRCTrackDiagRightBankedUp25ToUp25;
+        case TrackElemType::diagDown25ToLeftBankedDown25:
+            return SuspendedSwingingRCTrackDiagDown25ToLeftBankedDown25;
+        case TrackElemType::diagDown25ToRightBankedDown25:
+            return SuspendedSwingingRCTrackDiagDown25ToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToDown25:
+            return SuspendedSwingingRCTrackDiagLeftBankedDown25ToDown25;
+        case TrackElemType::diagRightBankedDown25ToDown25:
+            return SuspendedSwingingRCTrackDiagRightBankedDown25ToDown25;
+        case TrackElemType::diagLeftBankedFlatToLeftBankedUp25:
+            return SuspendedSwingingRCTrackDiagLeftBankedFlatToLeftBankedUp25;
+        case TrackElemType::diagRightBankedFlatToRightBankedUp25:
+            return SuspendedSwingingRCTrackDiagRightBankedFlatToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToLeftBankedFlat:
+            return SuspendedSwingingRCTrackDiagLeftBankedUp25ToLeftBankedFlat;
+        case TrackElemType::diagRightBankedUp25ToRightBankedFlat:
+            return SuspendedSwingingRCTrackDiagRightBankedUp25ToRightBankedFlat;
+        case TrackElemType::diagLeftBankedFlatToLeftBankedDown25:
+            return SuspendedSwingingRCTrackDiagLeftBankedFlatToLeftBankedDown25;
+        case TrackElemType::diagRightBankedFlatToRightBankedDown25:
+            return SuspendedSwingingRCTrackDiagRightBankedFlatToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToLeftBankedFlat:
+            return SuspendedSwingingRCTrackDiagLeftBankedDown25ToLeftBankedFlat;
+        case TrackElemType::diagRightBankedDown25ToRightBankedFlat:
+            return SuspendedSwingingRCTrackDiagRightBankedDown25ToRightBankedFlat;
+        case TrackElemType::diagUp25LeftBanked:
+            return SuspendedSwingingRCTrackDiagUp25LeftBanked;
+        case TrackElemType::diagUp25RightBanked:
+            return SuspendedSwingingRCTrackDiagUp25RightBanked;
+        case TrackElemType::diagDown25LeftBanked:
+            return SuspendedSwingingRCTrackDiagDown25LeftBanked;
+        case TrackElemType::diagDown25RightBanked:
+            return SuspendedSwingingRCTrackDiagDown25RightBanked;
+        case TrackElemType::diagFlatToLeftBankedUp25:
+            return SuspendedSwingingRCTrackDiagFlatToLeftBankedUp25;
+        case TrackElemType::diagFlatToRightBankedUp25:
+            return SuspendedSwingingRCTrackDiagFlatToRightBankedUp25;
+        case TrackElemType::diagLeftBankedUp25ToFlat:
+            return SuspendedSwingingRCTrackDiagLeftBankedUp25ToFlat;
+        case TrackElemType::diagRightBankedUp25ToFlat:
+            return SuspendedSwingingRCTrackDiagRightBankedUp25ToFlat;
+        case TrackElemType::diagFlatToLeftBankedDown25:
+            return SuspendedSwingingRCTrackDiagFlatToLeftBankedDown25;
+        case TrackElemType::diagFlatToRightBankedDown25:
+            return SuspendedSwingingRCTrackDiagFlatToRightBankedDown25;
+        case TrackElemType::diagLeftBankedDown25ToFlat:
+            return SuspendedSwingingRCTrackDiagLeftBankedDown25ToFlat;
+        case TrackElemType::diagRightBankedDown25ToFlat:
+            return SuspendedSwingingRCTrackDiagRightBankedDown25ToFlat;
         default:
             return TrackPaintFunctionDummy;
     }
