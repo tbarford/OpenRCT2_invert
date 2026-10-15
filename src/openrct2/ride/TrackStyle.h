@@ -112,19 +112,20 @@ namespace OpenRCT2
         bool beforeSupports = false;
     };
 
-    // How PaintTrack blocks segments for a TrackDrawerEntry. With none the paint functions block the segments,
-    // otherwise PaintTrack blocks them from the track sequence data, using this to pick the blocked segments type for
-    // each track group.
+    // PaintTrack blocks segments for a blockedSeg group in the RTD. With none the paint functions block the segments,
+    // otherwise PaintTrack blocks them from the track sequence data from the TED.
     enum class TrackBlockedSegments : uint8_t
     {
         none,
         narrow,
         inverted,
         wide,
+        multiDimensionRollerCoaster,
         count,
     };
 
-    BlockedSegmentsType GetTrackGroupBlockedSegmentsType(TrackBlockedSegments trackBlockedSegments, TrackGroup trackGroup);
+    TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
+        TrackBlockedSegments trackBlockedSegments, TrackElemType trackElemType, uint8_t sequence);
 
     TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
         TrackStyle trackStyle, TrackElemType trackElemType, uint8_t sequence);

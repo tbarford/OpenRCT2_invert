@@ -637,18 +637,87 @@ namespace OpenRCT2
         return segments;
     }
 
-    static constexpr auto kTrackBlockedSegmentsGroupTypes = std::to_array<TrackGroupBlockedSegmentTypes>({
-        {},                                 // none
-        kTrackGroupBlockedSegmentsNarrow,   // narrow
-        kTrackGroupBlockedSegmentsInverted, // inverted
-        kTrackGroupBlockedSegmentsWide,     // wide
-    });
-    static_assert(std::size(kTrackBlockedSegmentsGroupTypes) == EnumValue(TrackBlockedSegments::count));
-
-    BlockedSegmentsType GetTrackGroupBlockedSegmentsType(
-        const TrackBlockedSegments trackBlockedSegments, const TrackGroup trackGroup)
+    // Per piece overrides of the blocked segments type from the track group table, as one bit per sequence
+    struct BlockedSegmentsOverrides
     {
-        return kTrackBlockedSegmentsGroupTypes[EnumValue(trackBlockedSegments)][EnumValue(trackGroup)];
+        uint16_t narrow = 0;
+        uint16_t wide = 0; // takes precedence over narrow
+        uint16_t all = 0;  // blocks all segments
+    };
+    using TrackElemTypeBlockedSegmentsOverrides = std::array<BlockedSegmentsOverrides, EnumValue(TrackElemType::count)>;
+
+    static constexpr const TrackElemTypeBlockedSegmentsOverrides kBlockedSegmentsOverridesNone{};
+
+    static constexpr const TrackElemTypeBlockedSegmentsOverrides kBlockedSegmentsOverridesMultiDimensionRollerCoaster =
+        []() consteval {
+            TrackElemTypeBlockedSegmentsOverrides array{};
+            constexpr uint16_t kAllSequences = 0xFFFF;
+            // multi dimension coaster uses a mix of narrow and wide blocks
+            array[EnumValue(TrackElemType::leftQuarterTurn5Tiles)].wide = 1 << 0;
+            array[EnumValue(TrackElemType::bankedLeftQuarterTurn5Tiles)] = { kAllSequences, 1 << 0 };
+            array[EnumValue(TrackElemType::rightQuarterTurn5Tiles)].wide = 1 << 6;
+            array[EnumValue(TrackElemType::bankedRightQuarterTurn5Tiles)] = { kAllSequences, 1 << 6 };
+            array[EnumValue(TrackElemType::leftQuarterTurn3Tiles)].wide = 1 << 0;
+            array[EnumValue(TrackElemType::leftBankedQuarterTurn3Tiles)] = { kAllSequences, 1 << 0 };
+            array[EnumValue(TrackElemType::rightQuarterTurn3Tiles)].wide = 1 << 3;
+            array[EnumValue(TrackElemType::rightBankedQuarterTurn3Tiles)] = { kAllSequences, 1 << 3 };
+            array[EnumValue(TrackElemType::leftEighthToDiag)].wide = (1 << 0) | (1 << 1) | (1 << 4);
+            array[EnumValue(TrackElemType::rightEighthToDiag)].wide = (1 << 0) | (1 << 1) | (1 << 4);
+            array[EnumValue(TrackElemType::leftEighthBankToDiag)].wide = (1 << 0) | (1 << 1) | (1 << 4);
+            array[EnumValue(TrackElemType::rightEighthBankToDiag)].wide = (1 << 0) | (1 << 1) | (1 << 4);
+            array[EnumValue(TrackElemType::leftEighthToOrthogonal)].wide = (1 << 0) | (1 << 3) | (1 << 4);
+            array[EnumValue(TrackElemType::rightEighthToOrthogonal)].wide = (1 << 0) | (1 << 3) | (1 << 4);
+            array[EnumValue(TrackElemType::leftEighthBankToOrthogonal)].wide = (1 << 0) | (1 << 3) | (1 << 4);
+            array[EnumValue(TrackElemType::rightEighthBankToOrthogonal)].wide = (1 << 0) | (1 << 3) | (1 << 4);
+            array[EnumValue(TrackElemType::leftHalfBankedHelixUpSmall)].wide = (1 << 0) | (1 << 4) | (1 << 7);
+            array[EnumValue(TrackElemType::rightHalfBankedHelixUpSmall)].wide = (1 << 0) | (1 << 3) | (1 << 7);
+            array[EnumValue(TrackElemType::leftHalfBankedHelixDownSmall)].wide = (1 << 0) | (1 << 3) | (1 << 4) | (1 << 7);
+            array[EnumValue(TrackElemType::rightHalfBankedHelixDownSmall)].wide = (1 << 3) | (1 << 7);
+            array[EnumValue(TrackElemType::leftHalfBankedHelixUpLarge)].wide = (1 << 0) | (1 << 7) | (1 << 13);
+            array[EnumValue(TrackElemType::rightHalfBankedHelixUpLarge)].wide = (1 << 0) | (1 << 6) | (1 << 13);
+            array[EnumValue(TrackElemType::leftHalfBankedHelixDownLarge)].wide = (1 << 0) | (1 << 6) | (1 << 7) | (1 << 13);
+            array[EnumValue(TrackElemType::rightHalfBankedHelixDownLarge)].wide = (1 << 6) | (1 << 13);
+            // multi dimension sbends have some unique segments
+            array[EnumValue(TrackElemType::sBendLeft)].all = (1 << 1) | (1 << 2);
+            array[EnumValue(TrackElemType::sBendRight)].all = (1 << 1) | (1 << 2);
+            return array;
+        }();
+
+    struct TrackBlockedSegmentsProfile
+    {
+        TrackGroupBlockedSegmentTypes groupTypes;
+        const TrackElemTypeBlockedSegmentsOverrides* overrides;
+    };
+
+    static constexpr auto kTrackBlockedSegmentsProfiles = std::to_array<TrackBlockedSegmentsProfile>({
+        { {}, &kBlockedSegmentsOverridesNone },                                 // none
+        { kTrackGroupBlockedSegmentsNarrow, &kBlockedSegmentsOverridesNone },   // narrow
+        { kTrackGroupBlockedSegmentsInverted, &kBlockedSegmentsOverridesNone }, // inverted
+        { kTrackGroupBlockedSegmentsWide, &kBlockedSegmentsOverridesNone },     // wide
+        { kTrackGroupBlockedSegmentsMultiDimensionRollerCoaster,
+          &kBlockedSegmentsOverridesMultiDimensionRollerCoaster }, // multiDimensionRollerCoaster
+    });
+    static_assert(std::size(kTrackBlockedSegmentsProfiles) == EnumValue(TrackBlockedSegments::count));
+
+    TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
+        const TrackBlockedSegments trackBlockedSegments, const TrackElemType trackElemType, const uint8_t sequence)
+    {
+        const auto& profile = kTrackBlockedSegmentsProfiles[EnumValue(trackBlockedSegments)];
+        const auto& ted = TrackMetadata::GetTrackElementDescriptor(trackElemType);
+        const auto& sequenceDesc = ted.sequenceData.sequences[sequence];
+        const auto& overrides = (*profile.overrides)[EnumValue(trackElemType)];
+        const uint16_t sequenceBit = static_cast<uint16_t>(1u << sequence);
+
+        BlockedSegmentsType segmentsType = profile.groupTypes[EnumValue(ted.definition.group)];
+        if (overrides.narrow & sequenceBit)
+            segmentsType = BlockedSegmentsType::narrow;
+        if (overrides.wide & sequenceBit)
+            segmentsType = BlockedSegmentsType::wide;
+
+        const PaintSegments segments = (overrides.all & sequenceBit) ? kSegmentsAll
+                                                                     : sequenceDesc.blockedSegments[EnumValue(segmentsType)];
+        const bool inverted = segmentsType == BlockedSegmentsType::inverted;
+        return { segments, sequenceDesc.invertSegmentBlocking != inverted };
     }
 
     TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(

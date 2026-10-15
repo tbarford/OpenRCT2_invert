@@ -2027,14 +2027,11 @@ void PaintTrack(PaintSession& session, Direction direction, int32_t height, cons
             return;
         }
 
-        const auto& ted = GetTrackElementDescriptor(trackType);
         const uint8_t clampedTrackSequence = trackType == TrackElemType::maze ? 0 : trackSequence;
-        const auto& sequence = ted.sequenceData.sequences[clampedTrackSequence];
-        const auto segmentsType = GetTrackGroupBlockedSegmentsType(trackDrawerEntry.blockedSegments, ted.definition.group);
-        const auto blockedSegments = paintSegmentsRotate(sequence.blockedSegments[EnumValue(segmentsType)], direction);
-        const bool beforeSupports = sequence.invertSegmentBlocking != (segmentsType == BlockedSegmentsType::inverted);
+        const auto blocked = GetTrackSequenceBlockedSegments(trackDrawerEntry.blockedSegments, trackType, clampedTrackSequence);
+        const auto blockedSegments = paintSegmentsRotate(blocked.segments, direction);
 
-        if (beforeSupports)
+        if (blocked.beforeSupports)
         {
             PaintUtilSetSegmentSupportHeight(session, blockedSegments, 0xFFFF, 0);
             paintFunction(session, *ride, trackSequence, direction, height, trackElement, trackDrawerEntry.supportType);
