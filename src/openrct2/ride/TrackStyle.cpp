@@ -637,6 +637,20 @@ namespace OpenRCT2
         return segments;
     }
 
+    static constexpr auto kTrackBlockedSegmentsGroupTypes = std::to_array<TrackGroupBlockedSegmentTypes>({
+        {},                                 // none
+        kTrackGroupBlockedSegmentsNarrow,   // narrow
+        kTrackGroupBlockedSegmentsInverted, // inverted
+        kTrackGroupBlockedSegmentsWide,     // wide
+    });
+    static_assert(std::size(kTrackBlockedSegmentsGroupTypes) == EnumValue(TrackBlockedSegments::count));
+
+    BlockedSegmentsType GetTrackGroupBlockedSegmentsType(
+        const TrackBlockedSegments trackBlockedSegments, const TrackGroup trackGroup)
+    {
+        return kTrackBlockedSegmentsGroupTypes[EnumValue(trackBlockedSegments)][EnumValue(trackGroup)];
+    }
+
     TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
         const TrackStyle trackStyle, const TrackElemType trackElemType, const uint8_t sequence)
     {

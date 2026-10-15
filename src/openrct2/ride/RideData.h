@@ -297,6 +297,7 @@ namespace OpenRCT2
     {
         TrackStyle trackStyle = TrackStyle::null;
         SupportType supportType{};
+        TrackBlockedSegments blockedSegments = TrackBlockedSegments::none;
         /** rct2: 0x0097C468 (0 - 31) and 0x0097C5D4 (32 - 63) */
         RideTrackGroups enabledTrackGroups{};
         // Pieces that this ride type _can_ draw, but are disabled because their vehicles lack the relevant sprites,

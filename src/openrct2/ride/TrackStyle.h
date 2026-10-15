@@ -11,6 +11,7 @@
 
 #include "../paint/tile_element/Segment.h"
 #include "TrackPaint.h"
+#include "ted/TrackGroup.h"
 
 #include <cstdint>
 
@@ -111,12 +112,19 @@ namespace OpenRCT2
         bool beforeSupports = false;
     };
 
-    // Styles that return true have their segments blocked by PaintTrack using the track sequence data, instead of by
-    // their paint functions.
-    constexpr bool trackStyleBlocksSegmentsCentrally(TrackStyle)
+    // How PaintTrack blocks segments for a TrackDrawerEntry. With none the paint functions block the segments,
+    // otherwise PaintTrack blocks them from the track sequence data, using this to pick the blocked segments type for
+    // each track group.
+    enum class TrackBlockedSegments : uint8_t
     {
-        return false;
-    }
+        none,
+        narrow,
+        inverted,
+        wide,
+        count,
+    };
+
+    BlockedSegmentsType GetTrackGroupBlockedSegmentsType(TrackBlockedSegments trackBlockedSegments, TrackGroup trackGroup);
 
     TrackSequenceBlockedSegments GetTrackSequenceBlockedSegments(
         TrackStyle trackStyle, TrackElemType trackElemType, uint8_t sequence);
