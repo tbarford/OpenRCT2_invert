@@ -544,30 +544,6 @@ namespace OpenRCT2
         return blockedSegmentsType;
     }
 
-    // these block one more segment than the inverted segments on some eighth turn tiles, which keeps the supports away
-    // from the swinging trains.
-    // kSegmentsNone uses the inverted segments.
-    static_assert(
-        EnumValue(TrackElemType::rightEighthToDiag) == EnumValue(TrackElemType::leftEighthToDiag) + 1
-        && EnumValue(TrackElemType::leftEighthToOrthogonal) == EnumValue(TrackElemType::leftEighthToDiag) + 2
-        && EnumValue(TrackElemType::rightEighthToOrthogonal) == EnumValue(TrackElemType::leftEighthToDiag) + 3);
-    static constexpr const auto kSuspendedEighthSegments = []() consteval {
-        std::array<std::array<PaintSegments, 5>, 4> array{};
-        // leftEighthToDiag
-        array[0][0] = { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
-        array[0][4] = { PaintSegment::right,    PaintSegment::bottom,     PaintSegment::centre,     PaintSegment::topLeft,
-                        PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
-        // rightEighthToDiag
-        array[1][0] = { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomLeft };
-        // leftEighthToOrthogonal
-        array[2][4] = { PaintSegment::centre, PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
-        // rightEighthToOrthogonal
-        array[3][0] = { PaintSegment::top,      PaintSegment::right,      PaintSegment::centre,     PaintSegment::topLeft,
-                        PaintSegment::topRight, PaintSegment::bottomLeft, PaintSegment::bottomRight };
-        array[3][4] = { PaintSegment::centre, PaintSegment::topLeft, PaintSegment::topRight, PaintSegment::bottomRight };
-        return array;
-    }();
-
     static PaintSegments OverrideBlockedSegments(
         const TrackStyle trackStyle, const TrackElemType trackElemType, const uint8_t sequence, const PaintSegments segments)
     {
@@ -614,15 +590,6 @@ namespace OpenRCT2
                 && sequence == 1)
             {
                 return paintSegmentsFlipXAxis(leftQuarterTurn3TilesSeq1);
-            }
-        }
-        if (trackStyle == TrackStyle::miniSuspendedCoaster || trackStyle == TrackStyle::suspendedSwingingCoaster)
-        {
-            const size_t piece = static_cast<size_t>(EnumValue(trackElemType)) - EnumValue(TrackElemType::leftEighthToDiag);
-            if (piece < kSuspendedEighthSegments.size() && sequence < kSuspendedEighthSegments[piece].size()
-                && kSuspendedEighthSegments[piece][sequence] != kSegmentsNone)
-            {
-                return kSuspendedEighthSegments[piece][sequence];
             }
         }
         if (trackStyle == TrackStyle::multiDimensionRollerCoaster)

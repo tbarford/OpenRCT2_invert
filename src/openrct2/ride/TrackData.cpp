@@ -2381,9 +2381,9 @@ namespace OpenRCT2::TrackMetadata
         .woodenSupports = { WoodenSupportSubType::neSw },
         .metalSupports = { MetalSupportPlace::centre },
         .blockedSegments = { {
-            { PS::centre, PS::topRight, PS::bottomLeft }, // narrow
-            { PS::centre, PS::topRight, PS::bottomLeft }, // inverted
-            kSegmentsAll,                                 // wide
+            { PS::centre, PS::topRight, PS::bottomLeft },                  // narrow
+            { PS::centre, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                  // wide
         } },
     };
 
@@ -2425,9 +2425,9 @@ namespace OpenRCT2::TrackMetadata
         .flags = { SequenceFlag::hasHeightMarker },
         .metalSupports = { MetalSupportPlace::bottomCorner },
         .blockedSegments = { {
-            { PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
-            { PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
-            kSegmentsAll,                                                                           // wide
+            { PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight },            // narrow
+            { PS::right, PS::bottom, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                                                      // wide
         } },
     };
 
@@ -2465,7 +2465,11 @@ namespace OpenRCT2::TrackMetadata
         .clearance = { -64, 32, 0, 0, { 0b0010, 0 }, {} },
         .flags = { SequenceFlag::hasHeightMarker },
         .metalSupports = { MetalSupportPlace::leftCorner },
-        .blockedSegments = blockedSegmentsFlipXAxis(kLeftEighthToDiagSeq4.blockedSegments),
+        .blockedSegments = { {
+            { PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // narrow
+            { PS::left, PS::centre, PS::topLeft, PS::topRight, PS::bottomLeft, PS::bottomRight }, // inverted
+            kSegmentsAll,                                                                         // wide
+        } },
     };
 
     static constexpr SequenceDescriptor kLeftEighthToOrthogonalSeq0 = {
